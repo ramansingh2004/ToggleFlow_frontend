@@ -79,87 +79,51 @@ export const scheduleEnableFlag = (
 
 
 
-export const getScheduleEnableFlagQueryKey = (flagId: string,
-    scheduleRequest?: BodyType<ScheduleRequest>,) => {
-    return [
-    'POST', `/flags/${flagId}/schedule/enable`, scheduleRequest
-    ] as const;
-    }
+export const getScheduleEnableFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError,{flagId: string;data: BodyType<ScheduleRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError,{flagId: string;data: BodyType<ScheduleRequest>}, TContext> => {
 
-
-export const getScheduleEnableFlagQueryOptions = <TData = Awaited<ReturnType<typeof scheduleEnableFlag>>, TError = ErrorType<ApiError>>(flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getScheduleEnableFlagQueryKey(flagId,scheduleRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof scheduleEnableFlag>>> = ({ signal }) => scheduleEnableFlag(flagId,scheduleRequest, requestOptions, signal);
+const mutationKey = ['scheduleEnableFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof scheduleEnableFlag>>, {flagId: string;data: BodyType<ScheduleRequest>}> = (props) => {
+          const {flagId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ScheduleEnableFlagQueryResult = NonNullable<Awaited<ReturnType<typeof scheduleEnableFlag>>>
-export type ScheduleEnableFlagQueryError = ErrorType<ApiError>
+          return  scheduleEnableFlag(flagId,data,requestOptions)
+        }
 
 
-export function useScheduleEnableFlag<TData = Awaited<ReturnType<typeof scheduleEnableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof scheduleEnableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof scheduleEnableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useScheduleEnableFlag<TData = Awaited<ReturnType<typeof scheduleEnableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof scheduleEnableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof scheduleEnableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useScheduleEnableFlag<TData = Awaited<ReturnType<typeof scheduleEnableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ScheduleEnableFlagMutationResult = NonNullable<Awaited<ReturnType<typeof scheduleEnableFlag>>>
+    export type ScheduleEnableFlagMutationBody = BodyType<ScheduleRequest>
+    export type ScheduleEnableFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Schedule flag enable
  */
-
-export function useScheduleEnableFlag<TData = Awaited<ReturnType<typeof scheduleEnableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getScheduleEnableFlagQueryOptions(flagId,scheduleRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useScheduleEnableFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof scheduleEnableFlag>>, TError,{flagId: string;data: BodyType<ScheduleRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof scheduleEnableFlag>>,
+        TError,
+        {flagId: string;data: BodyType<ScheduleRequest>},
+        TContext
+      > => {
+      return useMutation(getScheduleEnableFlagMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Schedule flag disable
  */
 export const scheduleDisableFlag = (
@@ -180,87 +144,51 @@ export const scheduleDisableFlag = (
 
 
 
-export const getScheduleDisableFlagQueryKey = (flagId: string,
-    scheduleRequest?: BodyType<ScheduleRequest>,) => {
-    return [
-    'POST', `/flags/${flagId}/schedule/disable`, scheduleRequest
-    ] as const;
-    }
+export const getScheduleDisableFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError,{flagId: string;data: BodyType<ScheduleRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError,{flagId: string;data: BodyType<ScheduleRequest>}, TContext> => {
 
-
-export const getScheduleDisableFlagQueryOptions = <TData = Awaited<ReturnType<typeof scheduleDisableFlag>>, TError = ErrorType<ApiError>>(flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getScheduleDisableFlagQueryKey(flagId,scheduleRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof scheduleDisableFlag>>> = ({ signal }) => scheduleDisableFlag(flagId,scheduleRequest, requestOptions, signal);
+const mutationKey = ['scheduleDisableFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof scheduleDisableFlag>>, {flagId: string;data: BodyType<ScheduleRequest>}> = (props) => {
+          const {flagId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ScheduleDisableFlagQueryResult = NonNullable<Awaited<ReturnType<typeof scheduleDisableFlag>>>
-export type ScheduleDisableFlagQueryError = ErrorType<ApiError>
+          return  scheduleDisableFlag(flagId,data,requestOptions)
+        }
 
 
-export function useScheduleDisableFlag<TData = Awaited<ReturnType<typeof scheduleDisableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof scheduleDisableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof scheduleDisableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useScheduleDisableFlag<TData = Awaited<ReturnType<typeof scheduleDisableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof scheduleDisableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof scheduleDisableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useScheduleDisableFlag<TData = Awaited<ReturnType<typeof scheduleDisableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ScheduleDisableFlagMutationResult = NonNullable<Awaited<ReturnType<typeof scheduleDisableFlag>>>
+    export type ScheduleDisableFlagMutationBody = BodyType<ScheduleRequest>
+    export type ScheduleDisableFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Schedule flag disable
  */
-
-export function useScheduleDisableFlag<TData = Awaited<ReturnType<typeof scheduleDisableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    scheduleRequest: BodyType<ScheduleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getScheduleDisableFlagQueryOptions(flagId,scheduleRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useScheduleDisableFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof scheduleDisableFlag>>, TError,{flagId: string;data: BodyType<ScheduleRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof scheduleDisableFlag>>,
+        TError,
+        {flagId: string;data: BodyType<ScheduleRequest>},
+        TContext
+      > => {
+      return useMutation(getScheduleDisableFlagMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Cancel scheduled flag change
  */
 export const cancelSchedule = (
@@ -278,81 +206,51 @@ export const cancelSchedule = (
 
 
 
-export const getCancelScheduleQueryKey = (flagId: string,) => {
-    return [
-    'DELETE', `/flags/${flagId}/schedule`
-    ] as const;
-    }
+export const getCancelScheduleMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError,{flagId: string}, TContext> => {
 
-
-export const getCancelScheduleQueryOptions = <TData = Awaited<ReturnType<typeof cancelSchedule>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCancelScheduleQueryKey(flagId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof cancelSchedule>>> = ({ signal }) => cancelSchedule(flagId, requestOptions, signal);
+const mutationKey = ['cancelSchedule'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof cancelSchedule>>, {flagId: string}> = (props) => {
+          const {flagId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CancelScheduleQueryResult = NonNullable<Awaited<ReturnType<typeof cancelSchedule>>>
-export type CancelScheduleQueryError = ErrorType<ApiError>
+          return  cancelSchedule(flagId,requestOptions)
+        }
 
 
-export function useCancelSchedule<TData = Awaited<ReturnType<typeof cancelSchedule>>, TError = ErrorType<ApiError>>(
- flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof cancelSchedule>>,
-          TError,
-          Awaited<ReturnType<typeof cancelSchedule>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCancelSchedule<TData = Awaited<ReturnType<typeof cancelSchedule>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof cancelSchedule>>,
-          TError,
-          Awaited<ReturnType<typeof cancelSchedule>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCancelSchedule<TData = Awaited<ReturnType<typeof cancelSchedule>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CancelScheduleMutationResult = NonNullable<Awaited<ReturnType<typeof cancelSchedule>>>
+
+    export type CancelScheduleMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Cancel scheduled flag change
  */
-
-export function useCancelSchedule<TData = Awaited<ReturnType<typeof cancelSchedule>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCancelScheduleQueryOptions(flagId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useCancelSchedule = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelSchedule>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof cancelSchedule>>,
+        TError,
+        {flagId: string},
+        TContext
+      > => {
+      return useMutation(getCancelScheduleMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Get scheduled flags
  */
 export const getScheduledFlags = (
@@ -370,47 +268,77 @@ export const getScheduledFlags = (
 
 
 
-export const getGetScheduledFlagsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError,void, TContext> => {
-
-const mutationKey = ['getScheduledFlags'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetScheduledFlagsQueryKey = () => {
+    return [
+    `/dashboard/schedules`
+    ] as const;
+    }
 
 
+export const getGetScheduledFlagsQueryOptions = <TData = Awaited<ReturnType<typeof getScheduledFlags>>, TError = ErrorType<ApiError>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScheduledFlagsQueryKey();
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getScheduledFlags>>, void> = () => {
 
-
-          return  getScheduledFlags(requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScheduledFlags>>> = ({ signal }) => getScheduledFlags(requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetScheduledFlagsQueryResult = NonNullable<Awaited<ReturnType<typeof getScheduledFlags>>>
+export type GetScheduledFlagsQueryError = ErrorType<ApiError>
 
-    export type GetScheduledFlagsMutationResult = NonNullable<Awaited<ReturnType<typeof getScheduledFlags>>>
 
-    export type GetScheduledFlagsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetScheduledFlags<TData = Awaited<ReturnType<typeof getScheduledFlags>>, TError = ErrorType<ApiError>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduledFlags>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduledFlags>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduledFlags<TData = Awaited<ReturnType<typeof getScheduledFlags>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduledFlags>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduledFlags>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduledFlags<TData = Awaited<ReturnType<typeof getScheduledFlags>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get scheduled flags
  */
-export const useGetScheduledFlags = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getScheduledFlags>>,
-        TError,
-        void,
-        TContext
-      > => {
-      return useMutation(getGetScheduledFlagsMutationOptions(options), queryClient);
-    }
+
+export function useGetScheduledFlags<TData = Awaited<ReturnType<typeof getScheduledFlags>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduledFlags>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetScheduledFlagsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

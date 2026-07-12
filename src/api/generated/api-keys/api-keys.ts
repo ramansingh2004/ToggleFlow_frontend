@@ -77,51 +77,81 @@ export const getApiKeysByProjectId = (
 
 
 
-export const getGetApiKeysByProjectIdMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getApiKeysByProjectId'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetApiKeysByProjectIdQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/api-keys`
+    ] as const;
+    }
 
 
+export const getGetApiKeysByProjectIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiKeysByProjectIdQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getApiKeysByProjectId>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getApiKeysByProjectId(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiKeysByProjectId>>> = ({ signal }) => getApiKeysByProjectId(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetApiKeysByProjectIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiKeysByProjectId>>>
+export type GetApiKeysByProjectIdQueryError = ErrorType<ApiError>
 
-    export type GetApiKeysByProjectIdMutationResult = NonNullable<Awaited<ReturnType<typeof getApiKeysByProjectId>>>
 
-    export type GetApiKeysByProjectIdMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetApiKeysByProjectId<TData = Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiKeysByProjectId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiKeysByProjectId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiKeysByProjectId<TData = Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiKeysByProjectId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiKeysByProjectId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiKeysByProjectId<TData = Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary List API keys
  */
-export const useGetApiKeysByProjectId = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getApiKeysByProjectId>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetApiKeysByProjectIdMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetApiKeysByProjectId<TData = Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeysByProjectId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiKeysByProjectIdQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Creates a new API key for a project.
  *
  * **Important:** The plaintext API key is returned only once during creation.
@@ -146,87 +176,51 @@ export const createApiKey = (
 
 
 
-export const getCreateApiKeyQueryKey = (projectId: string,
-    createApiKeyRequest?: BodyType<CreateApiKeyRequest>,) => {
-    return [
-    'POST', `/projects/${projectId}/api-keys`, createApiKeyRequest
-    ] as const;
-    }
+export const getCreateApiKeyMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createApiKey>>, TError,{projectId: string;data: BodyType<CreateApiKeyRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createApiKey>>, TError,{projectId: string;data: BodyType<CreateApiKeyRequest>}, TContext> => {
 
-
-export const getCreateApiKeyQueryOptions = <TData = Awaited<ReturnType<typeof createApiKey>>, TError = ErrorType<ApiError>>(projectId: string,
-    createApiKeyRequest: BodyType<CreateApiKeyRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createApiKey>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCreateApiKeyQueryKey(projectId,createApiKeyRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof createApiKey>>> = ({ signal }) => createApiKey(projectId,createApiKeyRequest, requestOptions, signal);
+const mutationKey = ['createApiKey'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createApiKey>>, {projectId: string;data: BodyType<CreateApiKeyRequest>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof createApiKey>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CreateApiKeyQueryResult = NonNullable<Awaited<ReturnType<typeof createApiKey>>>
-export type CreateApiKeyQueryError = ErrorType<ApiError>
+          return  createApiKey(projectId,data,requestOptions)
+        }
 
 
-export function useCreateApiKey<TData = Awaited<ReturnType<typeof createApiKey>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createApiKeyRequest: BodyType<CreateApiKeyRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof createApiKey>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createApiKey>>,
-          TError,
-          Awaited<ReturnType<typeof createApiKey>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateApiKey<TData = Awaited<ReturnType<typeof createApiKey>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createApiKeyRequest: BodyType<CreateApiKeyRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createApiKey>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createApiKey>>,
-          TError,
-          Awaited<ReturnType<typeof createApiKey>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateApiKey<TData = Awaited<ReturnType<typeof createApiKey>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createApiKeyRequest: BodyType<CreateApiKeyRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createApiKey>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof createApiKey>>>
+    export type CreateApiKeyMutationBody = BodyType<CreateApiKeyRequest>
+    export type CreateApiKeyMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Create API key
  */
-
-export function useCreateApiKey<TData = Awaited<ReturnType<typeof createApiKey>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createApiKeyRequest: BodyType<CreateApiKeyRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createApiKey>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCreateApiKeyQueryOptions(projectId,createApiKeyRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useCreateApiKey = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createApiKey>>, TError,{projectId: string;data: BodyType<CreateApiKeyRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createApiKey>>,
+        TError,
+        {projectId: string;data: BodyType<CreateApiKeyRequest>},
+        TContext
+      > => {
+      return useMutation(getCreateApiKeyMutationOptions(options), queryClient);
+    }
+    /**
  * Revokes an API key by marking it inactive. The key can no longer be used for SDK authentication.
  * @summary Revoke API key
  */
@@ -245,77 +239,47 @@ export const revokeApiKey = (
 
 
 
-export const getRevokeApiKeyQueryKey = (apiKeyId: string,) => {
-    return [
-    'DELETE', `/api-keys/${apiKeyId}`
-    ] as const;
-    }
+export const getRevokeApiKeyMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError,{apiKeyId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError,{apiKeyId: string}, TContext> => {
 
-
-export const getRevokeApiKeyQueryOptions = <TData = Awaited<ReturnType<typeof revokeApiKey>>, TError = ErrorType<ApiError>>(apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getRevokeApiKeyQueryKey(apiKeyId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof revokeApiKey>>> = ({ signal }) => revokeApiKey(apiKeyId, requestOptions, signal);
+const mutationKey = ['revokeApiKey'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof revokeApiKey>>, {apiKeyId: string}> = (props) => {
+          const {apiKeyId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: apiKeyId !== null && apiKeyId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type RevokeApiKeyQueryResult = NonNullable<Awaited<ReturnType<typeof revokeApiKey>>>
-export type RevokeApiKeyQueryError = ErrorType<ApiError>
+          return  revokeApiKey(apiKeyId,requestOptions)
+        }
 
 
-export function useRevokeApiKey<TData = Awaited<ReturnType<typeof revokeApiKey>>, TError = ErrorType<ApiError>>(
- apiKeyId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof revokeApiKey>>,
-          TError,
-          Awaited<ReturnType<typeof revokeApiKey>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRevokeApiKey<TData = Awaited<ReturnType<typeof revokeApiKey>>, TError = ErrorType<ApiError>>(
- apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof revokeApiKey>>,
-          TError,
-          Awaited<ReturnType<typeof revokeApiKey>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRevokeApiKey<TData = Awaited<ReturnType<typeof revokeApiKey>>, TError = ErrorType<ApiError>>(
- apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RevokeApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof revokeApiKey>>>
+
+    export type RevokeApiKeyMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Revoke API key
  */
-
-export function useRevokeApiKey<TData = Awaited<ReturnType<typeof revokeApiKey>>, TError = ErrorType<ApiError>>(
- apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getRevokeApiKeyQueryOptions(apiKeyId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
+export const useRevokeApiKey = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError,{apiKeyId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof revokeApiKey>>,
+        TError,
+        {apiKeyId: string},
+        TContext
+      > => {
+      return useMutation(getRevokeApiKeyMutationOptions(options), queryClient);
+    }

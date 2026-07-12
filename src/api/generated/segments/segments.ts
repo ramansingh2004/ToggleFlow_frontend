@@ -82,51 +82,81 @@ export const getProjectSegments = (
 
 
 
-export const getGetProjectSegmentsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getProjectSegments'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetProjectSegmentsQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/segments`
+    ] as const;
+    }
 
 
+export const getGetProjectSegmentsQueryOptions = <TData = Awaited<ReturnType<typeof getProjectSegments>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectSegmentsQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getProjectSegments>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getProjectSegments(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjectSegments>>> = ({ signal }) => getProjectSegments(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetProjectSegmentsQueryResult = NonNullable<Awaited<ReturnType<typeof getProjectSegments>>>
+export type GetProjectSegmentsQueryError = ErrorType<ApiError>
 
-    export type GetProjectSegmentsMutationResult = NonNullable<Awaited<ReturnType<typeof getProjectSegments>>>
 
-    export type GetProjectSegmentsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetProjectSegments<TData = Awaited<ReturnType<typeof getProjectSegments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectSegments>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectSegments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectSegments<TData = Awaited<ReturnType<typeof getProjectSegments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectSegments>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectSegments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectSegments<TData = Awaited<ReturnType<typeof getProjectSegments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get project segments
  */
-export const useGetProjectSegments = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getProjectSegments>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetProjectSegmentsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetProjectSegments<TData = Awaited<ReturnType<typeof getProjectSegments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectSegments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProjectSegmentsQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Creates a new user segment.
  * @summary Create segment
  */
@@ -148,87 +178,51 @@ export const createSegment = (
 
 
 
-export const getCreateSegmentQueryKey = (projectId: string,
-    segmentBase?: BodyType<SegmentBase>,) => {
-    return [
-    'POST', `/projects/${projectId}/segments`, segmentBase
-    ] as const;
-    }
+export const getCreateSegmentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSegment>>, TError,{projectId: string;data: BodyType<SegmentBase>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSegment>>, TError,{projectId: string;data: BodyType<SegmentBase>}, TContext> => {
 
-
-export const getCreateSegmentQueryOptions = <TData = Awaited<ReturnType<typeof createSegment>>, TError = ErrorType<ApiError>>(projectId: string,
-    segmentBase: BodyType<SegmentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCreateSegmentQueryKey(projectId,segmentBase);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof createSegment>>> = ({ signal }) => createSegment(projectId,segmentBase, requestOptions, signal);
+const mutationKey = ['createSegment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSegment>>, {projectId: string;data: BodyType<SegmentBase>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof createSegment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CreateSegmentQueryResult = NonNullable<Awaited<ReturnType<typeof createSegment>>>
-export type CreateSegmentQueryError = ErrorType<ApiError>
+          return  createSegment(projectId,data,requestOptions)
+        }
 
 
-export function useCreateSegment<TData = Awaited<ReturnType<typeof createSegment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    segmentBase: BodyType<SegmentBase>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof createSegment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createSegment>>,
-          TError,
-          Awaited<ReturnType<typeof createSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateSegment<TData = Awaited<ReturnType<typeof createSegment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    segmentBase: BodyType<SegmentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createSegment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createSegment>>,
-          TError,
-          Awaited<ReturnType<typeof createSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateSegment<TData = Awaited<ReturnType<typeof createSegment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    segmentBase: BodyType<SegmentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSegmentMutationResult = NonNullable<Awaited<ReturnType<typeof createSegment>>>
+    export type CreateSegmentMutationBody = BodyType<SegmentBase>
+    export type CreateSegmentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Create segment
  */
-
-export function useCreateSegment<TData = Awaited<ReturnType<typeof createSegment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    segmentBase: BodyType<SegmentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCreateSegmentQueryOptions(projectId,segmentBase,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useCreateSegment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSegment>>, TError,{projectId: string;data: BodyType<SegmentBase>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createSegment>>,
+        TError,
+        {projectId: string;data: BodyType<SegmentBase>},
+        TContext
+      > => {
+      return useMutation(getCreateSegmentMutationOptions(options), queryClient);
+    }
+    /**
  * Updates a segment.
  * @summary Update segment
  */
@@ -250,87 +244,51 @@ export const updateSegment = (
 
 
 
-export const getUpdateSegmentQueryKey = (segmentId: string,
-    updateSegmentRequest?: BodyType<UpdateSegmentRequest>,) => {
-    return [
-    'PATCH', `/segments/${segmentId}`, updateSegmentRequest
-    ] as const;
-    }
+export const getUpdateSegmentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSegment>>, TError,{segmentId: string;data: BodyType<UpdateSegmentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSegment>>, TError,{segmentId: string;data: BodyType<UpdateSegmentRequest>}, TContext> => {
 
-
-export const getUpdateSegmentQueryOptions = <TData = Awaited<ReturnType<typeof updateSegment>>, TError = ErrorType<ApiError>>(segmentId: string,
-    updateSegmentRequest: BodyType<UpdateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getUpdateSegmentQueryKey(segmentId,updateSegmentRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof updateSegment>>> = ({ signal }) => updateSegment(segmentId,updateSegmentRequest, requestOptions, signal);
+const mutationKey = ['updateSegment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSegment>>, {segmentId: string;data: BodyType<UpdateSegmentRequest>}> = (props) => {
+          const {segmentId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: segmentId !== null && segmentId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof updateSegment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type UpdateSegmentQueryResult = NonNullable<Awaited<ReturnType<typeof updateSegment>>>
-export type UpdateSegmentQueryError = ErrorType<ApiError>
+          return  updateSegment(segmentId,data,requestOptions)
+        }
 
 
-export function useUpdateSegment<TData = Awaited<ReturnType<typeof updateSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    updateSegmentRequest: BodyType<UpdateSegmentRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateSegment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof updateSegment>>,
-          TError,
-          Awaited<ReturnType<typeof updateSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUpdateSegment<TData = Awaited<ReturnType<typeof updateSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    updateSegmentRequest: BodyType<UpdateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateSegment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof updateSegment>>,
-          TError,
-          Awaited<ReturnType<typeof updateSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUpdateSegment<TData = Awaited<ReturnType<typeof updateSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    updateSegmentRequest: BodyType<UpdateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSegmentMutationResult = NonNullable<Awaited<ReturnType<typeof updateSegment>>>
+    export type UpdateSegmentMutationBody = BodyType<UpdateSegmentRequest>
+    export type UpdateSegmentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Update segment
  */
-
-export function useUpdateSegment<TData = Awaited<ReturnType<typeof updateSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    updateSegmentRequest: BodyType<UpdateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getUpdateSegmentQueryOptions(segmentId,updateSegmentRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useUpdateSegment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSegment>>, TError,{segmentId: string;data: BodyType<UpdateSegmentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateSegment>>,
+        TError,
+        {segmentId: string;data: BodyType<UpdateSegmentRequest>},
+        TContext
+      > => {
+      return useMutation(getUpdateSegmentMutationOptions(options), queryClient);
+    }
+    /**
  * Deletes a segment.
  * @summary Delete segment
  */
@@ -349,81 +307,51 @@ export const deleteSegment = (
 
 
 
-export const getDeleteSegmentQueryKey = (segmentId: string,) => {
-    return [
-    'DELETE', `/segments/${segmentId}`
-    ] as const;
-    }
+export const getDeleteSegmentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSegment>>, TError,{segmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSegment>>, TError,{segmentId: string}, TContext> => {
 
-
-export const getDeleteSegmentQueryOptions = <TData = Awaited<ReturnType<typeof deleteSegment>>, TError = ErrorType<ApiError>>(segmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getDeleteSegmentQueryKey(segmentId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof deleteSegment>>> = ({ signal }) => deleteSegment(segmentId, requestOptions, signal);
+const mutationKey = ['deleteSegment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSegment>>, {segmentId: string}> = (props) => {
+          const {segmentId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: segmentId !== null && segmentId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof deleteSegment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type DeleteSegmentQueryResult = NonNullable<Awaited<ReturnType<typeof deleteSegment>>>
-export type DeleteSegmentQueryError = ErrorType<ApiError>
+          return  deleteSegment(segmentId,requestOptions)
+        }
 
 
-export function useDeleteSegment<TData = Awaited<ReturnType<typeof deleteSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteSegment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof deleteSegment>>,
-          TError,
-          Awaited<ReturnType<typeof deleteSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDeleteSegment<TData = Awaited<ReturnType<typeof deleteSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteSegment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof deleteSegment>>,
-          TError,
-          Awaited<ReturnType<typeof deleteSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDeleteSegment<TData = Awaited<ReturnType<typeof deleteSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSegmentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSegment>>>
+
+    export type DeleteSegmentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Delete segment
  */
-
-export function useDeleteSegment<TData = Awaited<ReturnType<typeof deleteSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getDeleteSegmentQueryOptions(segmentId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useDeleteSegment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSegment>>, TError,{segmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSegment>>,
+        TError,
+        {segmentId: string},
+        TContext
+      > => {
+      return useMutation(getDeleteSegmentMutationOptions(options), queryClient);
+    }
+    /**
  * Tests whether a sample user matches a segment.
  * @summary Test segment
  */
@@ -445,87 +373,51 @@ export const testSegment = (
 
 
 
-export const getTestSegmentQueryKey = (segmentId: string,
-    testSegmentRequest?: BodyType<TestSegmentRequest>,) => {
-    return [
-    'POST', `/segments/${segmentId}/test`, testSegmentRequest
-    ] as const;
-    }
+export const getTestSegmentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof testSegment>>, TError,{segmentId: string;data: BodyType<TestSegmentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof testSegment>>, TError,{segmentId: string;data: BodyType<TestSegmentRequest>}, TContext> => {
 
-
-export const getTestSegmentQueryOptions = <TData = Awaited<ReturnType<typeof testSegment>>, TError = ErrorType<ApiError>>(segmentId: string,
-    testSegmentRequest: BodyType<TestSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getTestSegmentQueryKey(segmentId,testSegmentRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof testSegment>>> = ({ signal }) => testSegment(segmentId,testSegmentRequest, requestOptions, signal);
+const mutationKey = ['testSegment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof testSegment>>, {segmentId: string;data: BodyType<TestSegmentRequest>}> = (props) => {
+          const {segmentId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: segmentId !== null && segmentId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof testSegment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type TestSegmentQueryResult = NonNullable<Awaited<ReturnType<typeof testSegment>>>
-export type TestSegmentQueryError = ErrorType<ApiError>
+          return  testSegment(segmentId,data,requestOptions)
+        }
 
 
-export function useTestSegment<TData = Awaited<ReturnType<typeof testSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    testSegmentRequest: BodyType<TestSegmentRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof testSegment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof testSegment>>,
-          TError,
-          Awaited<ReturnType<typeof testSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTestSegment<TData = Awaited<ReturnType<typeof testSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    testSegmentRequest: BodyType<TestSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testSegment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof testSegment>>,
-          TError,
-          Awaited<ReturnType<typeof testSegment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTestSegment<TData = Awaited<ReturnType<typeof testSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    testSegmentRequest: BodyType<TestSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TestSegmentMutationResult = NonNullable<Awaited<ReturnType<typeof testSegment>>>
+    export type TestSegmentMutationBody = BodyType<TestSegmentRequest>
+    export type TestSegmentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Test segment
  */
-
-export function useTestSegment<TData = Awaited<ReturnType<typeof testSegment>>, TError = ErrorType<ApiError>>(
- segmentId: string,
-    testSegmentRequest: BodyType<TestSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testSegment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getTestSegmentQueryOptions(segmentId,testSegmentRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useTestSegment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof testSegment>>, TError,{segmentId: string;data: BodyType<TestSegmentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof testSegment>>,
+        TError,
+        {segmentId: string;data: BodyType<TestSegmentRequest>},
+        TContext
+      > => {
+      return useMutation(getTestSegmentMutationOptions(options), queryClient);
+    }
+    /**
  * Returns all matching segments for a supplied user context.
  * @summary Evaluate user against all segments
  */
@@ -547,83 +439,47 @@ export const evaluateSegments = (
 
 
 
-export const getEvaluateSegmentsQueryKey = (projectId: string,
-    evaluateSegmentRequest?: BodyType<EvaluateSegmentRequest>,) => {
-    return [
-    'POST', `/projects/${projectId}/segments/evaluate`, evaluateSegmentRequest
-    ] as const;
-    }
+export const getEvaluateSegmentsMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError,{projectId: string;data: BodyType<EvaluateSegmentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError,{projectId: string;data: BodyType<EvaluateSegmentRequest>}, TContext> => {
 
-
-export const getEvaluateSegmentsQueryOptions = <TData = Awaited<ReturnType<typeof evaluateSegments>>, TError = ErrorType<ApiError>>(projectId: string,
-    evaluateSegmentRequest: BodyType<EvaluateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getEvaluateSegmentsQueryKey(projectId,evaluateSegmentRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof evaluateSegments>>> = ({ signal }) => evaluateSegments(projectId,evaluateSegmentRequest, requestOptions, signal);
+const mutationKey = ['evaluateSegments'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof evaluateSegments>>, {projectId: string;data: BodyType<EvaluateSegmentRequest>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type EvaluateSegmentsQueryResult = NonNullable<Awaited<ReturnType<typeof evaluateSegments>>>
-export type EvaluateSegmentsQueryError = ErrorType<ApiError>
+          return  evaluateSegments(projectId,data,requestOptions)
+        }
 
 
-export function useEvaluateSegments<TData = Awaited<ReturnType<typeof evaluateSegments>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    evaluateSegmentRequest: BodyType<EvaluateSegmentRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof evaluateSegments>>,
-          TError,
-          Awaited<ReturnType<typeof evaluateSegments>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useEvaluateSegments<TData = Awaited<ReturnType<typeof evaluateSegments>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    evaluateSegmentRequest: BodyType<EvaluateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof evaluateSegments>>,
-          TError,
-          Awaited<ReturnType<typeof evaluateSegments>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useEvaluateSegments<TData = Awaited<ReturnType<typeof evaluateSegments>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    evaluateSegmentRequest: BodyType<EvaluateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateSegmentsMutationResult = NonNullable<Awaited<ReturnType<typeof evaluateSegments>>>
+    export type EvaluateSegmentsMutationBody = BodyType<EvaluateSegmentRequest>
+    export type EvaluateSegmentsMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Evaluate user against all segments
  */
-
-export function useEvaluateSegments<TData = Awaited<ReturnType<typeof evaluateSegments>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    evaluateSegmentRequest: BodyType<EvaluateSegmentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getEvaluateSegmentsQueryOptions(projectId,evaluateSegmentRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
+export const useEvaluateSegments = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateSegments>>, TError,{projectId: string;data: BodyType<EvaluateSegmentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof evaluateSegments>>,
+        TError,
+        {projectId: string;data: BodyType<EvaluateSegmentRequest>},
+        TContext
+      > => {
+      return useMutation(getEvaluateSegmentsMutationOptions(options), queryClient);
+    }

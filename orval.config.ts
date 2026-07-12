@@ -20,12 +20,6 @@ export default defineConfig({
           path: './src/api/client/orval-client.ts',
           name: 'customInstance',
         },
-
-        query: {
-          useQuery: true,
-          useMutation: true,
-          signal: true,
-        },
       },
     },
   },

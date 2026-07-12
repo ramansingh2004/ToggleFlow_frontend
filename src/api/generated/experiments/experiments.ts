@@ -81,51 +81,81 @@ export const getProjectExperiments = (
 
 
 
-export const getGetProjectExperimentsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getProjectExperiments'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetProjectExperimentsQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/experiments`
+    ] as const;
+    }
 
 
+export const getGetProjectExperimentsQueryOptions = <TData = Awaited<ReturnType<typeof getProjectExperiments>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectExperimentsQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getProjectExperiments>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getProjectExperiments(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjectExperiments>>> = ({ signal }) => getProjectExperiments(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetProjectExperimentsQueryResult = NonNullable<Awaited<ReturnType<typeof getProjectExperiments>>>
+export type GetProjectExperimentsQueryError = ErrorType<ApiError>
 
-    export type GetProjectExperimentsMutationResult = NonNullable<Awaited<ReturnType<typeof getProjectExperiments>>>
 
-    export type GetProjectExperimentsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetProjectExperiments<TData = Awaited<ReturnType<typeof getProjectExperiments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectExperiments>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectExperiments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectExperiments<TData = Awaited<ReturnType<typeof getProjectExperiments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectExperiments>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectExperiments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectExperiments<TData = Awaited<ReturnType<typeof getProjectExperiments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get project experiments
  */
-export const useGetProjectExperiments = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getProjectExperiments>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetProjectExperimentsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetProjectExperiments<TData = Awaited<ReturnType<typeof getProjectExperiments>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectExperiments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProjectExperimentsQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Creates a new A/B experiment.
  * @summary Create experiment
  */
@@ -147,87 +177,51 @@ export const createExperiment = (
 
 
 
-export const getCreateExperimentQueryKey = (projectId: string,
-    experimentBase?: BodyType<ExperimentBase>,) => {
-    return [
-    'POST', `/projects/${projectId}/experiments`, experimentBase
-    ] as const;
-    }
+export const getCreateExperimentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<ExperimentBase>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<ExperimentBase>}, TContext> => {
 
-
-export const getCreateExperimentQueryOptions = <TData = Awaited<ReturnType<typeof createExperiment>>, TError = ErrorType<ApiError>>(projectId: string,
-    experimentBase: BodyType<ExperimentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCreateExperimentQueryKey(projectId,experimentBase);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof createExperiment>>> = ({ signal }) => createExperiment(projectId,experimentBase, requestOptions, signal);
+const mutationKey = ['createExperiment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExperiment>>, {projectId: string;data: BodyType<ExperimentBase>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof createExperiment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CreateExperimentQueryResult = NonNullable<Awaited<ReturnType<typeof createExperiment>>>
-export type CreateExperimentQueryError = ErrorType<ApiError>
+          return  createExperiment(projectId,data,requestOptions)
+        }
 
 
-export function useCreateExperiment<TData = Awaited<ReturnType<typeof createExperiment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    experimentBase: BodyType<ExperimentBase>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof createExperiment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createExperiment>>,
-          TError,
-          Awaited<ReturnType<typeof createExperiment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateExperiment<TData = Awaited<ReturnType<typeof createExperiment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    experimentBase: BodyType<ExperimentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createExperiment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createExperiment>>,
-          TError,
-          Awaited<ReturnType<typeof createExperiment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateExperiment<TData = Awaited<ReturnType<typeof createExperiment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    experimentBase: BodyType<ExperimentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateExperimentMutationResult = NonNullable<Awaited<ReturnType<typeof createExperiment>>>
+    export type CreateExperimentMutationBody = BodyType<ExperimentBase>
+    export type CreateExperimentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Create experiment
  */
-
-export function useCreateExperiment<TData = Awaited<ReturnType<typeof createExperiment>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    experimentBase: BodyType<ExperimentBase>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCreateExperimentQueryOptions(projectId,experimentBase,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useCreateExperiment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<ExperimentBase>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createExperiment>>,
+        TError,
+        {projectId: string;data: BodyType<ExperimentBase>},
+        TContext
+      > => {
+      return useMutation(getCreateExperimentMutationOptions(options), queryClient);
+    }
+    /**
  * Returns experiment statistics and variant performance.
  * @summary Get experiment results
  */
@@ -246,51 +240,81 @@ export const getExperimentResults = (
 
 
 
-export const getGetExperimentResultsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError,{experimentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError,{experimentId: string}, TContext> => {
-
-const mutationKey = ['getExperimentResults'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetExperimentResultsQueryKey = (experimentId: string,) => {
+    return [
+    `/experiments/${experimentId}/results`
+    ] as const;
+    }
 
 
+export const getGetExperimentResultsQueryOptions = <TData = Awaited<ReturnType<typeof getExperimentResults>>, TError = ErrorType<ApiError>>(experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExperimentResultsQueryKey(experimentId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getExperimentResults>>, {experimentId: string}> = (props) => {
-          const {experimentId} = props ?? {};
 
-          return  getExperimentResults(experimentId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExperimentResults>>> = ({ signal }) => getExperimentResults(experimentId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: experimentId !== null && experimentId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetExperimentResultsQueryResult = NonNullable<Awaited<ReturnType<typeof getExperimentResults>>>
+export type GetExperimentResultsQueryError = ErrorType<ApiError>
 
-    export type GetExperimentResultsMutationResult = NonNullable<Awaited<ReturnType<typeof getExperimentResults>>>
 
-    export type GetExperimentResultsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetExperimentResults<TData = Awaited<ReturnType<typeof getExperimentResults>>, TError = ErrorType<ApiError>>(
+ experimentId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExperimentResults>>,
+          TError,
+          Awaited<ReturnType<typeof getExperimentResults>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExperimentResults<TData = Awaited<ReturnType<typeof getExperimentResults>>, TError = ErrorType<ApiError>>(
+ experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExperimentResults>>,
+          TError,
+          Awaited<ReturnType<typeof getExperimentResults>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExperimentResults<TData = Awaited<ReturnType<typeof getExperimentResults>>, TError = ErrorType<ApiError>>(
+ experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get experiment results
  */
-export const useGetExperimentResults = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError,{experimentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getExperimentResults>>,
-        TError,
-        {experimentId: string},
-        TContext
-      > => {
-      return useMutation(getGetExperimentResultsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetExperimentResults<TData = Awaited<ReturnType<typeof getExperimentResults>>, TError = ErrorType<ApiError>>(
+ experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExperimentResults>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetExperimentResultsQueryOptions(experimentId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Starts a draft experiment.
  * @summary Start experiment
  */
@@ -309,81 +333,51 @@ export const startExperiment = (
 
 
 
-export const getStartExperimentQueryKey = (experimentId: string,) => {
-    return [
-    'POST', `/experiments/${experimentId}/start`
-    ] as const;
-    }
+export const getStartExperimentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startExperiment>>, TError,{experimentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof startExperiment>>, TError,{experimentId: string}, TContext> => {
 
-
-export const getStartExperimentQueryOptions = <TData = Awaited<ReturnType<typeof startExperiment>>, TError = ErrorType<ApiError>>(experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof startExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getStartExperimentQueryKey(experimentId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof startExperiment>>> = ({ signal }) => startExperiment(experimentId, requestOptions, signal);
+const mutationKey = ['startExperiment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startExperiment>>, {experimentId: string}> = (props) => {
+          const {experimentId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: experimentId !== null && experimentId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof startExperiment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type StartExperimentQueryResult = NonNullable<Awaited<ReturnType<typeof startExperiment>>>
-export type StartExperimentQueryError = ErrorType<ApiError>
+          return  startExperiment(experimentId,requestOptions)
+        }
 
 
-export function useStartExperiment<TData = Awaited<ReturnType<typeof startExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof startExperiment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof startExperiment>>,
-          TError,
-          Awaited<ReturnType<typeof startExperiment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStartExperiment<TData = Awaited<ReturnType<typeof startExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof startExperiment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof startExperiment>>,
-          TError,
-          Awaited<ReturnType<typeof startExperiment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStartExperiment<TData = Awaited<ReturnType<typeof startExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof startExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartExperimentMutationResult = NonNullable<Awaited<ReturnType<typeof startExperiment>>>
+
+    export type StartExperimentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Start experiment
  */
-
-export function useStartExperiment<TData = Awaited<ReturnType<typeof startExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof startExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getStartExperimentQueryOptions(experimentId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useStartExperiment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startExperiment>>, TError,{experimentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof startExperiment>>,
+        TError,
+        {experimentId: string},
+        TContext
+      > => {
+      return useMutation(getStartExperimentMutationOptions(options), queryClient);
+    }
+    /**
  * Ends a running experiment.
  * @summary End experiment
  */
@@ -405,87 +399,51 @@ export const endExperiment = (
 
 
 
-export const getEndExperimentQueryKey = (experimentId: string,
-    endExperimentRequest?: BodyType<EndExperimentRequest>,) => {
-    return [
-    'POST', `/experiments/${experimentId}/end`, endExperimentRequest
-    ] as const;
-    }
+export const getEndExperimentMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endExperiment>>, TError,{experimentId: string;data?: BodyType<EndExperimentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof endExperiment>>, TError,{experimentId: string;data?: BodyType<EndExperimentRequest>}, TContext> => {
 
-
-export const getEndExperimentQueryOptions = <TData = Awaited<ReturnType<typeof endExperiment>>, TError = ErrorType<ApiError>>(experimentId: string,
-    endExperimentRequest?: BodyType<EndExperimentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof endExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getEndExperimentQueryKey(experimentId,endExperimentRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof endExperiment>>> = ({ signal }) => endExperiment(experimentId,endExperimentRequest, requestOptions, signal);
+const mutationKey = ['endExperiment'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof endExperiment>>, {experimentId: string;data?: BodyType<EndExperimentRequest>}> = (props) => {
+          const {experimentId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: experimentId !== null && experimentId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof endExperiment>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type EndExperimentQueryResult = NonNullable<Awaited<ReturnType<typeof endExperiment>>>
-export type EndExperimentQueryError = ErrorType<ApiError>
+          return  endExperiment(experimentId,data,requestOptions)
+        }
 
 
-export function useEndExperiment<TData = Awaited<ReturnType<typeof endExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    endExperimentRequest: undefined |  BodyType<EndExperimentRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof endExperiment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof endExperiment>>,
-          TError,
-          Awaited<ReturnType<typeof endExperiment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useEndExperiment<TData = Awaited<ReturnType<typeof endExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    endExperimentRequest?: BodyType<EndExperimentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof endExperiment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof endExperiment>>,
-          TError,
-          Awaited<ReturnType<typeof endExperiment>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useEndExperiment<TData = Awaited<ReturnType<typeof endExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    endExperimentRequest?: BodyType<EndExperimentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof endExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EndExperimentMutationResult = NonNullable<Awaited<ReturnType<typeof endExperiment>>>
+    export type EndExperimentMutationBody = BodyType<EndExperimentRequest> | undefined
+    export type EndExperimentMutationError = ErrorType<ApiError>
+
+    /**
  * @summary End experiment
  */
-
-export function useEndExperiment<TData = Awaited<ReturnType<typeof endExperiment>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    endExperimentRequest?: BodyType<EndExperimentRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof endExperiment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getEndExperimentQueryOptions(experimentId,endExperimentRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useEndExperiment = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof endExperiment>>, TError,{experimentId: string;data?: BodyType<EndExperimentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof endExperiment>>,
+        TError,
+        {experimentId: string;data?: BodyType<EndExperimentRequest>},
+        TContext
+      > => {
+      return useMutation(getEndExperimentMutationOptions(options), queryClient);
+    }
+    /**
  * Records a conversion result for a variant.
  * @summary Record experiment result
  */
@@ -508,89 +466,47 @@ export const recordExperimentResult = (
 
 
 
-export const getRecordExperimentResultQueryKey = (experimentId: string,
-    variantId: string,
-    recordExperimentResultRequest?: BodyType<RecordExperimentResultRequest>,) => {
-    return [
-    'POST', `/experiments/${experimentId}/variants/${variantId}/results`, recordExperimentResultRequest
-    ] as const;
-    }
+export const getRecordExperimentResultMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError,{experimentId: string;variantId: string;data: BodyType<RecordExperimentResultRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError,{experimentId: string;variantId: string;data: BodyType<RecordExperimentResultRequest>}, TContext> => {
 
-
-export const getRecordExperimentResultQueryOptions = <TData = Awaited<ReturnType<typeof recordExperimentResult>>, TError = ErrorType<ApiError>>(experimentId: string,
-    variantId: string,
-    recordExperimentResultRequest: BodyType<RecordExperimentResultRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getRecordExperimentResultQueryKey(experimentId,variantId,recordExperimentResultRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof recordExperimentResult>>> = ({ signal }) => recordExperimentResult(experimentId,variantId,recordExperimentResultRequest, requestOptions, signal);
+const mutationKey = ['recordExperimentResult'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof recordExperimentResult>>, {experimentId: string;variantId: string;data: BodyType<RecordExperimentResultRequest>}> = (props) => {
+          const {experimentId,variantId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: experimentId !== null && experimentId !== undefined && variantId !== null && variantId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type RecordExperimentResultQueryResult = NonNullable<Awaited<ReturnType<typeof recordExperimentResult>>>
-export type RecordExperimentResultQueryError = ErrorType<ApiError>
+          return  recordExperimentResult(experimentId,variantId,data,requestOptions)
+        }
 
 
-export function useRecordExperimentResult<TData = Awaited<ReturnType<typeof recordExperimentResult>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    variantId: string,
-    recordExperimentResultRequest: BodyType<RecordExperimentResultRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof recordExperimentResult>>,
-          TError,
-          Awaited<ReturnType<typeof recordExperimentResult>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRecordExperimentResult<TData = Awaited<ReturnType<typeof recordExperimentResult>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    variantId: string,
-    recordExperimentResultRequest: BodyType<RecordExperimentResultRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof recordExperimentResult>>,
-          TError,
-          Awaited<ReturnType<typeof recordExperimentResult>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRecordExperimentResult<TData = Awaited<ReturnType<typeof recordExperimentResult>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    variantId: string,
-    recordExperimentResultRequest: BodyType<RecordExperimentResultRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RecordExperimentResultMutationResult = NonNullable<Awaited<ReturnType<typeof recordExperimentResult>>>
+    export type RecordExperimentResultMutationBody = BodyType<RecordExperimentResultRequest>
+    export type RecordExperimentResultMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Record experiment result
  */
-
-export function useRecordExperimentResult<TData = Awaited<ReturnType<typeof recordExperimentResult>>, TError = ErrorType<ApiError>>(
- experimentId: string,
-    variantId: string,
-    recordExperimentResultRequest: BodyType<RecordExperimentResultRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getRecordExperimentResultQueryOptions(experimentId,variantId,recordExperimentResultRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
+export const useRecordExperimentResult = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError,{experimentId: string;variantId: string;data: BodyType<RecordExperimentResultRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof recordExperimentResult>>,
+        TError,
+        {experimentId: string;variantId: string;data: BodyType<RecordExperimentResultRequest>},
+        TContext
+      > => {
+      return useMutation(getRecordExperimentResultMutationOptions(options), queryClient);
+    }

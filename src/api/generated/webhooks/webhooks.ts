@@ -79,51 +79,81 @@ export const getWebhooks = (
 
 
 
-export const getGetWebhooksMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getWebhooks>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getWebhooks>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getWebhooks'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetWebhooksQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/webhooks`
+    ] as const;
+    }
 
 
+export const getGetWebhooksQueryOptions = <TData = Awaited<ReturnType<typeof getWebhooks>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhooks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWebhooksQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getWebhooks>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getWebhooks(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWebhooks>>> = ({ signal }) => getWebhooks(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWebhooks>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetWebhooksQueryResult = NonNullable<Awaited<ReturnType<typeof getWebhooks>>>
+export type GetWebhooksQueryError = ErrorType<ApiError>
 
-    export type GetWebhooksMutationResult = NonNullable<Awaited<ReturnType<typeof getWebhooks>>>
 
-    export type GetWebhooksMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetWebhooks<TData = Awaited<ReturnType<typeof getWebhooks>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhooks>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWebhooks>>,
+          TError,
+          Awaited<ReturnType<typeof getWebhooks>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWebhooks<TData = Awaited<ReturnType<typeof getWebhooks>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhooks>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWebhooks>>,
+          TError,
+          Awaited<ReturnType<typeof getWebhooks>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWebhooks<TData = Awaited<ReturnType<typeof getWebhooks>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhooks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary List webhooks
  */
-export const useGetWebhooks = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getWebhooks>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getWebhooks>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetWebhooksMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetWebhooks<TData = Awaited<ReturnType<typeof getWebhooks>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhooks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetWebhooksQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Creates a webhook endpoint for a project.
  *
  * **Important:** The webhook secret is returned only once during creation.
@@ -148,87 +178,51 @@ export const createWebhook = (
 
 
 
-export const getCreateWebhookQueryKey = (projectId: string,
-    createWebhookRequest?: BodyType<CreateWebhookRequest>,) => {
-    return [
-    'POST', `/projects/${projectId}/webhooks`, createWebhookRequest
-    ] as const;
-    }
+export const getCreateWebhookMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createWebhook>>, TError,{projectId: string;data: BodyType<CreateWebhookRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createWebhook>>, TError,{projectId: string;data: BodyType<CreateWebhookRequest>}, TContext> => {
 
-
-export const getCreateWebhookQueryOptions = <TData = Awaited<ReturnType<typeof createWebhook>>, TError = ErrorType<ApiError>>(projectId: string,
-    createWebhookRequest: BodyType<CreateWebhookRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCreateWebhookQueryKey(projectId,createWebhookRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof createWebhook>>> = ({ signal }) => createWebhook(projectId,createWebhookRequest, requestOptions, signal);
+const mutationKey = ['createWebhook'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createWebhook>>, {projectId: string;data: BodyType<CreateWebhookRequest>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof createWebhook>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CreateWebhookQueryResult = NonNullable<Awaited<ReturnType<typeof createWebhook>>>
-export type CreateWebhookQueryError = ErrorType<ApiError>
+          return  createWebhook(projectId,data,requestOptions)
+        }
 
 
-export function useCreateWebhook<TData = Awaited<ReturnType<typeof createWebhook>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createWebhookRequest: BodyType<CreateWebhookRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof createWebhook>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createWebhook>>,
-          TError,
-          Awaited<ReturnType<typeof createWebhook>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateWebhook<TData = Awaited<ReturnType<typeof createWebhook>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createWebhookRequest: BodyType<CreateWebhookRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createWebhook>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createWebhook>>,
-          TError,
-          Awaited<ReturnType<typeof createWebhook>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateWebhook<TData = Awaited<ReturnType<typeof createWebhook>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createWebhookRequest: BodyType<CreateWebhookRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateWebhookMutationResult = NonNullable<Awaited<ReturnType<typeof createWebhook>>>
+    export type CreateWebhookMutationBody = BodyType<CreateWebhookRequest>
+    export type CreateWebhookMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Create webhook
  */
-
-export function useCreateWebhook<TData = Awaited<ReturnType<typeof createWebhook>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createWebhookRequest: BodyType<CreateWebhookRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCreateWebhookQueryOptions(projectId,createWebhookRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useCreateWebhook = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createWebhook>>, TError,{projectId: string;data: BodyType<CreateWebhookRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createWebhook>>,
+        TError,
+        {projectId: string;data: BodyType<CreateWebhookRequest>},
+        TContext
+      > => {
+      return useMutation(getCreateWebhookMutationOptions(options), queryClient);
+    }
+    /**
  * Sends a test payload to the configured webhook endpoint.
  * @summary Test webhook
  */
@@ -247,81 +241,51 @@ export const testWebhook = (
 
 
 
-export const getTestWebhookQueryKey = (webhookId: string,) => {
-    return [
-    'POST', `/webhooks/${webhookId}/test`
-    ] as const;
-    }
+export const getTestWebhookMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof testWebhook>>, TError,{webhookId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof testWebhook>>, TError,{webhookId: string}, TContext> => {
 
-
-export const getTestWebhookQueryOptions = <TData = Awaited<ReturnType<typeof testWebhook>>, TError = ErrorType<ApiError>>(webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getTestWebhookQueryKey(webhookId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof testWebhook>>> = ({ signal }) => testWebhook(webhookId, requestOptions, signal);
+const mutationKey = ['testWebhook'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof testWebhook>>, {webhookId: string}> = (props) => {
+          const {webhookId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: webhookId !== null && webhookId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof testWebhook>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type TestWebhookQueryResult = NonNullable<Awaited<ReturnType<typeof testWebhook>>>
-export type TestWebhookQueryError = ErrorType<ApiError>
+          return  testWebhook(webhookId,requestOptions)
+        }
 
 
-export function useTestWebhook<TData = Awaited<ReturnType<typeof testWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof testWebhook>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof testWebhook>>,
-          TError,
-          Awaited<ReturnType<typeof testWebhook>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTestWebhook<TData = Awaited<ReturnType<typeof testWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testWebhook>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof testWebhook>>,
-          TError,
-          Awaited<ReturnType<typeof testWebhook>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTestWebhook<TData = Awaited<ReturnType<typeof testWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TestWebhookMutationResult = NonNullable<Awaited<ReturnType<typeof testWebhook>>>
+
+    export type TestWebhookMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Test webhook
  */
-
-export function useTestWebhook<TData = Awaited<ReturnType<typeof testWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof testWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getTestWebhookQueryOptions(webhookId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useTestWebhook = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof testWebhook>>, TError,{webhookId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof testWebhook>>,
+        TError,
+        {webhookId: string},
+        TContext
+      > => {
+      return useMutation(getTestWebhookMutationOptions(options), queryClient);
+    }
+    /**
  * Permanently deletes a webhook endpoint.
  * @summary Delete webhook
  */
@@ -340,81 +304,51 @@ export const deleteWebhook = (
 
 
 
-export const getDeleteWebhookQueryKey = (webhookId: string,) => {
-    return [
-    'DELETE', `/webhooks/${webhookId}`
-    ] as const;
-    }
+export const getDeleteWebhookMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError,{webhookId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError,{webhookId: string}, TContext> => {
 
-
-export const getDeleteWebhookQueryOptions = <TData = Awaited<ReturnType<typeof deleteWebhook>>, TError = ErrorType<ApiError>>(webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getDeleteWebhookQueryKey(webhookId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof deleteWebhook>>> = ({ signal }) => deleteWebhook(webhookId, requestOptions, signal);
+const mutationKey = ['deleteWebhook'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteWebhook>>, {webhookId: string}> = (props) => {
+          const {webhookId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: webhookId !== null && webhookId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type DeleteWebhookQueryResult = NonNullable<Awaited<ReturnType<typeof deleteWebhook>>>
-export type DeleteWebhookQueryError = ErrorType<ApiError>
+          return  deleteWebhook(webhookId,requestOptions)
+        }
 
 
-export function useDeleteWebhook<TData = Awaited<ReturnType<typeof deleteWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof deleteWebhook>>,
-          TError,
-          Awaited<ReturnType<typeof deleteWebhook>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDeleteWebhook<TData = Awaited<ReturnType<typeof deleteWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof deleteWebhook>>,
-          TError,
-          Awaited<ReturnType<typeof deleteWebhook>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDeleteWebhook<TData = Awaited<ReturnType<typeof deleteWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteWebhookMutationResult = NonNullable<Awaited<ReturnType<typeof deleteWebhook>>>
+
+    export type DeleteWebhookMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Delete webhook
  */
-
-export function useDeleteWebhook<TData = Awaited<ReturnType<typeof deleteWebhook>>, TError = ErrorType<ApiError>>(
- webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getDeleteWebhookQueryOptions(webhookId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useDeleteWebhook = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteWebhook>>, TError,{webhookId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteWebhook>>,
+        TError,
+        {webhookId: string},
+        TContext
+      > => {
+      return useMutation(getDeleteWebhookMutationOptions(options), queryClient);
+    }
+    /**
  * Returns delivery history and statistics for a webhook endpoint.
  * @summary Webhook delivery history
  */
@@ -433,47 +367,77 @@ export const getWebhookHistory = (
 
 
 
-export const getGetWebhookHistoryMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError,{webhookId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError,{webhookId: string}, TContext> => {
-
-const mutationKey = ['getWebhookHistory'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetWebhookHistoryQueryKey = (webhookId: string,) => {
+    return [
+    `/webhooks/${webhookId}/history`
+    ] as const;
+    }
 
 
+export const getGetWebhookHistoryQueryOptions = <TData = Awaited<ReturnType<typeof getWebhookHistory>>, TError = ErrorType<ApiError>>(webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWebhookHistoryQueryKey(webhookId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getWebhookHistory>>, {webhookId: string}> = (props) => {
-          const {webhookId} = props ?? {};
 
-          return  getWebhookHistory(webhookId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWebhookHistory>>> = ({ signal }) => getWebhookHistory(webhookId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: webhookId !== null && webhookId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetWebhookHistoryQueryResult = NonNullable<Awaited<ReturnType<typeof getWebhookHistory>>>
+export type GetWebhookHistoryQueryError = ErrorType<ApiError>
 
-    export type GetWebhookHistoryMutationResult = NonNullable<Awaited<ReturnType<typeof getWebhookHistory>>>
 
-    export type GetWebhookHistoryMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetWebhookHistory<TData = Awaited<ReturnType<typeof getWebhookHistory>>, TError = ErrorType<ApiError>>(
+ webhookId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWebhookHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getWebhookHistory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWebhookHistory<TData = Awaited<ReturnType<typeof getWebhookHistory>>, TError = ErrorType<ApiError>>(
+ webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWebhookHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getWebhookHistory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWebhookHistory<TData = Awaited<ReturnType<typeof getWebhookHistory>>, TError = ErrorType<ApiError>>(
+ webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Webhook delivery history
  */
-export const useGetWebhookHistory = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError,{webhookId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getWebhookHistory>>,
-        TError,
-        {webhookId: string},
-        TContext
-      > => {
-      return useMutation(getGetWebhookHistoryMutationOptions(options), queryClient);
-    }
+
+export function useGetWebhookHistory<TData = Awaited<ReturnType<typeof getWebhookHistory>>, TError = ErrorType<ApiError>>(
+ webhookId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWebhookHistory>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetWebhookHistoryQueryOptions(webhookId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

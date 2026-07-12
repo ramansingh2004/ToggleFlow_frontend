@@ -83,87 +83,51 @@ export const setRolloutPercentage = (
 
 
 
-export const getSetRolloutPercentageQueryKey = (flagId: string,
-    setRolloutRequest?: BodyType<SetRolloutRequest>,) => {
-    return [
-    'PATCH', `/flags/${flagId}/rollout`, setRolloutRequest
-    ] as const;
-    }
+export const getSetRolloutPercentageMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError,{flagId: string;data: BodyType<SetRolloutRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError,{flagId: string;data: BodyType<SetRolloutRequest>}, TContext> => {
 
-
-export const getSetRolloutPercentageQueryOptions = <TData = Awaited<ReturnType<typeof setRolloutPercentage>>, TError = ErrorType<ApiError>>(flagId: string,
-    setRolloutRequest: BodyType<SetRolloutRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getSetRolloutPercentageQueryKey(flagId,setRolloutRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof setRolloutPercentage>>> = ({ signal }) => setRolloutPercentage(flagId,setRolloutRequest, requestOptions, signal);
+const mutationKey = ['setRolloutPercentage'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setRolloutPercentage>>, {flagId: string;data: BodyType<SetRolloutRequest>}> = (props) => {
+          const {flagId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type SetRolloutPercentageQueryResult = NonNullable<Awaited<ReturnType<typeof setRolloutPercentage>>>
-export type SetRolloutPercentageQueryError = ErrorType<ApiError>
+          return  setRolloutPercentage(flagId,data,requestOptions)
+        }
 
 
-export function useSetRolloutPercentage<TData = Awaited<ReturnType<typeof setRolloutPercentage>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    setRolloutRequest: BodyType<SetRolloutRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof setRolloutPercentage>>,
-          TError,
-          Awaited<ReturnType<typeof setRolloutPercentage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSetRolloutPercentage<TData = Awaited<ReturnType<typeof setRolloutPercentage>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    setRolloutRequest: BodyType<SetRolloutRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof setRolloutPercentage>>,
-          TError,
-          Awaited<ReturnType<typeof setRolloutPercentage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSetRolloutPercentage<TData = Awaited<ReturnType<typeof setRolloutPercentage>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    setRolloutRequest: BodyType<SetRolloutRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SetRolloutPercentageMutationResult = NonNullable<Awaited<ReturnType<typeof setRolloutPercentage>>>
+    export type SetRolloutPercentageMutationBody = BodyType<SetRolloutRequest>
+    export type SetRolloutPercentageMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Set rollout percentage
  */
-
-export function useSetRolloutPercentage<TData = Awaited<ReturnType<typeof setRolloutPercentage>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    setRolloutRequest: BodyType<SetRolloutRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getSetRolloutPercentageQueryOptions(flagId,setRolloutRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useSetRolloutPercentage = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setRolloutPercentage>>, TError,{flagId: string;data: BodyType<SetRolloutRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof setRolloutPercentage>>,
+        TError,
+        {flagId: string;data: BodyType<SetRolloutRequest>},
+        TContext
+      > => {
+      return useMutation(getSetRolloutPercentageMutationOptions(options), queryClient);
+    }
+    /**
  * Returns rollout information including
  * current percentage,
  * estimated affected users,
@@ -185,51 +149,81 @@ export const getRolloutStats = (
 
 
 
-export const getGetRolloutStatsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError,{flagId: string}, TContext> => {
-
-const mutationKey = ['getRolloutStats'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetRolloutStatsQueryKey = (flagId: string,) => {
+    return [
+    `/flags/${flagId}/rollout/stats`
+    ] as const;
+    }
 
 
+export const getGetRolloutStatsQueryOptions = <TData = Awaited<ReturnType<typeof getRolloutStats>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRolloutStatsQueryKey(flagId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getRolloutStats>>, {flagId: string}> = (props) => {
-          const {flagId} = props ?? {};
 
-          return  getRolloutStats(flagId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRolloutStats>>> = ({ signal }) => getRolloutStats(flagId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetRolloutStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getRolloutStats>>>
+export type GetRolloutStatsQueryError = ErrorType<ApiError>
 
-    export type GetRolloutStatsMutationResult = NonNullable<Awaited<ReturnType<typeof getRolloutStats>>>
 
-    export type GetRolloutStatsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetRolloutStats<TData = Awaited<ReturnType<typeof getRolloutStats>>, TError = ErrorType<ApiError>>(
+ flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRolloutStats>>,
+          TError,
+          Awaited<ReturnType<typeof getRolloutStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRolloutStats<TData = Awaited<ReturnType<typeof getRolloutStats>>, TError = ErrorType<ApiError>>(
+ flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRolloutStats>>,
+          TError,
+          Awaited<ReturnType<typeof getRolloutStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRolloutStats<TData = Awaited<ReturnType<typeof getRolloutStats>>, TError = ErrorType<ApiError>>(
+ flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get rollout statistics
  */
-export const useGetRolloutStats = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getRolloutStats>>,
-        TError,
-        {flagId: string},
-        TContext
-      > => {
-      return useMutation(getGetRolloutStatsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetRolloutStats<TData = Awaited<ReturnType<typeof getRolloutStats>>, TError = ErrorType<ApiError>>(
+ flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRolloutStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRolloutStatsQueryOptions(flagId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Immediately disables the feature flag for all users.
  *
  * This resets the rollout and is typically used
@@ -251,77 +245,47 @@ export const rollbackFlag = (
 
 
 
-export const getRollbackFlagQueryKey = (flagId: string,) => {
-    return [
-    'POST', `/flags/${flagId}/rollout/rollback`
-    ] as const;
-    }
+export const getRollbackFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError,{flagId: string}, TContext> => {
 
-
-export const getRollbackFlagQueryOptions = <TData = Awaited<ReturnType<typeof rollbackFlag>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getRollbackFlagQueryKey(flagId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof rollbackFlag>>> = ({ signal }) => rollbackFlag(flagId, requestOptions, signal);
+const mutationKey = ['rollbackFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof rollbackFlag>>, {flagId: string}> = (props) => {
+          const {flagId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type RollbackFlagQueryResult = NonNullable<Awaited<ReturnType<typeof rollbackFlag>>>
-export type RollbackFlagQueryError = ErrorType<ApiError>
+          return  rollbackFlag(flagId,requestOptions)
+        }
 
 
-export function useRollbackFlag<TData = Awaited<ReturnType<typeof rollbackFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof rollbackFlag>>,
-          TError,
-          Awaited<ReturnType<typeof rollbackFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRollbackFlag<TData = Awaited<ReturnType<typeof rollbackFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof rollbackFlag>>,
-          TError,
-          Awaited<ReturnType<typeof rollbackFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRollbackFlag<TData = Awaited<ReturnType<typeof rollbackFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RollbackFlagMutationResult = NonNullable<Awaited<ReturnType<typeof rollbackFlag>>>
+
+    export type RollbackFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Roll back a feature flag
  */
-
-export function useRollbackFlag<TData = Awaited<ReturnType<typeof rollbackFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getRollbackFlagQueryOptions(flagId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
+export const useRollbackFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rollbackFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof rollbackFlag>>,
+        TError,
+        {flagId: string},
+        TContext
+      > => {
+      return useMutation(getRollbackFlagMutationOptions(options), queryClient);
+    }

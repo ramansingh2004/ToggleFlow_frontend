@@ -9,13 +9,18 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-  useMutation
+  useQuery
 } from '@tanstack/react-query';
 import type {
-  MutationFunction,
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   QueryClient,
-  UseMutationOptions,
-  UseMutationResult
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -34,6 +39,21 @@ import type { ErrorType } from '../../client/orval-client';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
+};
 
 /**
  * Returns all enabled feature flags available for the project associated
@@ -58,51 +78,81 @@ export const getSdkFlags = (
 
 
 
-export const getGetSdkFlagsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError,{params?: GetSdkFlagsParams}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError,{params?: GetSdkFlagsParams}, TContext> => {
-
-const mutationKey = ['getSdkFlags'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetSdkFlagsQueryKey = (params?: GetSdkFlagsParams,) => {
+    return [
+    `/sdk/flags`, ...(params ? [params] : [])
+    ] as const;
+    }
 
 
+export const getGetSdkFlagsQueryOptions = <TData = Awaited<ReturnType<typeof getSdkFlags>>, TError = ErrorType<ApiError>>(params?: GetSdkFlagsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSdkFlagsQueryKey(params);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getSdkFlags>>, {params?: GetSdkFlagsParams}> = (props) => {
-          const {params} = props ?? {};
 
-          return  getSdkFlags(params,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSdkFlags>>> = ({ signal }) => getSdkFlags(params, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetSdkFlagsQueryResult = NonNullable<Awaited<ReturnType<typeof getSdkFlags>>>
+export type GetSdkFlagsQueryError = ErrorType<ApiError>
 
-    export type GetSdkFlagsMutationResult = NonNullable<Awaited<ReturnType<typeof getSdkFlags>>>
 
-    export type GetSdkFlagsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetSdkFlags<TData = Awaited<ReturnType<typeof getSdkFlags>>, TError = ErrorType<ApiError>>(
+ params: undefined |  GetSdkFlagsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSdkFlags>>,
+          TError,
+          Awaited<ReturnType<typeof getSdkFlags>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSdkFlags<TData = Awaited<ReturnType<typeof getSdkFlags>>, TError = ErrorType<ApiError>>(
+ params?: GetSdkFlagsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSdkFlags>>,
+          TError,
+          Awaited<ReturnType<typeof getSdkFlags>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSdkFlags<TData = Awaited<ReturnType<typeof getSdkFlags>>, TError = ErrorType<ApiError>>(
+ params?: GetSdkFlagsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get all feature flags
  */
-export const useGetSdkFlags = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError,{params?: GetSdkFlagsParams}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getSdkFlags>>,
-        TError,
-        {params?: GetSdkFlagsParams},
-        TContext
-      > => {
-      return useMutation(getGetSdkFlagsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetSdkFlags<TData = Awaited<ReturnType<typeof getSdkFlags>>, TError = ErrorType<ApiError>>(
+ params?: GetSdkFlagsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlags>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSdkFlagsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Returns a single feature flag by key.
  * @summary Get feature flag
  */
@@ -121,51 +171,81 @@ export const getSdkFlag = (
 
 
 
-export const getGetSdkFlagMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError,{key: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError,{key: string}, TContext> => {
-
-const mutationKey = ['getSdkFlag'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetSdkFlagQueryKey = (key: string,) => {
+    return [
+    `/sdk/flags/${key}`
+    ] as const;
+    }
 
 
+export const getGetSdkFlagQueryOptions = <TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSdkFlagQueryKey(key);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getSdkFlag>>, {key: string}> = (props) => {
-          const {key} = props ?? {};
 
-          return  getSdkFlag(key,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSdkFlag>>> = ({ signal }) => getSdkFlag(key, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: key !== null && key !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetSdkFlagQueryResult = NonNullable<Awaited<ReturnType<typeof getSdkFlag>>>
+export type GetSdkFlagQueryError = ErrorType<ApiError>
 
-    export type GetSdkFlagMutationResult = NonNullable<Awaited<ReturnType<typeof getSdkFlag>>>
 
-    export type GetSdkFlagMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
+ key: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSdkFlag>>,
+          TError,
+          Awaited<ReturnType<typeof getSdkFlag>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
+ key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSdkFlag>>,
+          TError,
+          Awaited<ReturnType<typeof getSdkFlag>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
+ key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get feature flag
  */
-export const useGetSdkFlag = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError,{key: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getSdkFlag>>,
-        TError,
-        {key: string},
-        TContext
-      > => {
-      return useMutation(getGetSdkFlagMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
+ key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSdkFlagQueryOptions(key,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Returns metadata about the project associated with the API key.
  * @summary Get project information
  */
@@ -184,51 +264,81 @@ export const getSdkProjectInfo = (
 
 
 
-export const getGetSdkProjectInfoMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError,void, TContext> => {
-
-const mutationKey = ['getSdkProjectInfo'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetSdkProjectInfoQueryKey = () => {
+    return [
+    `/sdk/info`
+    ] as const;
+    }
 
 
+export const getGetSdkProjectInfoQueryOptions = <TData = Awaited<ReturnType<typeof getSdkProjectInfo>>, TError = ErrorType<ApiError>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSdkProjectInfoQueryKey();
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getSdkProjectInfo>>, void> = () => {
 
-
-          return  getSdkProjectInfo(requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSdkProjectInfo>>> = ({ signal }) => getSdkProjectInfo(requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetSdkProjectInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getSdkProjectInfo>>>
+export type GetSdkProjectInfoQueryError = ErrorType<ApiError>
 
-    export type GetSdkProjectInfoMutationResult = NonNullable<Awaited<ReturnType<typeof getSdkProjectInfo>>>
 
-    export type GetSdkProjectInfoMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetSdkProjectInfo<TData = Awaited<ReturnType<typeof getSdkProjectInfo>>, TError = ErrorType<ApiError>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSdkProjectInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getSdkProjectInfo>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSdkProjectInfo<TData = Awaited<ReturnType<typeof getSdkProjectInfo>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSdkProjectInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getSdkProjectInfo>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSdkProjectInfo<TData = Awaited<ReturnType<typeof getSdkProjectInfo>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get project information
  */
-export const useGetSdkProjectInfo = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getSdkProjectInfo>>,
-        TError,
-        void,
-        TContext
-      > => {
-      return useMutation(getGetSdkProjectInfoMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetSdkProjectInfo<TData = Awaited<ReturnType<typeof getSdkProjectInfo>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkProjectInfo>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSdkProjectInfoQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Returns the current health status of the SDK service.
  * @summary SDK health check
  */
@@ -247,47 +357,77 @@ export const sdkHealthCheck = (
 
 
 
-export const getSdkHealthCheckMutationOptions = <TError = ErrorType<void | ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError,void, TContext> => {
-
-const mutationKey = ['sdkHealthCheck'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getSdkHealthCheckQueryKey = () => {
+    return [
+    `/sdk/health`
+    ] as const;
+    }
 
 
+export const getSdkHealthCheckQueryOptions = <TData = Awaited<ReturnType<typeof sdkHealthCheck>>, TError = ErrorType<void | ApiError>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getSdkHealthCheckQueryKey();
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sdkHealthCheck>>, void> = () => {
 
-
-          return  sdkHealthCheck(requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof sdkHealthCheck>>> = ({ signal }) => sdkHealthCheck(requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type SdkHealthCheckQueryResult = NonNullable<Awaited<ReturnType<typeof sdkHealthCheck>>>
+export type SdkHealthCheckQueryError = ErrorType<void | ApiError>
 
-    export type SdkHealthCheckMutationResult = NonNullable<Awaited<ReturnType<typeof sdkHealthCheck>>>
 
-    export type SdkHealthCheckMutationError = ErrorType<void | ApiError>
-
-    /**
+export function useSdkHealthCheck<TData = Awaited<ReturnType<typeof sdkHealthCheck>>, TError = ErrorType<void | ApiError>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof sdkHealthCheck>>,
+          TError,
+          Awaited<ReturnType<typeof sdkHealthCheck>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSdkHealthCheck<TData = Awaited<ReturnType<typeof sdkHealthCheck>>, TError = ErrorType<void | ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof sdkHealthCheck>>,
+          TError,
+          Awaited<ReturnType<typeof sdkHealthCheck>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSdkHealthCheck<TData = Awaited<ReturnType<typeof sdkHealthCheck>>, TError = ErrorType<void | ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary SDK health check
  */
-export const useSdkHealthCheck = <TError = ErrorType<void | ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof sdkHealthCheck>>,
-        TError,
-        void,
-        TContext
-      > => {
-      return useMutation(getSdkHealthCheckMutationOptions(options), queryClient);
-    }
+
+export function useSdkHealthCheck<TData = Awaited<ReturnType<typeof sdkHealthCheck>>, TError = ErrorType<void | ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof sdkHealthCheck>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getSdkHealthCheckQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

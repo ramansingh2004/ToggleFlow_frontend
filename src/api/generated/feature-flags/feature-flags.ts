@@ -81,51 +81,81 @@ export const getFlagsByProjectId = (
 
 
 
-export const getGetFlagsByProjectIdMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getFlagsByProjectId'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetFlagsByProjectIdQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/flags`
+    ] as const;
+    }
 
 
+export const getGetFlagsByProjectIdQueryOptions = <TData = Awaited<ReturnType<typeof getFlagsByProjectId>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFlagsByProjectIdQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getFlagsByProjectId>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getFlagsByProjectId(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFlagsByProjectId>>> = ({ signal }) => getFlagsByProjectId(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetFlagsByProjectIdQueryResult = NonNullable<Awaited<ReturnType<typeof getFlagsByProjectId>>>
+export type GetFlagsByProjectIdQueryError = ErrorType<ApiError>
 
-    export type GetFlagsByProjectIdMutationResult = NonNullable<Awaited<ReturnType<typeof getFlagsByProjectId>>>
 
-    export type GetFlagsByProjectIdMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetFlagsByProjectId<TData = Awaited<ReturnType<typeof getFlagsByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFlagsByProjectId>>,
+          TError,
+          Awaited<ReturnType<typeof getFlagsByProjectId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFlagsByProjectId<TData = Awaited<ReturnType<typeof getFlagsByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFlagsByProjectId>>,
+          TError,
+          Awaited<ReturnType<typeof getFlagsByProjectId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFlagsByProjectId<TData = Awaited<ReturnType<typeof getFlagsByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary List feature flags
  */
-export const useGetFlagsByProjectId = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getFlagsByProjectId>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetFlagsByProjectIdMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetFlagsByProjectId<TData = Awaited<ReturnType<typeof getFlagsByProjectId>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagsByProjectId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFlagsByProjectIdQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Creates a new feature flag in a project.
  * @summary Create feature flag
  */
@@ -147,87 +177,51 @@ export const createFlag = (
 
 
 
-export const getCreateFlagQueryKey = (projectId: string,
-    createFeatureFlagRequest?: BodyType<CreateFeatureFlagRequest>,) => {
-    return [
-    'POST', `/projects/${projectId}/flags`, createFeatureFlagRequest
-    ] as const;
-    }
+export const getCreateFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFlag>>, TError,{projectId: string;data: BodyType<CreateFeatureFlagRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createFlag>>, TError,{projectId: string;data: BodyType<CreateFeatureFlagRequest>}, TContext> => {
 
-
-export const getCreateFlagQueryOptions = <TData = Awaited<ReturnType<typeof createFlag>>, TError = ErrorType<ApiError>>(projectId: string,
-    createFeatureFlagRequest: BodyType<CreateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCreateFlagQueryKey(projectId,createFeatureFlagRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof createFlag>>> = ({ signal }) => createFlag(projectId,createFeatureFlagRequest, requestOptions, signal);
+const mutationKey = ['createFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFlag>>, {projectId: string;data: BodyType<CreateFeatureFlagRequest>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof createFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CreateFlagQueryResult = NonNullable<Awaited<ReturnType<typeof createFlag>>>
-export type CreateFlagQueryError = ErrorType<ApiError>
+          return  createFlag(projectId,data,requestOptions)
+        }
 
 
-export function useCreateFlag<TData = Awaited<ReturnType<typeof createFlag>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createFeatureFlagRequest: BodyType<CreateFeatureFlagRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof createFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createFlag>>,
-          TError,
-          Awaited<ReturnType<typeof createFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateFlag<TData = Awaited<ReturnType<typeof createFlag>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createFeatureFlagRequest: BodyType<CreateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof createFlag>>,
-          TError,
-          Awaited<ReturnType<typeof createFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCreateFlag<TData = Awaited<ReturnType<typeof createFlag>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createFeatureFlagRequest: BodyType<CreateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateFlagMutationResult = NonNullable<Awaited<ReturnType<typeof createFlag>>>
+    export type CreateFlagMutationBody = BodyType<CreateFeatureFlagRequest>
+    export type CreateFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Create feature flag
  */
-
-export function useCreateFlag<TData = Awaited<ReturnType<typeof createFlag>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    createFeatureFlagRequest: BodyType<CreateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof createFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getCreateFlagQueryOptions(projectId,createFeatureFlagRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useCreateFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFlag>>, TError,{projectId: string;data: BodyType<CreateFeatureFlagRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createFlag>>,
+        TError,
+        {projectId: string;data: BodyType<CreateFeatureFlagRequest>},
+        TContext
+      > => {
+      return useMutation(getCreateFlagMutationOptions(options), queryClient);
+    }
+    /**
  * Returns detailed information about a feature flag.
  * @summary Get feature flag
  */
@@ -246,51 +240,81 @@ export const getFlagById = (
 
 
 
-export const getGetFlagByIdMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getFlagById>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getFlagById>>, TError,{flagId: string}, TContext> => {
-
-const mutationKey = ['getFlagById'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetFlagByIdQueryKey = (flagId: string,) => {
+    return [
+    `/flags/${flagId}`
+    ] as const;
+    }
 
 
+export const getGetFlagByIdQueryOptions = <TData = Awaited<ReturnType<typeof getFlagById>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFlagByIdQueryKey(flagId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getFlagById>>, {flagId: string}> = (props) => {
-          const {flagId} = props ?? {};
 
-          return  getFlagById(flagId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFlagById>>> = ({ signal }) => getFlagById(flagId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFlagById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetFlagByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getFlagById>>>
+export type GetFlagByIdQueryError = ErrorType<ApiError>
 
-    export type GetFlagByIdMutationResult = NonNullable<Awaited<ReturnType<typeof getFlagById>>>
 
-    export type GetFlagByIdMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetFlagById<TData = Awaited<ReturnType<typeof getFlagById>>, TError = ErrorType<ApiError>>(
+ flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFlagById>>,
+          TError,
+          Awaited<ReturnType<typeof getFlagById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFlagById<TData = Awaited<ReturnType<typeof getFlagById>>, TError = ErrorType<ApiError>>(
+ flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFlagById>>,
+          TError,
+          Awaited<ReturnType<typeof getFlagById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFlagById<TData = Awaited<ReturnType<typeof getFlagById>>, TError = ErrorType<ApiError>>(
+ flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get feature flag
  */
-export const useGetFlagById = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getFlagById>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getFlagById>>,
-        TError,
-        {flagId: string},
-        TContext
-      > => {
-      return useMutation(getGetFlagByIdMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetFlagById<TData = Awaited<ReturnType<typeof getFlagById>>, TError = ErrorType<ApiError>>(
+ flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFlagByIdQueryOptions(flagId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Updates the name and description of a feature flag.
  * @summary Update feature flag
  */
@@ -312,87 +336,51 @@ export const updateFlag = (
 
 
 
-export const getUpdateFlagQueryKey = (flagId: string,
-    updateFeatureFlagRequest?: BodyType<UpdateFeatureFlagRequest>,) => {
-    return [
-    'PATCH', `/flags/${flagId}`, updateFeatureFlagRequest
-    ] as const;
-    }
+export const getUpdateFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFlag>>, TError,{flagId: string;data: BodyType<UpdateFeatureFlagRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateFlag>>, TError,{flagId: string;data: BodyType<UpdateFeatureFlagRequest>}, TContext> => {
 
-
-export const getUpdateFlagQueryOptions = <TData = Awaited<ReturnType<typeof updateFlag>>, TError = ErrorType<ApiError>>(flagId: string,
-    updateFeatureFlagRequest: BodyType<UpdateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getUpdateFlagQueryKey(flagId,updateFeatureFlagRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof updateFlag>>> = ({ signal }) => updateFlag(flagId,updateFeatureFlagRequest, requestOptions, signal);
+const mutationKey = ['updateFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFlag>>, {flagId: string;data: BodyType<UpdateFeatureFlagRequest>}> = (props) => {
+          const {flagId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof updateFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type UpdateFlagQueryResult = NonNullable<Awaited<ReturnType<typeof updateFlag>>>
-export type UpdateFlagQueryError = ErrorType<ApiError>
+          return  updateFlag(flagId,data,requestOptions)
+        }
 
 
-export function useUpdateFlag<TData = Awaited<ReturnType<typeof updateFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    updateFeatureFlagRequest: BodyType<UpdateFeatureFlagRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof updateFlag>>,
-          TError,
-          Awaited<ReturnType<typeof updateFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUpdateFlag<TData = Awaited<ReturnType<typeof updateFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    updateFeatureFlagRequest: BodyType<UpdateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof updateFlag>>,
-          TError,
-          Awaited<ReturnType<typeof updateFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUpdateFlag<TData = Awaited<ReturnType<typeof updateFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    updateFeatureFlagRequest: BodyType<UpdateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateFlagMutationResult = NonNullable<Awaited<ReturnType<typeof updateFlag>>>
+    export type UpdateFlagMutationBody = BodyType<UpdateFeatureFlagRequest>
+    export type UpdateFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Update feature flag
  */
-
-export function useUpdateFlag<TData = Awaited<ReturnType<typeof updateFlag>>, TError = ErrorType<ApiError>>(
- flagId: string,
-    updateFeatureFlagRequest: BodyType<UpdateFeatureFlagRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getUpdateFlagQueryOptions(flagId,updateFeatureFlagRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useUpdateFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFlag>>, TError,{flagId: string;data: BodyType<UpdateFeatureFlagRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateFlag>>,
+        TError,
+        {flagId: string;data: BodyType<UpdateFeatureFlagRequest>},
+        TContext
+      > => {
+      return useMutation(getUpdateFlagMutationOptions(options), queryClient);
+    }
+    /**
  * Soft deletes a feature flag.
  * @summary Delete feature flag
  */
@@ -411,81 +399,51 @@ export const deleteFlag = (
 
 
 
-export const getDeleteFlagQueryKey = (flagId: string,) => {
-    return [
-    'DELETE', `/flags/${flagId}`
-    ] as const;
-    }
+export const getDeleteFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFlag>>, TError,{flagId: string}, TContext> => {
 
-
-export const getDeleteFlagQueryOptions = <TData = Awaited<ReturnType<typeof deleteFlag>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getDeleteFlagQueryKey(flagId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof deleteFlag>>> = ({ signal }) => deleteFlag(flagId, requestOptions, signal);
+const mutationKey = ['deleteFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFlag>>, {flagId: string}> = (props) => {
+          const {flagId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof deleteFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type DeleteFlagQueryResult = NonNullable<Awaited<ReturnType<typeof deleteFlag>>>
-export type DeleteFlagQueryError = ErrorType<ApiError>
+          return  deleteFlag(flagId,requestOptions)
+        }
 
 
-export function useDeleteFlag<TData = Awaited<ReturnType<typeof deleteFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof deleteFlag>>,
-          TError,
-          Awaited<ReturnType<typeof deleteFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDeleteFlag<TData = Awaited<ReturnType<typeof deleteFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof deleteFlag>>,
-          TError,
-          Awaited<ReturnType<typeof deleteFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDeleteFlag<TData = Awaited<ReturnType<typeof deleteFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFlagMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFlag>>>
+
+    export type DeleteFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Delete feature flag
  */
-
-export function useDeleteFlag<TData = Awaited<ReturnType<typeof deleteFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof deleteFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getDeleteFlagQueryOptions(flagId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useDeleteFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFlag>>,
+        TError,
+        {flagId: string},
+        TContext
+      > => {
+      return useMutation(getDeleteFlagMutationOptions(options), queryClient);
+    }
+    /**
  * Enables a feature flag.
  * @summary Enable feature flag
  */
@@ -504,81 +462,51 @@ export const enableFlag = (
 
 
 
-export const getEnableFlagQueryKey = (flagId: string,) => {
-    return [
-    'POST', `/flags/${flagId}/enable`
-    ] as const;
-    }
+export const getEnableFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enableFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof enableFlag>>, TError,{flagId: string}, TContext> => {
 
-
-export const getEnableFlagQueryOptions = <TData = Awaited<ReturnType<typeof enableFlag>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof enableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getEnableFlagQueryKey(flagId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof enableFlag>>> = ({ signal }) => enableFlag(flagId, requestOptions, signal);
+const mutationKey = ['enableFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enableFlag>>, {flagId: string}> = (props) => {
+          const {flagId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof enableFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type EnableFlagQueryResult = NonNullable<Awaited<ReturnType<typeof enableFlag>>>
-export type EnableFlagQueryError = ErrorType<ApiError>
+          return  enableFlag(flagId,requestOptions)
+        }
 
 
-export function useEnableFlag<TData = Awaited<ReturnType<typeof enableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof enableFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof enableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof enableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useEnableFlag<TData = Awaited<ReturnType<typeof enableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof enableFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof enableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof enableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useEnableFlag<TData = Awaited<ReturnType<typeof enableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof enableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EnableFlagMutationResult = NonNullable<Awaited<ReturnType<typeof enableFlag>>>
+
+    export type EnableFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Enable feature flag
  */
-
-export function useEnableFlag<TData = Awaited<ReturnType<typeof enableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof enableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getEnableFlagQueryOptions(flagId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useEnableFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enableFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof enableFlag>>,
+        TError,
+        {flagId: string},
+        TContext
+      > => {
+      return useMutation(getEnableFlagMutationOptions(options), queryClient);
+    }
+    /**
  * Disables a feature flag.
  * @summary Disable feature flag
  */
@@ -597,77 +525,47 @@ export const disableFlag = (
 
 
 
-export const getDisableFlagQueryKey = (flagId: string,) => {
-    return [
-    'POST', `/flags/${flagId}/disable`
-    ] as const;
-    }
+export const getDisableFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disableFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof disableFlag>>, TError,{flagId: string}, TContext> => {
 
-
-export const getDisableFlagQueryOptions = <TData = Awaited<ReturnType<typeof disableFlag>>, TError = ErrorType<ApiError>>(flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof disableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getDisableFlagQueryKey(flagId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof disableFlag>>> = ({ signal }) => disableFlag(flagId, requestOptions, signal);
+const mutationKey = ['disableFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof disableFlag>>, {flagId: string}> = (props) => {
+          const {flagId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof disableFlag>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type DisableFlagQueryResult = NonNullable<Awaited<ReturnType<typeof disableFlag>>>
-export type DisableFlagQueryError = ErrorType<ApiError>
+          return  disableFlag(flagId,requestOptions)
+        }
 
 
-export function useDisableFlag<TData = Awaited<ReturnType<typeof disableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof disableFlag>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof disableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof disableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDisableFlag<TData = Awaited<ReturnType<typeof disableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof disableFlag>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof disableFlag>>,
-          TError,
-          Awaited<ReturnType<typeof disableFlag>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDisableFlag<TData = Awaited<ReturnType<typeof disableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof disableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DisableFlagMutationResult = NonNullable<Awaited<ReturnType<typeof disableFlag>>>
+
+    export type DisableFlagMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Disable feature flag
  */
-
-export function useDisableFlag<TData = Awaited<ReturnType<typeof disableFlag>>, TError = ErrorType<ApiError>>(
- flagId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof disableFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getDisableFlagQueryOptions(flagId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
+export const useDisableFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof disableFlag>>, TError,{flagId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof disableFlag>>,
+        TError,
+        {flagId: string},
+        TContext
+      > => {
+      return useMutation(getDisableFlagMutationOptions(options), queryClient);
+    }

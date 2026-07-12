@@ -81,81 +81,51 @@ export const recordConversion = (
 
 
 
-export const getRecordConversionQueryKey = (conversionRequest?: BodyType<ConversionRequest>,) => {
-    return [
-    'POST', `/analytics/conversions`, conversionRequest
-    ] as const;
-    }
+export const getRecordConversionMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordConversion>>, TError,{data: BodyType<ConversionRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof recordConversion>>, TError,{data: BodyType<ConversionRequest>}, TContext> => {
 
-
-export const getRecordConversionQueryOptions = <TData = Awaited<ReturnType<typeof recordConversion>>, TError = ErrorType<ApiError>>(conversionRequest: BodyType<ConversionRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordConversion>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getRecordConversionQueryKey(conversionRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof recordConversion>>> = ({ signal }) => recordConversion(conversionRequest, requestOptions, signal);
+const mutationKey = ['recordConversion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof recordConversion>>, {data: BodyType<ConversionRequest>}> = (props) => {
+          const {data} = props ?? {};
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof recordConversion>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type RecordConversionQueryResult = NonNullable<Awaited<ReturnType<typeof recordConversion>>>
-export type RecordConversionQueryError = ErrorType<ApiError>
+          return  recordConversion(data,requestOptions)
+        }
 
 
-export function useRecordConversion<TData = Awaited<ReturnType<typeof recordConversion>>, TError = ErrorType<ApiError>>(
- conversionRequest: BodyType<ConversionRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordConversion>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof recordConversion>>,
-          TError,
-          Awaited<ReturnType<typeof recordConversion>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRecordConversion<TData = Awaited<ReturnType<typeof recordConversion>>, TError = ErrorType<ApiError>>(
- conversionRequest: BodyType<ConversionRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordConversion>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof recordConversion>>,
-          TError,
-          Awaited<ReturnType<typeof recordConversion>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRecordConversion<TData = Awaited<ReturnType<typeof recordConversion>>, TError = ErrorType<ApiError>>(
- conversionRequest: BodyType<ConversionRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordConversion>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RecordConversionMutationResult = NonNullable<Awaited<ReturnType<typeof recordConversion>>>
+    export type RecordConversionMutationBody = BodyType<ConversionRequest>
+    export type RecordConversionMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Record conversion
  */
-
-export function useRecordConversion<TData = Awaited<ReturnType<typeof recordConversion>>, TError = ErrorType<ApiError>>(
- conversionRequest: BodyType<ConversionRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof recordConversion>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getRecordConversionQueryOptions(conversionRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useRecordConversion = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordConversion>>, TError,{data: BodyType<ConversionRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof recordConversion>>,
+        TError,
+        {data: BodyType<ConversionRequest>},
+        TContext
+      > => {
+      return useMutation(getRecordConversionMutationOptions(options), queryClient);
+    }
+    /**
  * Returns analytics and metrics for a specific feature flag.
  * @summary Get flag analytics
  */
@@ -176,51 +146,87 @@ export const getFlagAnalytics = (
 
 
 
-export const getGetFlagAnalyticsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError,{flagId: string;params?: GetFlagAnalyticsParams}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError,{flagId: string;params?: GetFlagAnalyticsParams}, TContext> => {
-
-const mutationKey = ['getFlagAnalytics'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetFlagAnalyticsQueryKey = (flagId: string,
+    params?: GetFlagAnalyticsParams,) => {
+    return [
+    `/analytics/flags/${flagId}`, ...(params ? [params] : [])
+    ] as const;
+    }
 
 
+export const getGetFlagAnalyticsQueryOptions = <TData = Awaited<ReturnType<typeof getFlagAnalytics>>, TError = ErrorType<ApiError>>(flagId: string,
+    params?: GetFlagAnalyticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFlagAnalyticsQueryKey(flagId,params);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getFlagAnalytics>>, {flagId: string;params?: GetFlagAnalyticsParams}> = (props) => {
-          const {flagId,params} = props ?? {};
 
-          return  getFlagAnalytics(flagId,params,requestOptions)
-        }
-
-
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFlagAnalytics>>> = ({ signal }) => getFlagAnalytics(flagId,params, requestOptions, signal);
 
 
 
 
-  return  { mutationFn, ...mutationOptions }}
 
-    export type GetFlagAnalyticsMutationResult = NonNullable<Awaited<ReturnType<typeof getFlagAnalytics>>>
+   return  { queryKey, queryFn, enabled: flagId !== null && flagId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-    export type GetFlagAnalyticsMutationError = ErrorType<ApiError>
+export type GetFlagAnalyticsQueryResult = NonNullable<Awaited<ReturnType<typeof getFlagAnalytics>>>
+export type GetFlagAnalyticsQueryError = ErrorType<ApiError>
 
-    /**
+
+export function useGetFlagAnalytics<TData = Awaited<ReturnType<typeof getFlagAnalytics>>, TError = ErrorType<ApiError>>(
+ flagId: string,
+    params: undefined |  GetFlagAnalyticsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFlagAnalytics>>,
+          TError,
+          Awaited<ReturnType<typeof getFlagAnalytics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFlagAnalytics<TData = Awaited<ReturnType<typeof getFlagAnalytics>>, TError = ErrorType<ApiError>>(
+ flagId: string,
+    params?: GetFlagAnalyticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFlagAnalytics>>,
+          TError,
+          Awaited<ReturnType<typeof getFlagAnalytics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFlagAnalytics<TData = Awaited<ReturnType<typeof getFlagAnalytics>>, TError = ErrorType<ApiError>>(
+ flagId: string,
+    params?: GetFlagAnalyticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get flag analytics
  */
-export const useGetFlagAnalytics = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError,{flagId: string;params?: GetFlagAnalyticsParams}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getFlagAnalytics>>,
-        TError,
-        {flagId: string;params?: GetFlagAnalyticsParams},
-        TContext
-      > => {
-      return useMutation(getGetFlagAnalyticsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetFlagAnalytics<TData = Awaited<ReturnType<typeof getFlagAnalytics>>, TError = ErrorType<ApiError>>(
+ flagId: string,
+    params?: GetFlagAnalyticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFlagAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFlagAnalyticsQueryOptions(flagId,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Returns analytics and usage metrics for a project.
  * @summary Get project analytics
  */
@@ -239,51 +245,81 @@ export const getProjectAnalytics = (
 
 
 
-export const getGetProjectAnalyticsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getProjectAnalytics'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetProjectAnalyticsQueryKey = (projectId: string,) => {
+    return [
+    `/analytics/projects/${projectId}`
+    ] as const;
+    }
 
 
+export const getGetProjectAnalyticsQueryOptions = <TData = Awaited<ReturnType<typeof getProjectAnalytics>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectAnalyticsQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getProjectAnalytics>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getProjectAnalytics(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjectAnalytics>>> = ({ signal }) => getProjectAnalytics(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetProjectAnalyticsQueryResult = NonNullable<Awaited<ReturnType<typeof getProjectAnalytics>>>
+export type GetProjectAnalyticsQueryError = ErrorType<ApiError>
 
-    export type GetProjectAnalyticsMutationResult = NonNullable<Awaited<ReturnType<typeof getProjectAnalytics>>>
 
-    export type GetProjectAnalyticsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetProjectAnalytics<TData = Awaited<ReturnType<typeof getProjectAnalytics>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectAnalytics>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectAnalytics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectAnalytics<TData = Awaited<ReturnType<typeof getProjectAnalytics>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectAnalytics>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectAnalytics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectAnalytics<TData = Awaited<ReturnType<typeof getProjectAnalytics>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get project analytics
  */
-export const useGetProjectAnalytics = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getProjectAnalytics>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetProjectAnalyticsMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetProjectAnalytics<TData = Awaited<ReturnType<typeof getProjectAnalytics>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProjectAnalyticsQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Returns usage statistics and request metrics for an API key.
  * @summary Get API key analytics
  */
@@ -302,47 +338,77 @@ export const getApiKeyAnalytics = (
 
 
 
-export const getGetApiKeyAnalyticsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError,{apiKeyId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError,{apiKeyId: string}, TContext> => {
-
-const mutationKey = ['getApiKeyAnalytics'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetApiKeyAnalyticsQueryKey = (apiKeyId: string,) => {
+    return [
+    `/analytics/api-keys/${apiKeyId}`
+    ] as const;
+    }
 
 
+export const getGetApiKeyAnalyticsQueryOptions = <TData = Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError = ErrorType<ApiError>>(apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiKeyAnalyticsQueryKey(apiKeyId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getApiKeyAnalytics>>, {apiKeyId: string}> = (props) => {
-          const {apiKeyId} = props ?? {};
 
-          return  getApiKeyAnalytics(apiKeyId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiKeyAnalytics>>> = ({ signal }) => getApiKeyAnalytics(apiKeyId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: apiKeyId !== null && apiKeyId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetApiKeyAnalyticsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiKeyAnalytics>>>
+export type GetApiKeyAnalyticsQueryError = ErrorType<ApiError>
 
-    export type GetApiKeyAnalyticsMutationResult = NonNullable<Awaited<ReturnType<typeof getApiKeyAnalytics>>>
 
-    export type GetApiKeyAnalyticsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetApiKeyAnalytics<TData = Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError = ErrorType<ApiError>>(
+ apiKeyId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiKeyAnalytics>>,
+          TError,
+          Awaited<ReturnType<typeof getApiKeyAnalytics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiKeyAnalytics<TData = Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError = ErrorType<ApiError>>(
+ apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiKeyAnalytics>>,
+          TError,
+          Awaited<ReturnType<typeof getApiKeyAnalytics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiKeyAnalytics<TData = Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError = ErrorType<ApiError>>(
+ apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Get API key analytics
  */
-export const useGetApiKeyAnalytics = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError,{apiKeyId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getApiKeyAnalytics>>,
-        TError,
-        {apiKeyId: string},
-        TContext
-      > => {
-      return useMutation(getGetApiKeyAnalyticsMutationOptions(options), queryClient);
-    }
+
+export function useGetApiKeyAnalytics<TData = Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError = ErrorType<ApiError>>(
+ apiKeyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiKeyAnalytics>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiKeyAnalyticsQueryOptions(apiKeyId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

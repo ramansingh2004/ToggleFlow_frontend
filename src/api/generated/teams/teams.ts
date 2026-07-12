@@ -79,51 +79,81 @@ export const getTeamMembers = (
 
 
 
-export const getGetTeamMembersMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getTeamMembers'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetTeamMembersQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/team`
+    ] as const;
+    }
 
 
+export const getGetTeamMembersQueryOptions = <TData = Awaited<ReturnType<typeof getTeamMembers>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTeamMembersQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getTeamMembers>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getTeamMembers(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTeamMembers>>> = ({ signal }) => getTeamMembers(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetTeamMembersQueryResult = NonNullable<Awaited<ReturnType<typeof getTeamMembers>>>
+export type GetTeamMembersQueryError = ErrorType<ApiError>
 
-    export type GetTeamMembersMutationResult = NonNullable<Awaited<ReturnType<typeof getTeamMembers>>>
 
-    export type GetTeamMembersMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetTeamMembers<TData = Awaited<ReturnType<typeof getTeamMembers>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeamMembers>>,
+          TError,
+          Awaited<ReturnType<typeof getTeamMembers>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeamMembers<TData = Awaited<ReturnType<typeof getTeamMembers>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeamMembers>>,
+          TError,
+          Awaited<ReturnType<typeof getTeamMembers>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeamMembers<TData = Awaited<ReturnType<typeof getTeamMembers>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary List team members
  */
-export const useGetTeamMembers = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getTeamMembers>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetTeamMembersMutationOptions(options), queryClient);
-    }
-    /**
+
+export function useGetTeamMembers<TData = Awaited<ReturnType<typeof getTeamMembers>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamMembers>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTeamMembersQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * Adds an existing user to the project team.
  * @summary Add team member
  */
@@ -145,87 +175,51 @@ export const addTeamMember = (
 
 
 
-export const getAddTeamMemberQueryKey = (projectId: string,
-    addTeamMemberRequest?: BodyType<AddTeamMemberRequest>,) => {
-    return [
-    'POST', `/projects/${projectId}/team`, addTeamMemberRequest
-    ] as const;
-    }
+export const getAddTeamMemberMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addTeamMember>>, TError,{projectId: string;data: BodyType<AddTeamMemberRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof addTeamMember>>, TError,{projectId: string;data: BodyType<AddTeamMemberRequest>}, TContext> => {
 
-
-export const getAddTeamMemberQueryOptions = <TData = Awaited<ReturnType<typeof addTeamMember>>, TError = ErrorType<ApiError>>(projectId: string,
-    addTeamMemberRequest: BodyType<AddTeamMemberRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof addTeamMember>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getAddTeamMemberQueryKey(projectId,addTeamMemberRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof addTeamMember>>> = ({ signal }) => addTeamMember(projectId,addTeamMemberRequest, requestOptions, signal);
+const mutationKey = ['addTeamMember'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addTeamMember>>, {projectId: string;data: BodyType<AddTeamMemberRequest>}> = (props) => {
+          const {projectId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof addTeamMember>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type AddTeamMemberQueryResult = NonNullable<Awaited<ReturnType<typeof addTeamMember>>>
-export type AddTeamMemberQueryError = ErrorType<ApiError>
+          return  addTeamMember(projectId,data,requestOptions)
+        }
 
 
-export function useAddTeamMember<TData = Awaited<ReturnType<typeof addTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    addTeamMemberRequest: BodyType<AddTeamMemberRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof addTeamMember>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof addTeamMember>>,
-          TError,
-          Awaited<ReturnType<typeof addTeamMember>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAddTeamMember<TData = Awaited<ReturnType<typeof addTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    addTeamMemberRequest: BodyType<AddTeamMemberRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof addTeamMember>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof addTeamMember>>,
-          TError,
-          Awaited<ReturnType<typeof addTeamMember>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAddTeamMember<TData = Awaited<ReturnType<typeof addTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    addTeamMemberRequest: BodyType<AddTeamMemberRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof addTeamMember>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddTeamMemberMutationResult = NonNullable<Awaited<ReturnType<typeof addTeamMember>>>
+    export type AddTeamMemberMutationBody = BodyType<AddTeamMemberRequest>
+    export type AddTeamMemberMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Add team member
  */
-
-export function useAddTeamMember<TData = Awaited<ReturnType<typeof addTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    addTeamMemberRequest: BodyType<AddTeamMemberRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof addTeamMember>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getAddTeamMemberQueryOptions(projectId,addTeamMemberRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useAddTeamMember = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addTeamMember>>, TError,{projectId: string;data: BodyType<AddTeamMemberRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addTeamMember>>,
+        TError,
+        {projectId: string;data: BodyType<AddTeamMemberRequest>},
+        TContext
+      > => {
+      return useMutation(getAddTeamMemberMutationOptions(options), queryClient);
+    }
+    /**
  * Updates the role of a team member.
  * @summary Update team member role
  */
@@ -248,93 +242,51 @@ export const updateTeamMemberRole = (
 
 
 
-export const getUpdateTeamMemberRoleQueryKey = (projectId: string,
-    memberId: string,
-    updateMemberRoleRequest?: BodyType<UpdateMemberRoleRequest>,) => {
-    return [
-    'PATCH', `/projects/${projectId}/team/${memberId}/role`, updateMemberRoleRequest
-    ] as const;
-    }
+export const getUpdateTeamMemberRoleMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError,{projectId: string;memberId: string;data: BodyType<UpdateMemberRoleRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError,{projectId: string;memberId: string;data: BodyType<UpdateMemberRoleRequest>}, TContext> => {
 
-
-export const getUpdateTeamMemberRoleQueryOptions = <TData = Awaited<ReturnType<typeof updateTeamMemberRole>>, TError = ErrorType<ApiError>>(projectId: string,
-    memberId: string,
-    updateMemberRoleRequest: BodyType<UpdateMemberRoleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getUpdateTeamMemberRoleQueryKey(projectId,memberId,updateMemberRoleRequest);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof updateTeamMemberRole>>> = ({ signal }) => updateTeamMemberRole(projectId,memberId,updateMemberRoleRequest, requestOptions, signal);
+const mutationKey = ['updateTeamMemberRole'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTeamMemberRole>>, {projectId: string;memberId: string;data: BodyType<UpdateMemberRoleRequest>}> = (props) => {
+          const {projectId,memberId,data} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined && memberId !== null && memberId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type UpdateTeamMemberRoleQueryResult = NonNullable<Awaited<ReturnType<typeof updateTeamMemberRole>>>
-export type UpdateTeamMemberRoleQueryError = ErrorType<ApiError>
+          return  updateTeamMemberRole(projectId,memberId,data,requestOptions)
+        }
 
 
-export function useUpdateTeamMemberRole<TData = Awaited<ReturnType<typeof updateTeamMemberRole>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string,
-    updateMemberRoleRequest: BodyType<UpdateMemberRoleRequest>, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof updateTeamMemberRole>>,
-          TError,
-          Awaited<ReturnType<typeof updateTeamMemberRole>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUpdateTeamMemberRole<TData = Awaited<ReturnType<typeof updateTeamMemberRole>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string,
-    updateMemberRoleRequest: BodyType<UpdateMemberRoleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof updateTeamMemberRole>>,
-          TError,
-          Awaited<ReturnType<typeof updateTeamMemberRole>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUpdateTeamMemberRole<TData = Awaited<ReturnType<typeof updateTeamMemberRole>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string,
-    updateMemberRoleRequest: BodyType<UpdateMemberRoleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateTeamMemberRoleMutationResult = NonNullable<Awaited<ReturnType<typeof updateTeamMemberRole>>>
+    export type UpdateTeamMemberRoleMutationBody = BodyType<UpdateMemberRoleRequest>
+    export type UpdateTeamMemberRoleMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Update team member role
  */
-
-export function useUpdateTeamMemberRole<TData = Awaited<ReturnType<typeof updateTeamMemberRole>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string,
-    updateMemberRoleRequest: BodyType<UpdateMemberRoleRequest>, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getUpdateTeamMemberRoleQueryOptions(projectId,memberId,updateMemberRoleRequest,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useUpdateTeamMemberRole = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTeamMemberRole>>, TError,{projectId: string;memberId: string;data: BodyType<UpdateMemberRoleRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateTeamMemberRole>>,
+        TError,
+        {projectId: string;memberId: string;data: BodyType<UpdateMemberRoleRequest>},
+        TContext
+      > => {
+      return useMutation(getUpdateTeamMemberRoleMutationOptions(options), queryClient);
+    }
+    /**
  * Removes a team member from the project.
  * @summary Remove team member
  */
@@ -354,87 +306,51 @@ export const removeTeamMember = (
 
 
 
-export const getRemoveTeamMemberQueryKey = (projectId: string,
-    memberId: string,) => {
-    return [
-    'DELETE', `/projects/${projectId}/team/${memberId}/role`
-    ] as const;
-    }
+export const getRemoveTeamMemberMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError,{projectId: string;memberId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError,{projectId: string;memberId: string}, TContext> => {
 
-
-export const getRemoveTeamMemberQueryOptions = <TData = Awaited<ReturnType<typeof removeTeamMember>>, TError = ErrorType<ApiError>>(projectId: string,
-    memberId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getRemoveTeamMemberQueryKey(projectId,memberId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof removeTeamMember>>> = ({ signal }) => removeTeamMember(projectId,memberId, requestOptions, signal);
+const mutationKey = ['removeTeamMember'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
 
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTeamMember>>, {projectId: string;memberId: string}> = (props) => {
+          const {projectId,memberId} = props ?? {};
 
-   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined && memberId !== null && memberId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type RemoveTeamMemberQueryResult = NonNullable<Awaited<ReturnType<typeof removeTeamMember>>>
-export type RemoveTeamMemberQueryError = ErrorType<ApiError>
+          return  removeTeamMember(projectId,memberId,requestOptions)
+        }
 
 
-export function useRemoveTeamMember<TData = Awaited<ReturnType<typeof removeTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof removeTeamMember>>,
-          TError,
-          Awaited<ReturnType<typeof removeTeamMember>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRemoveTeamMember<TData = Awaited<ReturnType<typeof removeTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof removeTeamMember>>,
-          TError,
-          Awaited<ReturnType<typeof removeTeamMember>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useRemoveTeamMember<TData = Awaited<ReturnType<typeof removeTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveTeamMemberMutationResult = NonNullable<Awaited<ReturnType<typeof removeTeamMember>>>
+
+    export type RemoveTeamMemberMutationError = ErrorType<ApiError>
+
+    /**
  * @summary Remove team member
  */
-
-export function useRemoveTeamMember<TData = Awaited<ReturnType<typeof removeTeamMember>>, TError = ErrorType<ApiError>>(
- projectId: string,
-    memberId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getRemoveTeamMemberQueryOptions(projectId,memberId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
+export const useRemoveTeamMember = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTeamMember>>, TError,{projectId: string;memberId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removeTeamMember>>,
+        TError,
+        {projectId: string;memberId: string},
+        TContext
+      > => {
+      return useMutation(getRemoveTeamMemberMutationOptions(options), queryClient);
+    }
+    /**
  * Returns statistics about the project team.
  * @summary Team statistics
  */
@@ -453,47 +369,77 @@ export const getTeamStats = (
 
 
 
-export const getGetTeamStatsMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getTeamStats>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getTeamStats>>, TError,{projectId: string}, TContext> => {
-
-const mutationKey = ['getTeamStats'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export const getGetTeamStatsQueryKey = (projectId: string,) => {
+    return [
+    `/projects/${projectId}/team/stats`
+    ] as const;
+    }
 
 
+export const getGetTeamStatsQueryOptions = <TData = Awaited<ReturnType<typeof getTeamStats>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTeamStatsQueryKey(projectId);
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getTeamStats>>, {projectId: string}> = (props) => {
-          const {projectId} = props ?? {};
 
-          return  getTeamStats(projectId,requestOptions)
-        }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTeamStats>>> = ({ signal }) => getTeamStats(projectId, requestOptions, signal);
 
 
 
 
 
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTeamStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-  return  { mutationFn, ...mutationOptions }}
+export type GetTeamStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getTeamStats>>>
+export type GetTeamStatsQueryError = ErrorType<ApiError>
 
-    export type GetTeamStatsMutationResult = NonNullable<Awaited<ReturnType<typeof getTeamStats>>>
 
-    export type GetTeamStatsMutationError = ErrorType<ApiError>
-
-    /**
+export function useGetTeamStats<TData = Awaited<ReturnType<typeof getTeamStats>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeamStats>>,
+          TError,
+          Awaited<ReturnType<typeof getTeamStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeamStats<TData = Awaited<ReturnType<typeof getTeamStats>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeamStats>>,
+          TError,
+          Awaited<ReturnType<typeof getTeamStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeamStats<TData = Awaited<ReturnType<typeof getTeamStats>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Team statistics
  */
-export const useGetTeamStats = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getTeamStats>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof getTeamStats>>,
-        TError,
-        {projectId: string},
-        TContext
-      > => {
-      return useMutation(getGetTeamStatsMutationOptions(options), queryClient);
-    }
+
+export function useGetTeamStats<TData = Awaited<ReturnType<typeof getTeamStats>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeamStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTeamStatsQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
