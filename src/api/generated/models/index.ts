@@ -223,4 +223,5 @@ export * from './webhookHistoryResponse';
 export * from './webhookHistoryStatistics';
 export * from './webhookHistoryWebhook';
 export * from './webhookListResponse';
+export * from './webhookSubscriptionEvent';
 export * from './webhookSummary';

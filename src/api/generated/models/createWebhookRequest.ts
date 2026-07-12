@@ -8,11 +8,12 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { WebhookSubscriptionEvent } from './webhookSubscriptionEvent';
 
 export interface CreateWebhookRequest {
   /** @maxLength 100 */
   name: string;
   url: string;
-  events: string[];
+  events: WebhookSubscriptionEvent[];
   active?: boolean;
 }

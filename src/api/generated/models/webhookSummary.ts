@@ -8,13 +8,14 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { WebhookSubscriptionEvent } from './webhookSubscriptionEvent';
 
 export interface WebhookSummary {
   id?: string;
   projectId?: string;
   name?: string;
   url?: string;
-  events?: string[];
+  events?: WebhookSubscriptionEvent[];
   active?: boolean;
   /** @nullable */
   lastTriggeredAt?: string | null;
