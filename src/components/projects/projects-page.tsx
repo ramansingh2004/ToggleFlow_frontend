@@ -41,6 +41,7 @@ import {
   type CreateProjectFormValues,
 } from '@/schemas/project.schema';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
+import { useUiStore } from '@/store/ui-store';
 
 export function ProjectsPage() {
   const [search, setSearch] = useState('');
@@ -180,6 +181,10 @@ function CreateProjectDialog({
     },
   });
 
+  const selectProject = useUiStore(
+    (state) => state.selectProject
+  );
+
   const handleDialogChange = (nextOpen: boolean) => {
     if (!nextOpen && createMutation.isPending) return;
 
@@ -194,13 +199,17 @@ function CreateProjectDialog({
     values: CreateProjectFormValues
   ) => {
     try {
-      await createMutation.mutateAsync({
+      const response = await createMutation.mutateAsync({
         data: {
           name: values.name.trim(),
           description:
             values.description.trim() || null,
         },
       });
+
+      if (response.data?.id) {
+        selectProject(response.data.id);
+      }
 
       await queryClient.invalidateQueries({
         queryKey: getGetProjectsQueryKey(),

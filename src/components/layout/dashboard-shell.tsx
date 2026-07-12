@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
+import { ProjectSelector } from '@/components/layout/project-selector';
 
 interface DashboardShellProps {
   children: ReactNode;
@@ -185,23 +186,7 @@ export function DashboardShell({
         </div>
 
         <div className="border-b border-white/[0.07] p-4">
-          <button
-            type="button"
-            className="flex w-full items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.035] px-3 py-3 text-left transition-colors hover:bg-white/[0.06]"
-          >
-            <div className="flex size-8 items-center justify-center rounded-lg bg-indigo-500/15">
-              <FolderKanban className="size-4 text-indigo-300" />
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-medium text-zinc-200">
-                Select a project
-              </p>
-              <p className="truncate text-[11px] text-zinc-600">
-                No active project
-              </p>
-            </div>
-          </button>
+          <ProjectSelector />
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-5">
