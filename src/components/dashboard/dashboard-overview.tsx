@@ -144,6 +144,7 @@ export function DashboardOverview() {
               </p>
 
               <Button
+                nativeButton={false}
                 render={<Link href="/projects" />}
                 className="mt-5 bg-indigo-500 text-white hover:bg-indigo-400"
               >
