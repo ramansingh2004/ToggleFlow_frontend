@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "api:generate": "orval --config orval.config.ts",
+    "api:watch": "orval --config orval.config.ts --watch"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
