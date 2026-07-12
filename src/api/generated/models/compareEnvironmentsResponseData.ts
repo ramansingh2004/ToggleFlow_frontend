@@ -8,12 +8,12 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { CompareEnvironmentsResponseDataComparisonItem } from './compareEnvironmentsResponseDataComparisonItem';
 import type { CompareEnvironmentsResponseDataEnvironmentsItem } from './compareEnvironmentsResponseDataEnvironmentsItem';
+import type { EnvironmentComparisonItem } from './environmentComparisonItem';
 
 export type CompareEnvironmentsResponseData = {
   projectId?: string;
   totalFlags?: number;
   environments?: CompareEnvironmentsResponseDataEnvironmentsItem[];
-  comparison?: CompareEnvironmentsResponseDataComparisonItem[];
+  comparison?: EnvironmentComparisonItem[];
 };

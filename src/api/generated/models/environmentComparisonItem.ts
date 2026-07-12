@@ -8,5 +8,9 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { EnvironmentComparisonState } from './environmentComparisonState';
 
-export type CompareEnvironmentsResponseDataComparisonItem = { [key: string]: unknown };
+export interface EnvironmentComparisonItem {
+  flagKey: string;
+  states: EnvironmentComparisonState[];
+}

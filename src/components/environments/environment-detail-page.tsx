@@ -18,6 +18,7 @@ import type {
 } from '@/api/generated/models';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EnvironmentActions } from '@/components/environments/environment-actions';
 
 interface EnvironmentDetailPageProps {
   environmentId: string;
@@ -92,13 +93,10 @@ export function EnvironmentDetailPage({
               </div>
             </div>
 
-            <Button
-              variant="outline"
-              className="border-white/10 bg-white/[0.025]"
-              disabled
-            >
-              Edit environment
-            </Button>
+            <EnvironmentActions
+              environment={environment}
+              environmentId={environmentId}
+            />
           </div>
 
           {type === 'production' && (

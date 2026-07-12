@@ -8,9 +8,10 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { CompareEnvironmentsResponseDataEnvironmentsItemType } from './compareEnvironmentsResponseDataEnvironmentsItemType';
 
 export type CompareEnvironmentsResponseDataEnvironmentsItem = {
-  id?: string;
-  name?: string;
-  type?: string;
+  id: string;
+  name: string;
+  type: CompareEnvironmentsResponseDataEnvironmentsItemType;
 };

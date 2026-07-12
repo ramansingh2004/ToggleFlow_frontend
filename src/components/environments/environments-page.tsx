@@ -52,6 +52,7 @@ import {
 } from '@/schemas/environment.schema';
 import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
+import { CompareEnvironmentsDialog } from '@/components/environments/compare-environments-dialog';
 
 type EnvironmentFilter =
   | 'all'
@@ -125,11 +126,18 @@ export function EnvironmentsPage() {
             </p>
           </div>
 
-          <CreateEnvironmentDialog
-            projectId={selectedProjectId}
-            open={createOpen}
-            onOpenChange={setCreateOpen}
-          />
+          <div className="flex flex-wrap gap-2">
+            <CompareEnvironmentsDialog
+              projectId={selectedProjectId}
+              environments={environments}
+            />
+
+            <CreateEnvironmentDialog
+              projectId={selectedProjectId}
+              open={createOpen}
+              onOpenChange={setCreateOpen}
+            />
+          </div>
         </div>
 
         <div className="mt-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">

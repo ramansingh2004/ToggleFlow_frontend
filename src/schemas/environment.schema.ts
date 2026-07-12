@@ -21,6 +21,16 @@ export const createEnvironmentSchema = z.object({
     .max(500, 'Description cannot exceed 500 characters'),
 });
 
+export const updateEnvironmentSchema =
+  createEnvironmentSchema.pick({
+    name: true,
+    description: true,
+  });
+
+export type UpdateEnvironmentFormValues = z.infer<
+  typeof updateEnvironmentSchema
+>;
+
 export type EnvironmentFormValues = z.infer<
   typeof createEnvironmentSchema
 >;
