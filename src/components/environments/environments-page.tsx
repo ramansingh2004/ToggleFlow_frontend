@@ -53,6 +53,7 @@ import {
 import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
 import { CompareEnvironmentsDialog } from '@/components/environments/compare-environments-dialog';
+import { PromoteFlagsDialog } from '@/components/environments/promote-flags-dialog';
 
 type EnvironmentFilter =
   | 'all'
@@ -127,6 +128,11 @@ export function EnvironmentsPage() {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            <PromoteFlagsDialog
+              projectId={selectedProjectId}
+              environments={environments}
+            />
+
             <CompareEnvironmentsDialog
               projectId={selectedProjectId}
               environments={environments}
