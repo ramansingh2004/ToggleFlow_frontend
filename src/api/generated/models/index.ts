@@ -43,6 +43,8 @@ export * from './createApiKeyResponse';
 export * from './createEnvironmentRequest';
 export * from './createEnvironmentRequestType';
 export * from './createExperimentRequest';
+export * from './createExperimentVariant';
+export * from './createExperimentVariantConfig';
 export * from './createFeatureFlagRequest';
 export * from './createProjectRequest';
 export * from './createSegmentRequest';

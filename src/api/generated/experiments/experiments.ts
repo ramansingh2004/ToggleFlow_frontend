@@ -30,9 +30,9 @@ import type {
 import type {
   ApiError,
   ApiSuccess,
+  CreateExperimentRequest,
   EndExperimentRequest,
   ExperimentActionResponse,
-  ExperimentBase,
   ExperimentListResponse,
   ExperimentResponse,
   ExperimentResultsResponse,
@@ -161,7 +161,7 @@ export function useGetProjectExperiments<TData = Awaited<ReturnType<typeof getPr
  */
 export const createExperiment = (
     projectId: string,
-    experimentBase: BodyType<ExperimentBase>,
+    createExperimentRequest: BodyType<CreateExperimentRequest>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -169,7 +169,7 @@ export const createExperiment = (
       return customInstance<ExperimentResponse>(
       {url: `/projects/${projectId}/experiments`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: experimentBase, signal
+      data: createExperimentRequest, signal
     },
       options);
     }
@@ -178,8 +178,8 @@ export const createExperiment = (
 
 
 export const getCreateExperimentMutationOptions = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<ExperimentBase>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<ExperimentBase>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<CreateExperimentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<CreateExperimentRequest>}, TContext> => {
 
 const mutationKey = ['createExperiment'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -191,7 +191,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExperiment>>, {projectId: string;data: BodyType<ExperimentBase>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExperiment>>, {projectId: string;data: BodyType<CreateExperimentRequest>}> = (props) => {
           const {projectId,data} = props ?? {};
 
           return  createExperiment(projectId,data,requestOptions)
@@ -205,18 +205,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateExperimentMutationResult = NonNullable<Awaited<ReturnType<typeof createExperiment>>>
-    export type CreateExperimentMutationBody = BodyType<ExperimentBase>
+    export type CreateExperimentMutationBody = BodyType<CreateExperimentRequest>
     export type CreateExperimentMutationError = ErrorType<ApiError>
 
     /**
  * @summary Create experiment
  */
 export const useCreateExperiment = <TError = ErrorType<ApiError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<ExperimentBase>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExperiment>>, TError,{projectId: string;data: BodyType<CreateExperimentRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createExperiment>>,
         TError,
-        {projectId: string;data: BodyType<ExperimentBase>},
+        {projectId: string;data: BodyType<CreateExperimentRequest>},
         TContext
       > => {
       return useMutation(getCreateExperimentMutationOptions(options), queryClient);

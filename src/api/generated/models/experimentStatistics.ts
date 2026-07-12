@@ -11,10 +11,11 @@
 import type { ExperimentStatisticsVariantsItem } from './experimentStatisticsVariantsItem';
 
 export interface ExperimentStatistics {
-  totalParticipants?: number;
-  totalConversions?: number;
-  overallConversionRate?: number;
-  statisticallySignificant?: boolean;
-  winningVariant?: string;
-  variants?: ExperimentStatisticsVariantsItem[];
+  totalParticipants: number;
+  totalConversions: number;
+  overallConversionRate: number;
+  statisticallySignificant: boolean;
+  /** @nullable */
+  winningVariant?: string | null;
+  variants: ExperimentStatisticsVariantsItem[];
 }

@@ -12,15 +12,17 @@ import type { ExperimentBase } from './experimentBase';
 import type { ExperimentStatus } from './experimentStatus';
 
 export type Experiment = ExperimentBase & ({
-  id?: string;
-  projectId?: string;
-  status?: ExperimentStatus;
+  id: string;
+  projectId: string;
+  status: ExperimentStatus;
   /** @nullable */
   conclusion?: string | null;
   /** @nullable */
   startedAt?: string | null;
   /** @nullable */
   endedAt?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @minimum 0 */
+  variantCount?: number;
 });

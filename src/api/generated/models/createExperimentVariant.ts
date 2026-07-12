@@ -8,25 +8,19 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateExperimentVariant } from './createExperimentVariant';
+import type { CreateExperimentVariantConfig } from './createExperimentVariantConfig';
 
-export interface CreateExperimentRequest {
+export interface CreateExperimentVariant {
   /**
      * @minLength 1
      * @maxLength 100
      */
   name: string;
   /**
-     * @maxLength 500
-     * @nullable
+     * @minimum 0
+     * @maximum 100
      */
-  description?: string | null;
-  flagId: string;
-  /**
-     * @minLength 1
-     * @maxLength 100
-     */
-  conversionMetric: string;
-  /** @minItems 2 */
-  variants: CreateExperimentVariant[];
+  weight: number;
+  /** @nullable */
+  config?: CreateExperimentVariantConfig;
 }
