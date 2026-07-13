@@ -45,6 +45,7 @@ import {
 } from '@/schemas/flag.schema';
 import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
+import { ScheduleFlagDialog } from '@/components/flags/schedule-flag-dialog';
 
 type FlagFilter = 'all' | 'enabled' | 'disabled';
 
@@ -314,6 +315,11 @@ function FlagRow({
         >
           {displayedValue ? 'On' : 'Off'}
         </span>
+
+        <ScheduleFlagDialog
+          flag={flag}
+          projectId={projectId}
+        />
 
         <Switch
           checked={displayedValue}

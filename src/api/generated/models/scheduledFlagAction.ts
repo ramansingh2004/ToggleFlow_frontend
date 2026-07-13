@@ -8,16 +8,11 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ScheduledFlagAction } from './scheduledFlagAction';
 
-export interface ScheduledFlag {
-  flagId: string;
-  flagName: string;
-  flagKey: string;
-  projectId: string;
-  projectName: string;
-  action: ScheduledFlagAction;
-  currentlyEnabled: boolean;
-  scheduledAt: string;
-  timeUntil: number;
-}
+export type ScheduledFlagAction = typeof ScheduledFlagAction[keyof typeof ScheduledFlagAction];
+
+
+export const ScheduledFlagAction = {
+  enable: 'enable',
+  disable: 'disable',
+} as const;

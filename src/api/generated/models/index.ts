@@ -169,6 +169,7 @@ export * from './rolloutStats';
 export * from './rolloutStatsResponse';
 export * from './samlProviderConfig';
 export * from './scheduledFlag';
+export * from './scheduledFlagAction';
 export * from './scheduledFlagListResponse';
 export * from './scheduleRequest';
 export * from './scheduleResponse';

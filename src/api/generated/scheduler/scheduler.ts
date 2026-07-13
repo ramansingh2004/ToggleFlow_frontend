@@ -32,6 +32,7 @@ import type {
   ApiSuccess,
   ScheduleRequest,
   ScheduleResponse,
+  ScheduleStatsResponse,
   ScheduledFlagListResponse
 } from '../models';
 
@@ -331,6 +332,98 @@ export function useGetScheduledFlags<TData = Awaited<ReturnType<typeof getSchedu
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetScheduledFlagsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * @summary Get schedule statistics
+ */
+export const getScheduleStats = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ScheduleStatsResponse>(
+      {url: `/dashboard/schedules/stats`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetScheduleStatsQueryKey = () => {
+    return [
+    `/dashboard/schedules/stats`
+    ] as const;
+    }
+
+
+export const getGetScheduleStatsQueryOptions = <TData = Awaited<ReturnType<typeof getScheduleStats>>, TError = ErrorType<ApiError>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScheduleStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScheduleStats>>> = ({ signal }) => getScheduleStats(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScheduleStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetScheduleStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getScheduleStats>>>
+export type GetScheduleStatsQueryError = ErrorType<ApiError>
+
+
+export function useGetScheduleStats<TData = Awaited<ReturnType<typeof getScheduleStats>>, TError = ErrorType<ApiError>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleStats>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleStats<TData = Awaited<ReturnType<typeof getScheduleStats>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScheduleStats>>,
+          TError,
+          Awaited<ReturnType<typeof getScheduleStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetScheduleStats<TData = Awaited<ReturnType<typeof getScheduleStats>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get schedule statistics
+ */
+
+export function useGetScheduleStats<TData = Awaited<ReturnType<typeof getScheduleStats>>, TError = ErrorType<ApiError>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getScheduleStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetScheduleStatsQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

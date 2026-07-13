@@ -10,6 +10,7 @@ import {
   Bell,
   Braces,
   Boxes,
+  CalendarClock,
   FolderKanban,
   KeyRound,
   LayoutDashboard,
@@ -69,6 +70,11 @@ const navigation = [
     label: 'Segments',
     href: '/segments',
     icon: ListFilter,
+  },
+  {
+  label: 'Scheduled changes',
+  href: '/schedules',
+  icon: CalendarClock,
   },
   {
     label: 'Analytics',

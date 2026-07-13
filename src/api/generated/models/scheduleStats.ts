@@ -10,8 +10,8 @@
  */
 
 export interface ScheduleStats {
-  total?: number;
-  inNextHour?: number;
-  inNextDay?: number;
-  inNextWeek?: number;
+  total: number;
+  inNextHour: number;
+  inNextDay: number;
+  inNextWeek: number;
 }
