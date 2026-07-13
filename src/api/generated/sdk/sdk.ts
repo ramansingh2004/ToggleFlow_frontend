@@ -25,6 +25,7 @@ import type {
 
 import type {
   ApiError,
+  GetSdkFlagParams,
   GetSdkFlagsParams,
   HealthResponse,
   SdkFlagResponse,
@@ -56,10 +57,9 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Returns all enabled feature flags available for the project associated
- * with the provided API key.
- *
- * The response is optimized for SDK consumption.
+ * Stable application-user identifier used for deterministic rollout
+ * evaluation. Applications should provide the same identifier for the
+ * same user on every request.
  * @summary Get all feature flags
  */
 export const getSdkFlags = (
@@ -153,17 +153,21 @@ export function useGetSdkFlags<TData = Awaited<ReturnType<typeof getSdkFlags>>, 
 
 
 /**
- * Returns a single feature flag by key.
+ * Returns and evaluates a single feature flag by key. When userId is
+ * supplied, the flag's rollout percentage is evaluated consistently
+ * for that application user.
  * @summary Get feature flag
  */
 export const getSdkFlag = (
     key: string,
+    params?: GetSdkFlagParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
 
       return customInstance<SdkFlagResponse>(
-      {url: `/sdk/flags/${key}`, method: 'GET', signal
+      {url: `/sdk/flags/${key}`, method: 'GET',
+        params, signal
     },
       options);
     }
@@ -171,23 +175,25 @@ export const getSdkFlag = (
 
 
 
-export const getGetSdkFlagQueryKey = (key: string,) => {
+export const getGetSdkFlagQueryKey = (key: string,
+    params?: GetSdkFlagParams,) => {
     return [
-    `/sdk/flags/${key}`
+    `/sdk/flags/${key}`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetSdkFlagQueryOptions = <TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSdkFlagQueryOptions = <TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(key: string,
+    params?: GetSdkFlagParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSdkFlagQueryKey(key);
+  const queryKey =  queryOptions?.queryKey ?? getGetSdkFlagQueryKey(key,params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSdkFlag>>> = ({ signal }) => getSdkFlag(key, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSdkFlag>>> = ({ signal }) => getSdkFlag(key,params, requestOptions, signal);
 
 
 
@@ -201,7 +207,8 @@ export type GetSdkFlagQueryError = ErrorType<ApiError>
 
 
 export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
- key: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>> & Pick<
+ key: string,
+    params: undefined |  GetSdkFlagParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSdkFlag>>,
           TError,
@@ -211,7 +218,8 @@ export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TE
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
- key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>> & Pick<
+ key: string,
+    params?: GetSdkFlagParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSdkFlag>>,
           TError,
@@ -221,7 +229,8 @@ export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TE
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
- key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ key: string,
+    params?: GetSdkFlagParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -229,11 +238,12 @@ export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TE
  */
 
 export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TError = ErrorType<ApiError>>(
- key: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ key: string,
+    params?: GetSdkFlagParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSdkFlag>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetSdkFlagQueryOptions(key,options)
+  const queryOptions = getGetSdkFlagQueryOptions(key,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

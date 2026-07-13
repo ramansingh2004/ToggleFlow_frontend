@@ -10,6 +10,11 @@
  */
 
 export interface RolloutMilestone {
-  percentage?: number;
-  estimatedMinutes?: number;
+  /**
+     * @minimum 0
+     * @maximum 100
+     */
+  percentage: number;
+  /** @minimum 0 */
+  estimatedMinutes: number;
 }

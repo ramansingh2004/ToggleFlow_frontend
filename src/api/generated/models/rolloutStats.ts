@@ -11,15 +11,20 @@
 import type { RolloutMilestone } from './rolloutMilestone';
 
 export interface RolloutStats {
-  flagId?: string;
-  flagName?: string;
-  flagKey?: string;
+  flagId: string;
+  flagName: string;
+  flagKey: string;
   /**
      * @minimum 0
      * @maximum 100
      */
-  rolloutPercentage?: number;
-  estimatedUsersAffected?: number;
-  isActive?: boolean;
-  nextMilestones?: RolloutMilestone[];
+  rolloutPercentage: number;
+  /**
+     * Estimated affected application users. Null when ToggleFlow does not
+     * have application-user population data.
+     * @nullable
+     */
+  estimatedUsersAffected: number | null;
+  isActive: boolean;
+  nextMilestones: RolloutMilestone[];
 }

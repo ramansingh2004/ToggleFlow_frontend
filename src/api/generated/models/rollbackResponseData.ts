@@ -8,10 +8,11 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { RollbackResponseDataAction } from './rollbackResponseDataAction';
 
 export type RollbackResponseData = {
-  flagId?: string;
-  action?: string;
-  newState?: string;
-  message?: string;
+  flagId: string;
+  action: RollbackResponseDataAction;
+  newState: string;
+  message: string;
 };

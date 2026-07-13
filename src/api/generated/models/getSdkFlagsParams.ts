@@ -11,7 +11,9 @@
 
 export type GetSdkFlagsParams = {
 /**
- * User identifier used for rollout percentage evaluation.
+ * Stable application-user identifier used for deterministic rollout
+ * evaluation. Applications should provide the same identifier for
+ * the same user on every request.
  */
 userId?: string;
 };

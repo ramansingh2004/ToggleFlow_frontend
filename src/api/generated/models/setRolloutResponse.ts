@@ -12,5 +12,5 @@ import type { ApiSuccess } from './apiSuccess';
 import type { SetRolloutResponseData } from './setRolloutResponseData';
 
 export type SetRolloutResponse = ApiSuccess & {
-  data?: SetRolloutResponseData;
+  data: SetRolloutResponseData;
 };

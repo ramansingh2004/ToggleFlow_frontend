@@ -8,9 +8,10 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ApiSuccess } from './apiSuccess';
-import type { RolloutStats } from './rolloutStats';
 
-export type RolloutStatsResponse = ApiSuccess & {
-  data: RolloutStats;
-};
+export type RollbackResponseDataAction = typeof RollbackResponseDataAction[keyof typeof RollbackResponseDataAction];
+
+
+export const RollbackResponseDataAction = {
+  rollback: 'rollback',
+} as const;

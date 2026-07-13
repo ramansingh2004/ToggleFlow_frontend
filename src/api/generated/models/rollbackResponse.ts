@@ -12,5 +12,5 @@ import type { ApiSuccess } from './apiSuccess';
 import type { RollbackResponseData } from './rollbackResponseData';
 
 export type RollbackResponse = ApiSuccess & {
-  data?: RollbackResponseData;
+  data: RollbackResponseData;
 };

@@ -8,9 +8,12 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ApiSuccess } from './apiSuccess';
-import type { RolloutStats } from './rolloutStats';
 
-export type RolloutStatsResponse = ApiSuccess & {
-  data: RolloutStats;
+export type GetSdkFlagParams = {
+/**
+ * Stable application-user identifier used for deterministic rollout
+ * evaluation.
+ * @minLength 1
+ */
+userId?: string;
 };

@@ -10,11 +10,11 @@
  */
 
 export type SetRolloutResponseData = {
-  flagId?: string;
+  flagId: string;
   /**
      * @minimum 0
      * @maximum 100
      */
-  percentage?: number;
-  message?: string;
+  percentage: number;
+  message: string;
 };
