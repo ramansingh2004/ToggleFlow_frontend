@@ -12,7 +12,11 @@ import type { SegmentRule } from './segmentRule';
 
 export interface SegmentBase {
   name: string;
-  /** @nullable */
+  /**
+     * @maxLength 500
+     * @nullable
+     */
   description?: string | null;
+  /** @minItems 1 */
   rules: SegmentRule[];
 }

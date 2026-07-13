@@ -11,8 +11,10 @@
 import type { SegmentBase } from './segmentBase';
 
 export type Segment = SegmentBase & {
-  id?: string;
-  projectId?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  id: string;
+  projectId: string;
+  /** @minimum 0 */
+  ruleCount?: number;
+  createdAt: string;
+  updatedAt: string;
 };

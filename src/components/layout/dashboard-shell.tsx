@@ -13,6 +13,7 @@ import {
   FolderKanban,
   KeyRound,
   LayoutDashboard,
+  ListFilter,
   LogOut,
   Menu,
   Settings,
@@ -63,6 +64,11 @@ const navigation = [
     label: 'Experiments',
     href: '/experiments',
     icon: Beaker,
+  },
+  {
+    label: 'Segments',
+    href: '/segments',
+    icon: ListFilter,
   },
   {
     label: 'Analytics',

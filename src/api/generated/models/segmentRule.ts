@@ -15,4 +15,10 @@ export interface SegmentRule {
   type: SegmentRuleType;
   operator: SegmentRuleOperator;
   value: string | string[];
+  /**
+     * Required when type is custom.
+     * @minLength 1
+     * @maxLength 100
+     */
+  attribute?: string;
 }
