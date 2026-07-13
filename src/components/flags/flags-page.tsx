@@ -46,6 +46,7 @@ import {
 import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
 import { ScheduleFlagDialog } from '@/components/flags/schedule-flag-dialog';
+import { RolloutFlagDialog } from '@/components/flags/rollout-flag-dialog';
 
 type FlagFilter = 'all' | 'enabled' | 'disabled';
 
@@ -315,6 +316,11 @@ function FlagRow({
         >
           {displayedValue ? 'On' : 'Off'}
         </span>
+
+        <RolloutFlagDialog
+          flag={flag}
+          projectId={projectId}
+        />
 
         <ScheduleFlagDialog
           flag={flag}

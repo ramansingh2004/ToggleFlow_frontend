@@ -18,6 +18,7 @@ import {
   LogOut,
   Menu,
   Settings,
+  Terminal,
   ToggleLeft,
   Users,
   Webhook,
@@ -93,6 +94,11 @@ const managementNavigation = [
     label: 'Webhooks',
     href: '/webhooks',
     icon: Webhook,
+  },
+  {
+    label: 'SDK quickstart',
+    href: '/sdk',
+    icon: Terminal,
   },
   {
     label: 'API keys',
