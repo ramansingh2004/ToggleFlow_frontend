@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Activity,
@@ -43,8 +43,10 @@ export function AnalyticsPage() {
     (state) => state.selectedProjectId
   );
 
-  const [selectedFlagId, setSelectedFlagId] =
-    useState('');
+  const [
+  requestedFlagId,
+  setRequestedFlagId,
+] = useState('');
   const [days, setDays] = useState<number>(30);
 
   const projectAnalyticsQuery =
@@ -68,27 +70,22 @@ export function AnalyticsPage() {
     }
   );
 
-  const flags = flagsQuery.data?.data ?? [];
+  const flags = useMemo(
+  () => flagsQuery.data?.data ?? [],
+  [flagsQuery.data?.data]
+);
 
-  useEffect(() => {
-    if (flags.length === 0) {
-      if (selectedFlagId) {
-        setSelectedFlagId('');
-      }
-      return;
-    }
+const selectedFlagId = useMemo(() => {
+  const requestedSelectionExists = flags.some(
+    (flag) => flag.id === requestedFlagId
+  );
 
-    const selectionExists = flags.some(
-      (flag) => flag.id === selectedFlagId
-    );
+  if (requestedSelectionExists) {
+    return requestedFlagId;
+  }
 
-    if (!selectionExists) {
-      setSelectedFlagId(
-        flags.find((flag) => flag.id)?.id ?? ''
-      );
-    }
-  }, [flags, selectedFlagId]);
-
+  return flags.find((flag) => flag.id)?.id ?? '';
+}, [flags, requestedFlagId]);
   const flagAnalyticsQuery = useGetFlagAnalytics(
     selectedFlagId,
     { days },
@@ -207,7 +204,7 @@ export function AnalyticsPage() {
               <Select
                 value={selectedFlagId || null}
                 onValueChange={(value) =>
-                  setSelectedFlagId(value ?? '')
+                  setRequestedFlagId(value ?? '')
                 }
               >
                 <SelectTrigger className="h-9 w-full border-white/[0.08] bg-white/[0.025] sm:w-56">

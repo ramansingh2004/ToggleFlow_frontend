@@ -61,6 +61,7 @@ import {
 } from '@/schemas/api-key.schema';
 import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
+import { SdkQuickstart } from '@/components/api-keys/sdk-quickstart';
 
 export function ApiKeysPage() {
   const selectedProjectId = useUiStore(
@@ -110,6 +111,10 @@ export function ApiKeysPage() {
             open={createOpen}
             onOpenChange={setCreateOpen}
           />
+        </div>
+
+        <div className="mt-8">
+          <SdkQuickstart projectId={selectedProjectId} />
         </div>
 
         <div className="mt-8">
@@ -470,6 +475,13 @@ function CreatedKeyView({
       <div className="rounded-xl border border-white/[0.08] bg-black/30 p-4">
         <code className="block break-all text-xs leading-6 text-indigo-200">
           {createdKey.key}
+          <p className="text-xs leading-5 text-zinc-600">
+            Store this value as{' '}
+            <code className="text-zinc-400">
+              TOGGLEFLOW_API_KEY
+            </code>{' '}
+            in your server&apos;s environment configuration.
+          </p>
         </code>
       </div>
 

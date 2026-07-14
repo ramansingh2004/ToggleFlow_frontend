@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
@@ -76,14 +76,6 @@ export function PromoteFlagsDialog({
   const targetsProduction =
     targetEnvironment?.type === 'production';
 
-  useEffect(() => {
-    setSelectedFlagIds([]);
-  }, [sourceId]);
-
-  useEffect(() => {
-    setProductionConfirmed(false);
-  }, [targetId]);
-
   const resetDialog = () => {
     setSourceId('');
     setTargetId('');
@@ -91,15 +83,26 @@ export function PromoteFlagsDialog({
     setProductionConfirmed(false);
   };
 
-  const handleSourceChange = (value: string | null) => {
-    const nextSourceId = value ?? '';
+  const handleSourceChange = (
+  value: string | null
+) => {
+  const nextSourceId = value ?? '';
 
-    setSourceId(nextSourceId);
+  setSourceId(nextSourceId);
+  setSelectedFlagIds([]);
 
-    if (targetId === nextSourceId) {
-      setTargetId('');
-    }
-  };
+  if (targetId === nextSourceId) {
+    setTargetId('');
+    setProductionConfirmed(false);
+  }
+};
+
+const handleTargetChange = (
+  value: string | null
+) => {
+  setTargetId(value ?? '');
+  setProductionConfirmed(false);
+};
 
   const toggleFlag = (flagId: string) => {
     setSelectedFlagIds((current) =>
@@ -287,9 +290,7 @@ export function PromoteFlagsDialog({
 
             <Select
               value={targetId || null}
-              onValueChange={(value) =>
-                setTargetId(value ?? '')
-              }
+              onValueChange={handleTargetChange}
               disabled={!sourceId}
             >
               <SelectTrigger className="h-10 w-full border-white/10 bg-white/[0.035]">

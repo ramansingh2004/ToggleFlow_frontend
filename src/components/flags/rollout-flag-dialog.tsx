@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangle,
@@ -62,7 +62,10 @@ export function RolloutFlagDialog({
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
-  const [percentage, setPercentage] = useState(100);
+  const [
+    percentageOverride,
+    setPercentageOverride,
+  ] = useState<number | null>(null);
   const [confirmRollback, setConfirmRollback] =
     useState(false);
 
@@ -82,18 +85,33 @@ export function RolloutFlagDialog({
 
   const stats = rolloutQuery.data?.data;
 
+  const percentage =
+  percentageOverride ??
+  stats?.rolloutPercentage ??
+  100;
+
   const isPending =
     updateMutation.isPending ||
     rollbackMutation.isPending;
 
-  useEffect(() => {
-    if (
-      open &&
-      stats?.rolloutPercentage !== undefined
-    ) {
-      setPercentage(stats.rolloutPercentage);
-    }
-  }, [open, stats?.rolloutPercentage]);
+  const closeDialog = () => {
+  closeDialog();
+  setPercentageOverride(null);
+  setConfirmRollback(false);
+};
+
+const handleOpenChange = (
+  nextOpen: boolean
+) => {
+  if (!nextOpen && isPending) return;
+
+  setOpen(nextOpen);
+
+  if (!nextOpen) {
+    setPercentageOverride(null);
+    setConfirmRollback(false);
+  }
+};
 
   const invalidateRolloutQueries = async () => {
     if (!flag.id) return;
@@ -147,7 +165,7 @@ export function RolloutFlagDialog({
           `Rollout updated to ${percentage}%`
       );
 
-      setOpen(false);
+      closeDialog();
     } catch (error) {
       toast.error(
         getApiErrorMessage(
@@ -184,9 +202,7 @@ export function RolloutFlagDialog({
           'Feature flag rolled back'
       );
 
-      setPercentage(0);
-      setConfirmRollback(false);
-      setOpen(false);
+      closeDialog();
     } catch (error) {
       toast.error(
         getApiErrorMessage(
@@ -200,15 +216,7 @@ export function RolloutFlagDialog({
   return (
     <Dialog
       open={open}
-      onOpenChange={(nextOpen) => {
-        if (!nextOpen && isPending) return;
-
-        setOpen(nextOpen);
-
-        if (!nextOpen) {
-          setConfirmRollback(false);
-        }
-      }}
+      onOpenChange={handleOpenChange}
     >
       <DialogTrigger
         render={
@@ -320,7 +328,7 @@ export function RolloutFlagDialog({
                       aria-label="Rollout percentage"
                       className="h-2 w-full cursor-pointer accent-indigo-500"
                       onChange={(event) =>
-                        setPercentage(
+                        setPercentageOverride(
                           Number(event.target.value)
                         )
                       }
@@ -342,7 +350,7 @@ export function RolloutFlagDialog({
                                 : 'rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-1.5 text-xs text-zinc-600 hover:text-zinc-300'
                             }
                             onClick={() =>
-                              setPercentage(preset)
+                              setPercentageOverride(preset)
                             }
                           >
                             {preset}%
@@ -370,7 +378,7 @@ export function RolloutFlagDialog({
                               event.target.value
                             );
 
-                            setPercentage(
+                            setPercentageOverride(
                               Math.max(
                                 0,
                                 Math.min(100, value)
@@ -445,7 +453,7 @@ export function RolloutFlagDialog({
                 variant="outline"
                 className="border-white/10 bg-transparent"
                 disabled={isPending}
-                onClick={() => setOpen(false)}
+                onClick={closeDialog}
               >
                 Cancel
               </Button>
