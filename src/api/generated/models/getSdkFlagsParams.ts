@@ -14,6 +14,7 @@ export type GetSdkFlagsParams = {
  * Stable application-user identifier used for deterministic rollout
  * evaluation. Applications should provide the same identifier for
  * the same user on every request.
+ * @minLength 1
  */
 userId?: string;
 };

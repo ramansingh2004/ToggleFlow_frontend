@@ -11,7 +11,8 @@
 import type { FlagsResponseFlags } from './flagsResponseFlags';
 
 export interface FlagsResponse {
-  flags?: FlagsResponseFlags;
-  count?: number;
-  timestamp?: string;
+  flags: FlagsResponseFlags;
+  /** @minimum 0 */
+  count: number;
+  timestamp: string;
 }

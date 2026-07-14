@@ -11,7 +11,7 @@
 import type { ApiErrorErrorDetails } from './apiErrorErrorDetails';
 
 export type ApiErrorError = {
-  message?: string;
-  statusCode?: number;
+  message: string;
+  statusCode: number;
   details?: ApiErrorErrorDetails;
 };

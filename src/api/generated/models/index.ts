@@ -118,6 +118,7 @@ export * from './getUsageTrendsParams';
 export * from './githubOAuthCallbackParams';
 export * from './googleOAuthCallbackParams';
 export * from './healthResponse';
+export * from './healthResponseStatus';
 export * from './linkedProviders';
 export * from './linkedProvidersPrimaryAuth';
 export * from './linkedProvidersResponse';

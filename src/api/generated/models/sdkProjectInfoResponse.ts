@@ -12,5 +12,5 @@ import type { ApiSuccess } from './apiSuccess';
 import type { ProjectInfo } from './projectInfo';
 
 export type SdkProjectInfoResponse = ApiSuccess & {
-  data?: ProjectInfo;
+  data: ProjectInfo;
 };

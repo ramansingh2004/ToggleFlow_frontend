@@ -10,7 +10,7 @@
  */
 
 export interface FlagResponse {
-  key?: string;
-  name?: string;
-  enabled?: boolean;
+  key: string;
+  name: string;
+  enabled: boolean;
 }

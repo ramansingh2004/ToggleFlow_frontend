@@ -10,10 +10,11 @@
  */
 
 export interface ProjectInfo {
-  id?: string;
-  name?: string;
-  slug?: string;
-  isActive?: boolean;
-  enabledFlagCount?: number;
-  createdAt?: string;
+  id: string;
+  name: string;
+  slug: string;
+  isActive: boolean;
+  /** @minimum 0 */
+  enabledFlagCount: number;
+  createdAt: string;
 }

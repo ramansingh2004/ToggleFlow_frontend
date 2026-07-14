@@ -10,7 +10,7 @@
  */
 
 export interface ApiSuccess {
-  success?: boolean;
+  success: boolean;
   message?: string;
-  timestamp?: string;
+  timestamp: string;
 }

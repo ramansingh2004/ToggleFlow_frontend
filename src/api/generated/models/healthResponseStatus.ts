@@ -8,10 +8,10 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ApiErrorError } from './apiErrorError';
 
-export interface ApiError {
-  success: boolean;
-  error: ApiErrorError;
-  timestamp: string;
-}
+export type HealthResponseStatus = typeof HealthResponseStatus[keyof typeof HealthResponseStatus];
+
+
+export const HealthResponseStatus = {
+  healthy: 'healthy',
+} as const;

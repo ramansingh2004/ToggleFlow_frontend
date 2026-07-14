@@ -12,5 +12,5 @@ import type { ApiSuccess } from './apiSuccess';
 import type { SdkFlagsResponseData } from './sdkFlagsResponseData';
 
 export type SdkFlagsResponse = ApiSuccess & {
-  data?: SdkFlagsResponseData;
+  data: SdkFlagsResponseData;
 };

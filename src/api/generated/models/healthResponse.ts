@@ -8,8 +8,9 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { HealthResponseStatus } from './healthResponseStatus';
 
 export interface HealthResponse {
-  status?: string;
-  timestamp?: string;
+  status: HealthResponseStatus;
+  timestamp: string;
 }
