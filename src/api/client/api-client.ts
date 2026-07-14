@@ -15,7 +15,7 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15_000,
+  timeout: 90_000,
 });
 
 let refreshRequest: Promise<void> | null = null;
