@@ -95,7 +95,7 @@ export function RolloutFlagDialog({
     rollbackMutation.isPending;
 
   const closeDialog = () => {
-  closeDialog();
+  setOpen(false);
   setPercentageOverride(null);
   setConfirmRollback(false);
 };
