@@ -9,10 +9,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface FeatureFlagSummary {
-  id?: string;
-  name?: string;
-  key?: string;
-  enabled?: boolean;
-  segmentIds?: string[];
-}
+export type EvaluationAttributeValue = string | number | boolean;

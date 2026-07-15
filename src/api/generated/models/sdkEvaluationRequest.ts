@@ -8,11 +8,14 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { EvaluationAttributes } from './evaluationAttributes';
 
-export interface FeatureFlagSummary {
-  id?: string;
-  name?: string;
-  key?: string;
-  enabled?: boolean;
-  segmentIds?: string[];
+export interface SdkEvaluationRequest {
+  /**
+     * Stable application-user identifier used for rollout bucketing and analytics.
+     * @minLength 1
+     * @maxLength 200
+     */
+  userId?: string;
+  attributes?: EvaluationAttributes;
 }

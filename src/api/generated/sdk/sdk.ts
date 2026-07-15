@@ -9,16 +9,20 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
@@ -28,13 +32,14 @@ import type {
   GetSdkFlagParams,
   GetSdkFlagsParams,
   HealthResponse,
+  SdkEvaluationRequest,
   SdkFlagResponse,
   SdkFlagsResponse,
   SdkProjectInfoResponse
 } from '../models';
 
 import { customInstance } from '../../client/orval-client';
-import type { ErrorType } from '../../client/orval-client';
+import type { ErrorType , BodyType } from '../../client/orval-client';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -256,6 +261,143 @@ export function useGetSdkFlag<TData = Awaited<ReturnType<typeof getSdkFlag>>, TE
 
 
 /**
+ * Evaluates all enabled project flags using application-user attributes,
+ * assigned segments, and gradual rollout percentages.
+ *
+ * Rules within a segment use AND logic. When multiple segments are
+ * assigned to a flag, matching any assigned segment makes the user
+ * eligible. Rollout evaluation is applied after segment matching.
+ * @summary Evaluate all feature flags
+ */
+export const evaluateSdkFlags = (
+    sdkEvaluationRequest: BodyType<SdkEvaluationRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<SdkFlagsResponse>(
+      {url: `/sdk/flags/evaluate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sdkEvaluationRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getEvaluateSdkFlagsMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateSdkFlags>>, TError,{data: BodyType<SdkEvaluationRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof evaluateSdkFlags>>, TError,{data: BodyType<SdkEvaluationRequest>}, TContext> => {
+
+const mutationKey = ['evaluateSdkFlags'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof evaluateSdkFlags>>, {data: BodyType<SdkEvaluationRequest>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  evaluateSdkFlags(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateSdkFlagsMutationResult = NonNullable<Awaited<ReturnType<typeof evaluateSdkFlags>>>
+    export type EvaluateSdkFlagsMutationBody = BodyType<SdkEvaluationRequest>
+    export type EvaluateSdkFlagsMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Evaluate all feature flags
+ */
+export const useEvaluateSdkFlags = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateSdkFlags>>, TError,{data: BodyType<SdkEvaluationRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof evaluateSdkFlags>>,
+        TError,
+        {data: BodyType<SdkEvaluationRequest>},
+        TContext
+      > => {
+      return useMutation(getEvaluateSdkFlagsMutationOptions(options), queryClient);
+    }
+    /**
+ * Evaluates one feature flag using application-user attributes,
+ * assigned segments, and its gradual rollout percentage.
+ * @summary Evaluate a feature flag
+ */
+export const evaluateSdkFlag = (
+    key: string,
+    sdkEvaluationRequest: BodyType<SdkEvaluationRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<SdkFlagResponse>(
+      {url: `/sdk/flags/${key}/evaluate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sdkEvaluationRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getEvaluateSdkFlagMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateSdkFlag>>, TError,{key: string;data: BodyType<SdkEvaluationRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof evaluateSdkFlag>>, TError,{key: string;data: BodyType<SdkEvaluationRequest>}, TContext> => {
+
+const mutationKey = ['evaluateSdkFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof evaluateSdkFlag>>, {key: string;data: BodyType<SdkEvaluationRequest>}> = (props) => {
+          const {key,data} = props ?? {};
+
+          return  evaluateSdkFlag(key,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateSdkFlagMutationResult = NonNullable<Awaited<ReturnType<typeof evaluateSdkFlag>>>
+    export type EvaluateSdkFlagMutationBody = BodyType<SdkEvaluationRequest>
+    export type EvaluateSdkFlagMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Evaluate a feature flag
+ */
+export const useEvaluateSdkFlag = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateSdkFlag>>, TError,{key: string;data: BodyType<SdkEvaluationRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof evaluateSdkFlag>>,
+        TError,
+        {key: string;data: BodyType<SdkEvaluationRequest>},
+        TContext
+      > => {
+      return useMutation(getEvaluateSdkFlagMutationOptions(options), queryClient);
+    }
+    /**
  * Returns metadata about the project associated with the API key.
  * @summary Get project information
  */

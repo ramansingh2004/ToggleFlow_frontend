@@ -32,4 +32,5 @@ export interface FeatureFlagBase {
   scheduledAt?: string | null;
   createdAt?: string;
   updatedAt?: string;
+  segmentIds?: string[];
 }

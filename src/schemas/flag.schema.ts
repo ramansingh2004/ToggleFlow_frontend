@@ -21,6 +21,10 @@ export const createFlagSchema = z.object({
     .string()
     .trim()
     .max(500, 'Description cannot exceed 500 characters'),
+
+  segmentIds: z
+    .array(z.string().min(1))
+    .max(20, 'A flag can use at most 20 segments'),
 });
 
 export type CreateFlagFormValues = z.infer<

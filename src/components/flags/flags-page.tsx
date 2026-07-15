@@ -47,6 +47,9 @@ import { useUiStore } from '@/store/ui-store';
 import { getApiErrorMessage } from '@/utils/get-api-error-message';
 import { ScheduleFlagDialog } from '@/components/flags/schedule-flag-dialog';
 import { RolloutFlagDialog } from '@/components/flags/rollout-flag-dialog';
+import { useGetProjectSegments } from '@/api/generated/segments/segments';
+import { SegmentPicker } from '@/components/flags/segment-picker';
+import { SegmentTargetingDialog } from '@/components/flags/segment-targeting-dialog';
 
 type FlagFilter = 'all' | 'enabled' | 'disabled';
 
@@ -296,6 +299,15 @@ function FlagRow({
             {flag.name ?? 'Unnamed flag'}
           </p>
 
+          {(flag.segmentIds?.length ?? 0) > 0 && (
+            <p className="mt-1 text-[11px] text-indigo-400/70">
+              {flag.segmentIds?.length}{' '}
+              {flag.segmentIds?.length === 1
+                ? 'target segment'
+                : 'target segments'}
+            </p>
+          )}
+
           <p className="mt-1 text-xs text-zinc-700 md:hidden">
             {displayedValue ? 'Enabled' : 'Disabled'}
           </p>
@@ -316,6 +328,11 @@ function FlagRow({
         >
           {displayedValue ? 'On' : 'Off'}
         </span>
+
+        <SegmentTargetingDialog
+          flag={flag}
+          projectId={projectId}
+        />
 
         <RolloutFlagDialog
           flag={flag}
@@ -357,6 +374,7 @@ function CreateFlagDialog({
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<CreateFlagFormValues>({
     resolver: zodResolver(createFlagSchema),
@@ -364,6 +382,7 @@ function CreateFlagDialog({
       name: '',
       key: '',
       description: '',
+      segmentIds: [],
     },
   });
 
@@ -385,6 +404,19 @@ function CreateFlagDialog({
     );
   };
 
+  const segmentsQuery = useGetProjectSegments(
+  projectId,
+  {
+    query: {
+      enabled: open,
+      staleTime: 30 * 1000,
+    },
+  }
+);
+
+const segments = segmentsQuery.data?.data ?? [];
+const selectedSegmentIds = watch('segmentIds');
+
   const onSubmit = async (
     values: CreateFlagFormValues
   ) => {
@@ -396,6 +428,7 @@ function CreateFlagDialog({
           key: values.key.trim(),
           description:
             values.description.trim() || null,
+          segmentIds: values.segmentIds,
         },
       });
 
@@ -446,7 +479,7 @@ function CreateFlagDialog({
         New flag
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-md">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Create feature flag</DialogTitle>
 
@@ -514,6 +547,49 @@ function CreateFlagDialog({
                 </p>
               )}
             </div>
+
+            {/* ADD: Segment targeting */}
+<div className="space-y-3">
+  <div>
+    <Label>Target segments</Label>
+
+    <p className="mt-1 text-xs leading-5 text-zinc-600">
+      Leave all users selected or restrict this flag to
+      users matching one or more segments.
+    </p>
+  </div>
+
+  <div className="max-h-64 overflow-y-auto pr-1">
+    <SegmentPicker
+      segments={segments}
+      selectedIds={selectedSegmentIds}
+      loading={segmentsQuery.isPending}
+      disabled={createMutation.isPending}
+      onChange={(segmentIds) =>
+        setValue(
+          'segmentIds',
+          segmentIds,
+          {
+            shouldDirty: true,
+            shouldValidate: true,
+          }
+        )
+      }
+    />
+  </div>
+
+  {segmentsQuery.isError && (
+    <p className="text-xs text-red-400">
+      Unable to load project segments.
+    </p>
+  )}
+
+  {errors.segmentIds && (
+    <p className="text-xs text-red-400">
+      {errors.segmentIds.message}
+    </p>
+  )}
+</div>
           </div>
 
           <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
@@ -522,7 +598,9 @@ function CreateFlagDialog({
               variant="outline"
               className="border-white/10 bg-transparent"
               disabled={createMutation.isPending}
-              onClick={() => onOpenChange(false)}
+              onClick={() => {
+                reset();
+                onOpenChange(false)}}
             >
               Cancel
             </Button>

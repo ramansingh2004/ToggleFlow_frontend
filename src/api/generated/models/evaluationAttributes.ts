@@ -8,11 +8,6 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { EvaluationAttributeValue } from './evaluationAttributeValue';
 
-export interface FeatureFlagSummary {
-  id?: string;
-  name?: string;
-  key?: string;
-  enabled?: boolean;
-  segmentIds?: string[];
-}
+export interface EvaluationAttributes {[key: string]: EvaluationAttributeValue}

@@ -20,4 +20,9 @@ export interface UpdateFeatureFlagRequest {
      * @nullable
      */
   description?: string | null;
+  /**
+     * Segments eligible for this flag. Rules within each segment use AND logic, while multiple assigned segments use OR logic.
+     * @maxItems 20
+     */
+  segmentIds?: string[];
 }
