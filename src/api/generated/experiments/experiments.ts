@@ -444,8 +444,9 @@ export const useEndExperiment = <TError = ErrorType<ApiError>,
       return useMutation(getEndExperimentMutationOptions(options), queryClient);
     }
     /**
- * Records a conversion result for a variant.
- * @summary Record experiment result
+ * Deprecated dashboard-authenticated endpoint. Application integrations must use the API-key-protected SDK assignment and conversion endpoints.
+ * @deprecated
+ * @summary Record experiment result (deprecated)
  */
 export const recordExperimentResult = (
     experimentId: string,
@@ -498,7 +499,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type RecordExperimentResultMutationError = ErrorType<ApiError>
 
     /**
- * @summary Record experiment result
+ * @deprecated
+ * @summary Record experiment result (deprecated)
  */
 export const useRecordExperimentResult = <TError = ErrorType<ApiError>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordExperimentResult>>, TError,{experimentId: string;variantId: string;data: BodyType<RecordExperimentResultRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}

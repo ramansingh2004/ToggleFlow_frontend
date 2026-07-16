@@ -8,17 +8,12 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ExperimentVariantConfig } from './experimentVariantConfig';
 
-export interface ExperimentVariant {
-  id: string;
-  name: string;
+export interface SdkExperimentUserRequest {
   /**
-     * @minimum 1
-     * @maximum 100
+     * Stable identifier for the application user.
+     * @minLength 1
+     * @maxLength 200
      */
-  weight: number;
-  /** @nullable */
-  config?: ExperimentVariantConfig;
-  createdAt?: string;
+  userId: string;
 }

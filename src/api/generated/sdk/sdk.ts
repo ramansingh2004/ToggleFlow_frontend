@@ -33,6 +33,9 @@ import type {
   GetSdkFlagsParams,
   HealthResponse,
   SdkEvaluationRequest,
+  SdkExperimentAssignmentResponse,
+  SdkExperimentConversionResponse,
+  SdkExperimentUserRequest,
   SdkFlagResponse,
   SdkFlagsResponse,
   SdkProjectInfoResponse
@@ -396,6 +399,141 @@ export const useEvaluateSdkFlag = <TError = ErrorType<ApiError>,
         TContext
       > => {
       return useMutation(getEvaluateSdkFlagMutationOptions(options), queryClient);
+    }
+    /**
+ * Deterministically assigns an application user to one weighted variant
+ * and persists the exposure. Repeating the request returns the same
+ * assignment. The experiment must be running and its flag must be enabled.
+ * @summary Assign an experiment variant
+ */
+export const assignSdkExperimentVariant = (
+    experimentId: string,
+    sdkExperimentUserRequest: BodyType<SdkExperimentUserRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<SdkExperimentAssignmentResponse>(
+      {url: `/sdk/experiments/${experimentId}/assign`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sdkExperimentUserRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getAssignSdkExperimentVariantMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignSdkExperimentVariant>>, TError,{experimentId: string;data: BodyType<SdkExperimentUserRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof assignSdkExperimentVariant>>, TError,{experimentId: string;data: BodyType<SdkExperimentUserRequest>}, TContext> => {
+
+const mutationKey = ['assignSdkExperimentVariant'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof assignSdkExperimentVariant>>, {experimentId: string;data: BodyType<SdkExperimentUserRequest>}> = (props) => {
+          const {experimentId,data} = props ?? {};
+
+          return  assignSdkExperimentVariant(experimentId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AssignSdkExperimentVariantMutationResult = NonNullable<Awaited<ReturnType<typeof assignSdkExperimentVariant>>>
+    export type AssignSdkExperimentVariantMutationBody = BodyType<SdkExperimentUserRequest>
+    export type AssignSdkExperimentVariantMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Assign an experiment variant
+ */
+export const useAssignSdkExperimentVariant = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignSdkExperimentVariant>>, TError,{experimentId: string;data: BodyType<SdkExperimentUserRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof assignSdkExperimentVariant>>,
+        TError,
+        {experimentId: string;data: BodyType<SdkExperimentUserRequest>},
+        TContext
+      > => {
+      return useMutation(getAssignSdkExperimentVariantMutationOptions(options), queryClient);
+    }
+    /**
+ * Idempotently records the experiment's configured conversion for a user
+ * who already has a persisted assignment.
+ * @summary Record an experiment conversion
+ */
+export const recordSdkExperimentConversion = (
+    experimentId: string,
+    sdkExperimentUserRequest: BodyType<SdkExperimentUserRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<SdkExperimentConversionResponse>(
+      {url: `/sdk/experiments/${experimentId}/convert`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sdkExperimentUserRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getRecordSdkExperimentConversionMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordSdkExperimentConversion>>, TError,{experimentId: string;data: BodyType<SdkExperimentUserRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof recordSdkExperimentConversion>>, TError,{experimentId: string;data: BodyType<SdkExperimentUserRequest>}, TContext> => {
+
+const mutationKey = ['recordSdkExperimentConversion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof recordSdkExperimentConversion>>, {experimentId: string;data: BodyType<SdkExperimentUserRequest>}> = (props) => {
+          const {experimentId,data} = props ?? {};
+
+          return  recordSdkExperimentConversion(experimentId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RecordSdkExperimentConversionMutationResult = NonNullable<Awaited<ReturnType<typeof recordSdkExperimentConversion>>>
+    export type RecordSdkExperimentConversionMutationBody = BodyType<SdkExperimentUserRequest>
+    export type RecordSdkExperimentConversionMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Record an experiment conversion
+ */
+export const useRecordSdkExperimentConversion = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordSdkExperimentConversion>>, TError,{experimentId: string;data: BodyType<SdkExperimentUserRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof recordSdkExperimentConversion>>,
+        TError,
+        {experimentId: string;data: BodyType<SdkExperimentUserRequest>},
+        TContext
+      > => {
+      return useMutation(getRecordSdkExperimentConversionMutationOptions(options), queryClient);
     }
     /**
  * Returns metadata about the project associated with the API key.

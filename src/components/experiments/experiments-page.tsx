@@ -91,6 +91,8 @@ export function ExperimentsPage() {
           />
         </div>
 
+        <ExperimentWorkflow />
+
         <div className="mt-8">
           {experimentsQuery.isPending && (
             <ExperimentsSkeleton />
@@ -276,6 +278,10 @@ function CreateExperimentDialog({
   });
 
   const variants = watch('variants');
+  const selectedFlagId = watch('flagId');
+  const selectedFlag = flags.find(
+    (flag) => flag.id === selectedFlagId
+  );
 
   const totalWeight = variants.reduce(
     (total, variant) =>
@@ -406,6 +412,7 @@ function CreateExperimentDialog({
                       className="bg-[#0d111a]"
                     >
                       {flag.name ?? flag.key ?? flag.id}
+                      {flag.enabled ? '' : ' — disabled'}
                     </option>
                   ) : null
                 )}
@@ -418,6 +425,14 @@ function CreateExperimentDialog({
                     experiment.
                   </p>
                 )}
+
+              {selectedFlag && !selectedFlag.enabled && (
+                <p className="text-xs leading-5 text-amber-400/80">
+                  You can create this experiment as a draft,
+                  but its flag must be enabled before users can
+                  receive variant assignments.
+                </p>
+              )}
             </FormField>
 
             <FormField
@@ -483,7 +498,7 @@ function CreateExperimentDialog({
                       <div className="relative">
                         <Input
                           type="number"
-                          min={0}
+                          min={1}
                           max={100}
                           aria-label={`Variant ${index + 1} weight`}
                           className="border-white/10 bg-black/20 pr-7"
@@ -549,7 +564,7 @@ function CreateExperimentDialog({
                     name: `Variant ${String.fromCharCode(
                       64 + fields.length
                     )}`,
-                    weight: 0,
+                    weight: 1,
                   })
                 }
               >
@@ -575,7 +590,8 @@ function CreateExperimentDialog({
               className="bg-indigo-500 text-white hover:bg-indigo-400"
               disabled={
                 createMutation.isPending ||
-                flags.length === 0
+                flags.length === 0 ||
+                totalWeight !== 100
               }
             >
               {createMutation.isPending && (
@@ -690,4 +706,56 @@ function formatDate(value: string): string {
     day: 'numeric',
     year: 'numeric',
   }).format(date);
+}
+
+function ExperimentWorkflow() {
+  const steps = [
+    {
+      number: '01',
+      title: 'Create draft',
+      description: 'Choose a flag, metric, and weighted variants.',
+    },
+    {
+      number: '02',
+      title: 'Start',
+      description: 'Enable the flag and begin accepting assignments.',
+    },
+    {
+      number: '03',
+      title: 'Measure',
+      description: 'Assign users and track the configured conversion.',
+    },
+    {
+      number: '04',
+      title: 'Conclude',
+      description: 'Review significance, end the test, and record findings.',
+    },
+  ];
+
+  return (
+    <section className="mt-8 overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+      <div className="grid gap-px bg-white/[0.06] sm:grid-cols-2 xl:grid-cols-4">
+        {steps.map((step) => (
+          <div
+            key={step.number}
+            className="bg-[#090c13] p-4"
+          >
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] text-indigo-400">
+                {step.number}
+              </span>
+
+              <p className="text-xs font-medium text-zinc-300">
+                {step.title}
+              </p>
+            </div>
+
+            <p className="mt-2 text-xs leading-5 text-zinc-600">
+              {step.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }

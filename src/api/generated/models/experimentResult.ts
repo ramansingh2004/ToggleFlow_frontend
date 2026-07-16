@@ -14,5 +14,8 @@ export interface ExperimentResult {
   variantId?: string;
   userId?: string;
   converted?: boolean;
+  /** @nullable */
+  convertedAt?: string | null;
   createdAt?: string;
+  updatedAt?: string;
 }

@@ -8,17 +8,9 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ExperimentVariantConfig } from './experimentVariantConfig';
+import type { ApiSuccess } from './apiSuccess';
+import type { SdkExperimentConversion } from './sdkExperimentConversion';
 
-export interface ExperimentVariant {
-  id: string;
-  name: string;
-  /**
-     * @minimum 1
-     * @maximum 100
-     */
-  weight: number;
-  /** @nullable */
-  config?: ExperimentVariantConfig;
-  createdAt?: string;
-}
+export type SdkExperimentConversionResponse = ApiSuccess & {
+  data: SdkExperimentConversion;
+};

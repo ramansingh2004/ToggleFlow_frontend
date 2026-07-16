@@ -12,8 +12,8 @@ const experimentVariantSchema = z.object({
       error: 'Weight is required.',
     })
     .int('Weight must be a whole number.')
-    .min(0, 'Weight cannot be negative.')
-    .max(100, 'Weight cannot exceed 100.'),
+    .min(1, 'Weight must be at least 1%.')
+    .max(100, 'Weight cannot exceed 100%.'),
 });
 
 export const createExperimentSchema = z
@@ -62,7 +62,10 @@ export const createExperimentSchema = z
       variant.name.trim().toLowerCase()
     );
 
-    if (new Set(normalizedNames).size !== normalizedNames.length) {
+    if (
+      new Set(normalizedNames).size !==
+      normalizedNames.length
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['variants'],

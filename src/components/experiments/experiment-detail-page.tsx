@@ -7,7 +7,10 @@ import {
   ArrowLeft,
   Award,
   Beaker,
+  Check,
   CheckCircle2,
+  Code2,
+  Copy,
   FlaskConical,
   LoaderCircle,
   Play,
@@ -53,6 +56,7 @@ export function ExperimentDetailPage({
     {
       query: {
         staleTime: 15 * 1000,
+        refetchInterval: 15 * 1000,
       },
     }
   );
@@ -162,6 +166,8 @@ export function ExperimentDetailPage({
 
           <ExperimentInformation experiment={experiment} />
         </div>
+
+        <IntegrationGuide experiment={experiment} />
       </div>
     </main>
   );
@@ -367,6 +373,10 @@ function VariantResults({
       conversions: result?.conversions ?? 0,
       conversionRate: result?.conversionRate ?? 0,
       confidence: result?.confidence ?? 0,
+      confidenceIntervalLow:
+        result?.confidenceIntervalLow ?? 0,
+      confidenceIntervalHigh:
+        result?.confidenceIntervalHigh ?? 0,
     };
   });
 
@@ -420,7 +430,7 @@ function VariantResults({
               />
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-3">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               <VariantMetric
                 label="Participants"
                 value={formatNumber(variant.participants)}
@@ -432,8 +442,17 @@ function VariantResults({
               />
 
               <VariantMetric
-                label="Confidence"
-                value={formatPercent(variant.confidence)}
+                label="95% interval"
+                value={`${formatPercent(
+                  variant.confidenceIntervalLow
+                )}–${formatPercent(
+                  variant.confidenceIntervalHigh
+                )}`}
+              />
+
+              <VariantMetric
+                label="Margin"
+                value={`±${formatPercent(variant.confidence)}`}
               />
             </div>
           </div>
@@ -442,9 +461,12 @@ function VariantResults({
 
       {(statistics?.totalParticipants ?? 0) === 0 && (
         <div className="border-t border-amber-400/10 bg-amber-500/[0.03] px-5 py-4 text-xs leading-5 text-amber-200/50">
-          No results have been recorded yet. The current backend
-          result endpoint only logs events, so statistics will
-          remain empty until result persistence is implemented.
+          No participants have been assigned yet. Start the
+          experiment, enable its feature flag, and call
+          <code className="mx-1 font-mono text-amber-200/70">
+            assignExperiment()
+          </code>
+          from your application server.
         </div>
       )}
     </section>
@@ -456,6 +478,19 @@ function ExperimentInformation({
 }: {
   experiment: ExperimentResultsResponseData;
 }) {
+  const [copied, setCopied] = useState(false);
+
+  const copyExperimentId = async () => {
+    try {
+      await navigator.clipboard.writeText(experiment.id);
+      setCopied(true);
+      toast.success('Experiment ID copied');
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error('Unable to copy the experiment ID.');
+    }
+  };
+
   return (
     <aside className="h-fit rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5">
       <h2 className="text-sm font-medium text-zinc-200">
@@ -463,6 +498,31 @@ function ExperimentInformation({
       </h2>
 
       <dl className="mt-5 space-y-5">
+        <div>
+          <dt className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+            Experiment ID
+          </dt>
+
+          <dd className="mt-2 flex items-center gap-2">
+            <code className="min-w-0 flex-1 truncate text-xs text-zinc-400">
+              {experiment.id}
+            </code>
+
+            <button
+              type="button"
+              className="rounded-lg border border-white/[0.07] p-2 text-zinc-600 transition-colors hover:bg-white/[0.05] hover:text-indigo-300"
+              aria-label="Copy experiment ID"
+              onClick={copyExperimentId}
+            >
+              {copied ? (
+                <Check className="size-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="size-3.5" />
+              )}
+            </button>
+          </dd>
+        </div>
+
         <InformationRow
           label="Conversion metric"
           value={experiment.conversionMetric}
@@ -521,8 +581,134 @@ function ExperimentInformation({
               : 'Not significant'}
           </span>
         </div>
+
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <p className="text-xs text-zinc-600">
+            p-value
+          </p>
+
+          <span className="font-mono text-xs text-zinc-500">
+            {formatPValue(experiment.statistics?.pValue)}
+          </span>
+        </div>
       </div>
     </aside>
+  );
+}
+
+function IntegrationGuide({
+  experiment,
+}: {
+  experiment: ExperimentResultsResponseData;
+}) {
+  const assignmentCode = `const assignment = await toggleflow.assignExperiment(
+  '${experiment.id}',
+  user.id
+);
+
+if (assignment.variant.name === 'Treatment') {
+  // Render the treatment experience.
+}`;
+
+  const conversionCode = `await toggleflow.trackConversion(
+  '${experiment.id}',
+  user.id
+);`;
+
+  return (
+    <section className="mt-6 overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+      <div className="flex items-start gap-3 border-b border-white/[0.07] px-5 py-4">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-cyan-400/15 bg-cyan-500/10">
+          <Code2 className="size-4 text-cyan-300" />
+        </div>
+
+        <div>
+          <h2 className="text-sm font-medium text-zinc-200">
+            Application integration
+          </h2>
+
+          <p className="mt-1 text-xs leading-5 text-zinc-600">
+            Assign on the server before rendering, then record
+            the conversion only when the configured event occurs.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-px bg-white/[0.06] lg:grid-cols-2">
+        <CodeStep
+          number="01"
+          title="Assign the user"
+          code={assignmentCode}
+        />
+
+        <CodeStep
+          number="02"
+          title={`Track ${experiment.conversionMetric}`}
+          code={conversionCode}
+        />
+      </div>
+
+      <div className="border-t border-indigo-400/10 bg-indigo-500/[0.035] px-5 py-4 text-xs leading-5 text-indigo-200/60">
+        Use the same stable application user ID for both calls.
+        The API key must remain server-side. This experiment is
+        currently <span className="font-medium text-indigo-200">{experiment.status}</span>.
+      </div>
+    </section>
+  );
+}
+
+function CodeStep({
+  number,
+  title,
+  code,
+}: {
+  number: string;
+  title: string;
+  code: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      toast.success('Code copied');
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error('Unable to copy the code.');
+    }
+  };
+
+  return (
+    <div className="bg-[#090c13] p-5">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[10px] text-indigo-400">
+            {number}
+          </span>
+          <p className="text-xs font-medium text-zinc-300">
+            {title}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="rounded-lg p-2 text-zinc-600 transition-colors hover:bg-white/[0.05] hover:text-zinc-300"
+          aria-label={`Copy ${title} code`}
+          onClick={copyCode}
+        >
+          {copied ? (
+            <Check className="size-3.5 text-emerald-400" />
+          ) : (
+            <Copy className="size-3.5" />
+          )}
+        </button>
+      </div>
+
+      <pre className="mt-4 overflow-x-auto rounded-xl border border-white/[0.06] bg-black/30 p-4 text-xs leading-6 text-zinc-400">
+        <code>{code}</code>
+      </pre>
+    </div>
   );
 }
 
@@ -660,4 +846,10 @@ function formatDateTime(value?: string | null): string {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(date);
+}
+
+function formatPValue(value?: number | null): string {
+  if (value == null) return 'Not available';
+  if (value < 0.0001) return '< 0.0001';
+  return value.toFixed(4);
 }

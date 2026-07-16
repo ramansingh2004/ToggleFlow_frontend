@@ -15,5 +15,16 @@ export type ExperimentStatisticsVariantsItem = {
   participants?: number;
   conversions?: number;
   conversionRate?: number;
+  /** Half-width of the 95% Wilson confidence interval, in percentage points. */
   confidence?: number;
+  /**
+     * @minimum 0
+     * @maximum 100
+     */
+  confidenceIntervalLow?: number;
+  /**
+     * @minimum 0
+     * @maximum 100
+     */
+  confidenceIntervalHigh?: number;
 };

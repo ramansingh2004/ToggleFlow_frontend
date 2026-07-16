@@ -17,5 +17,13 @@ export interface ExperimentStatistics {
   statisticallySignificant: boolean;
   /** @nullable */
   winningVariant?: string | null;
+  /** @nullable */
+  winningVariantId?: string | null;
+  /**
+     * @minimum 0
+     * @maximum 1
+     * @nullable
+     */
+  pValue?: number | null;
   variants: ExperimentStatisticsVariantsItem[];
 }

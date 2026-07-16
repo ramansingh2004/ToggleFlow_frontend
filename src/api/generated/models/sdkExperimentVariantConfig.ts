@@ -8,17 +8,8 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ExperimentVariantConfig } from './experimentVariantConfig';
 
-export interface ExperimentVariant {
-  id: string;
-  name: string;
-  /**
-     * @minimum 1
-     * @maximum 100
-     */
-  weight: number;
-  /** @nullable */
-  config?: ExperimentVariantConfig;
-  createdAt?: string;
-}
+/**
+ * @nullable
+ */
+export type SdkExperimentVariantConfig = { [key: string]: unknown } | null;
