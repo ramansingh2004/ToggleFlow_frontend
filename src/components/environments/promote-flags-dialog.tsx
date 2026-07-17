@@ -227,7 +227,7 @@ const handleTargetChange = (
         render={
           <Button
             variant="outline"
-            className="h-9 border-white/10 bg-white/[0.025]"
+            className="h-9 border-border bg-card"
             disabled={environments.length < 2}
           />
         }
@@ -236,13 +236,13 @@ const handleTargetChange = (
         Promote
       </DialogTrigger>
 
-      <DialogContent className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-2xl">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>
             Promote feature flags
           </DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Copy selected flag states and descriptions from
             one environment to another.
           </DialogDescription>
@@ -250,7 +250,7 @@ const handleTargetChange = (
 
         <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
           <div className="space-y-2">
-            <p className="text-xs font-medium text-zinc-400">
+            <p className="text-xs font-medium text-foreground-secondary">
               Source
             </p>
 
@@ -258,11 +258,11 @@ const handleTargetChange = (
               value={sourceId || null}
               onValueChange={handleSourceChange}
             >
-              <SelectTrigger className="h-10 w-full border-white/10 bg-white/[0.035]">
+              <SelectTrigger className="h-10 w-full border-border bg-card">
                 <SelectValue placeholder="Select source" />
               </SelectTrigger>
 
-              <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+              <SelectContent className="border border-border bg-popover text-foreground">
                 {environments.map((environment) => {
                   if (!environment.id) return null;
 
@@ -270,7 +270,7 @@ const handleTargetChange = (
                     <SelectItem
                       key={environment.id}
                       value={environment.id}
-                      className="focus:bg-white/[0.06]"
+                      className="focus:bg-surface-elevated"
                     >
                       {environment.name ??
                         'Unnamed environment'}
@@ -281,10 +281,10 @@ const handleTargetChange = (
             </Select>
           </div>
 
-          <ArrowRight className="mx-auto mb-3 hidden size-4 text-zinc-700 sm:block" />
+          <ArrowRight className="mx-auto mb-3 hidden size-4 text-muted-foreground sm:block" />
 
           <div className="space-y-2">
-            <p className="text-xs font-medium text-zinc-400">
+            <p className="text-xs font-medium text-foreground-secondary">
               Target
             </p>
 
@@ -293,11 +293,11 @@ const handleTargetChange = (
               onValueChange={handleTargetChange}
               disabled={!sourceId}
             >
-              <SelectTrigger className="h-10 w-full border-white/10 bg-white/[0.035]">
+              <SelectTrigger className="h-10 w-full border-border bg-card">
                 <SelectValue placeholder="Select target" />
               </SelectTrigger>
 
-              <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+              <SelectContent className="border border-border bg-popover text-foreground">
                 {environments
                   .filter(
                     (environment) =>
@@ -310,7 +310,7 @@ const handleTargetChange = (
                       <SelectItem
                         key={environment.id}
                         value={environment.id}
-                        className="focus:bg-white/[0.06]"
+                        className="focus:bg-surface-elevated"
                       >
                         {environment.name ??
                           'Unnamed environment'}
@@ -323,11 +323,11 @@ const handleTargetChange = (
         </div>
 
         {targetsProduction && (
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-amber-400/15 bg-amber-500/[0.06] p-4">
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-warning/30 bg-warning-subtle p-4">
             <input
               type="checkbox"
               checked={productionConfirmed}
-              className="mt-0.5 size-4 accent-amber-500"
+              className="mt-0.5 size-4 accent-warning"
               onChange={(event) =>
                 setProductionConfirmed(
                   event.target.checked
@@ -335,28 +335,28 @@ const handleTargetChange = (
               }
             />
 
-            <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-300" />
+            <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning" />
 
             <span>
-              <span className="block text-xs font-medium text-amber-200">
+              <span className="block text-xs font-medium text-warning">
                 Confirm production promotion
               </span>
 
-              <span className="mt-1 block text-xs leading-5 text-amber-200/50">
+              <span className="mt-1 block text-xs leading-5 text-warning">
                 These changes can affect live users.
               </span>
             </span>
           </label>
         )}
 
-        <div className="rounded-xl border border-white/[0.07]">
-          <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-3">
+        <div className="rounded-xl border border-border">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div>
-              <p className="text-xs font-medium text-zinc-300">
+              <p className="text-xs font-medium text-foreground-secondary">
                 Feature flags
               </p>
 
-              <p className="mt-1 text-[11px] text-zinc-600">
+              <p className="mt-1 text-[11px] text-muted-foreground">
                 {selectedFlagIds.length} selected
               </p>
             </div>
@@ -364,7 +364,7 @@ const handleTargetChange = (
             {sourceFlags.length > 0 && (
               <button
                 type="button"
-                className="text-xs text-indigo-300 hover:text-indigo-200"
+                className="text-xs text-primary hover:text-primary"
                 onClick={selectAllFlags}
               >
                 {selectedFlagIds.length ===
@@ -380,14 +380,14 @@ const handleTargetChange = (
             <FlagMessage message="Select a source environment." />
           ) : sourceQuery.isPending ? (
             <div className="flex min-h-40 items-center justify-center">
-              <LoaderCircle className="size-5 animate-spin text-indigo-300" />
+              <LoaderCircle className="size-5 animate-spin text-primary" />
             </div>
           ) : sourceQuery.isError ? (
             <FlagMessage message="Unable to load source flags." />
           ) : sourceFlags.length === 0 ? (
             <FlagMessage message="The source environment has no flags." />
           ) : (
-            <div className="max-h-72 divide-y divide-white/[0.06] overflow-y-auto">
+            <div className="max-h-72 divide-y divide-border overflow-y-auto">
               {sourceFlags.map((flag, index) => {
                 if (!flag.id) return null;
 
@@ -398,7 +398,7 @@ const handleTargetChange = (
                   <button
                     key={flag.id ?? index}
                     type="button"
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.025]"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-card"
                     onClick={() =>
                       toggleFlag(flag.id!)
                     }
@@ -406,8 +406,8 @@ const handleTargetChange = (
                     <span
                       className={
                         selected
-                          ? 'flex size-5 items-center justify-center rounded-md bg-indigo-500 text-white'
-                          : 'size-5 rounded-md border border-white/10'
+                          ? 'flex size-5 items-center justify-center rounded-md bg-primary text-primary-foreground'
+                          : 'size-5 rounded-md border border-border'
                       }
                     >
                       {selected && (
@@ -416,11 +416,11 @@ const handleTargetChange = (
                     </span>
 
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm text-zinc-300">
+                      <p className="truncate text-sm text-foreground-secondary">
                         {flag.name ?? 'Unnamed flag'}
                       </p>
 
-                      <p className="mt-1 truncate font-mono text-xs text-zinc-600">
+                      <p className="mt-1 truncate font-mono text-xs text-muted-foreground">
                         {flag.key ?? 'no_key'}
                       </p>
                     </div>
@@ -428,8 +428,8 @@ const handleTargetChange = (
                     <span
                       className={
                         flag.enabled
-                          ? 'text-xs text-emerald-400'
-                          : 'text-xs text-zinc-600'
+                          ? 'text-xs text-success'
+                          : 'text-xs text-muted-foreground'
                       }
                     >
                       {flag.enabled ? 'On' : 'Off'}
@@ -441,9 +441,9 @@ const handleTargetChange = (
           )}
         </div>
 
-        <div className="flex justify-end border-t border-white/[0.07] pt-4">
+        <div className="flex justify-end border-t border-border pt-4">
           <Button
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={
               !canPromote ||
               promoteMutation.isPending
@@ -469,7 +469,7 @@ function FlagMessage({
   message: string;
 }) {
   return (
-    <div className="flex min-h-40 items-center justify-center px-6 text-center text-sm text-zinc-600">
+    <div className="flex min-h-40 items-center justify-center px-6 text-center text-sm text-muted-foreground">
       {message}
     </div>
   );

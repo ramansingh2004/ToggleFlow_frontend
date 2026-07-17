@@ -61,20 +61,20 @@ export function EnvironmentDetailPage({
       <div className="mx-auto max-w-7xl">
         <Link
           href="/environments"
-          className="inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-300"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground-secondary"
         >
           <ArrowLeft className="size-4" />
           Back to environments
         </Link>
 
-        <header className="mt-6 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 sm:p-6">
+        <header className="mt-6 rounded-2xl border border-border bg-card p-5 sm:p-6">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
             <div className="flex items-start gap-4">
               <EnvironmentIcon type={type} />
 
               <div>
                 <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="text-2xl font-semibold tracking-[-0.03em] text-white">
+                  <h1 className="text-2xl font-semibold tracking-[-0.03em] text-foreground">
                     {environment.name ??
                       'Unnamed environment'}
                   </h1>
@@ -82,11 +82,11 @@ export function EnvironmentDetailPage({
                   <EnvironmentBadge type={type} />
                 </div>
 
-                <p className="mt-2 font-mono text-xs text-zinc-600">
+                <p className="mt-2 font-mono text-xs text-muted-foreground">
                   {environment.id ?? environmentId}
                 </p>
 
-                <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-500">
+                <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">
                   {environment.description ||
                     'No environment description has been added.'}
                 </p>
@@ -100,15 +100,15 @@ export function EnvironmentDetailPage({
           </div>
 
           {type === 'production' && (
-            <div className="mt-6 flex items-start gap-3 rounded-xl border border-amber-400/15 bg-amber-500/[0.06] p-4">
-              <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-300" />
+            <div className="mt-6 flex items-start gap-3 rounded-xl border border-warning/30 bg-warning-subtle p-4">
+              <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning" />
 
               <div>
-                <p className="text-xs font-medium text-amber-200">
+                <p className="text-xs font-medium text-warning">
                   Production environment
                 </p>
 
-                <p className="mt-1 text-xs leading-5 text-amber-200/50">
+                <p className="mt-1 text-xs leading-5 text-warning">
                   Changes here may affect live users.
                   Production environments cannot be deleted.
                 </p>
@@ -116,7 +116,7 @@ export function EnvironmentDetailPage({
             </div>
           )}
 
-          <div className="mt-6 grid gap-3 border-t border-white/[0.06] pt-5 sm:grid-cols-3">
+          <div className="mt-6 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
             <EnvironmentMetric
               label="Feature flags"
               value={environment.flagCount ?? flags.length}
@@ -153,11 +153,11 @@ function EnvironmentIcon({
 }) {
   const styles = {
     development:
-      'border-blue-400/15 bg-blue-500/10 text-blue-300',
+      'border-border bg-surface-elevated text-foreground-secondary',
     staging:
-      'border-amber-400/15 bg-amber-500/10 text-amber-300',
+      'border-warning/30 bg-warning-subtle text-warning',
     production:
-      'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+      'border-success/30 bg-success-subtle text-success',
   };
 
   return (
@@ -176,11 +176,11 @@ function EnvironmentBadge({
 }) {
   const styles = {
     development:
-      'border-blue-400/15 bg-blue-500/10 text-blue-300',
+      'border-border bg-surface-elevated text-foreground-secondary',
     staging:
-      'border-amber-400/15 bg-amber-500/10 text-amber-300',
+      'border-warning/30 bg-warning-subtle text-warning',
     production:
-      'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+      'border-success/30 bg-success-subtle text-success',
   };
 
   return (
@@ -204,12 +204,12 @@ function EnvironmentMetric({
   }>;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-white/[0.025] px-4 py-3">
-      <Icon className="size-4 text-zinc-600" />
+    <div className="flex items-center gap-3 rounded-xl bg-card px-4 py-3">
+      <Icon className="size-4 text-muted-foreground" />
 
       <div>
-        <p className="text-xs text-zinc-600">{label}</p>
-        <p className="mt-0.5 text-sm font-medium text-zinc-200">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="mt-0.5 text-sm font-medium text-foreground">
           {value}
         </p>
       </div>
@@ -223,13 +223,13 @@ function FlagsPanel({
   flags: FeatureFlagSummary[];
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="border-b border-white/[0.07] px-5 py-4">
-        <h2 className="text-sm font-medium text-white">
+    <section className="rounded-2xl border border-border bg-card">
+      <div className="border-b border-border px-5 py-4">
+        <h2 className="text-sm font-medium text-foreground">
           Feature flags
         </h2>
 
-        <p className="mt-1 text-xs text-zinc-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           Flags associated with this environment
         </p>
       </div>
@@ -237,31 +237,31 @@ function FlagsPanel({
       {flags.length === 0 ? (
         <EmptyPanel message="No feature flags are associated with this environment." />
       ) : (
-        <div className="divide-y divide-white/[0.06] p-3">
+        <div className="divide-y divide-border p-3">
           {flags.map((flag, index) => (
             <div
               key={flag.id ?? index}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-white/[0.03]"
+              className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-card"
             >
               <div
                 className={
                   flag.enabled
-                    ? 'size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]'
-                    : 'size-2 rounded-full bg-zinc-700'
+                    ? 'size-2 rounded-full bg-success'
+                    : 'size-2 rounded-full bg-surface-elevated'
                 }
               />
 
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm text-zinc-300">
+                <p className="truncate text-sm text-foreground-secondary">
                   {flag.name ?? 'Unnamed flag'}
                 </p>
 
-                <p className="mt-1 truncate font-mono text-xs text-zinc-600">
+                <p className="mt-1 truncate font-mono text-xs text-muted-foreground">
                   {flag.key ?? 'no_key'}
                 </p>
               </div>
 
-              <span className="text-xs text-zinc-600">
+              <span className="text-xs text-muted-foreground">
                 {flag.enabled ? 'Enabled' : 'Disabled'}
               </span>
             </div>
@@ -278,13 +278,13 @@ function ApiKeysPanel({
   apiKeys: ApiKeySummary[];
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="border-b border-white/[0.07] px-5 py-4">
-        <h2 className="text-sm font-medium text-white">
+    <section className="rounded-2xl border border-border bg-card">
+      <div className="border-b border-border px-5 py-4">
+        <h2 className="text-sm font-medium text-foreground">
           API keys
         </h2>
 
-        <p className="mt-1 text-xs text-zinc-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           Keys scoped to this environment
         </p>
       </div>
@@ -292,22 +292,22 @@ function ApiKeysPanel({
       {apiKeys.length === 0 ? (
         <EmptyPanel message="No API keys are scoped to this environment." />
       ) : (
-        <div className="divide-y divide-white/[0.06] p-3">
+        <div className="divide-y divide-border p-3">
           {apiKeys.map((apiKey, index) => (
             <div
               key={apiKey.id ?? index}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-white/[0.03]"
+              className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-card"
             >
-              <div className="flex size-9 items-center justify-center rounded-xl border border-cyan-400/15 bg-cyan-500/10">
-                <KeyRound className="size-4 text-cyan-300" />
+              <div className="flex size-9 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+                <KeyRound className="size-4 text-primary" />
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm text-zinc-300">
+                <p className="truncate text-sm text-foreground-secondary">
                   {apiKey.name ?? 'Unnamed key'}
                 </p>
 
-                <p className="mt-1 font-mono text-xs text-zinc-600">
+                <p className="mt-1 font-mono text-xs text-muted-foreground">
                   {apiKey.prefix ?? 'unknown'}••••••••
                 </p>
               </div>
@@ -315,8 +315,8 @@ function ApiKeysPanel({
               <span
                 className={
                   apiKey.isActive
-                    ? 'text-xs text-emerald-400'
-                    : 'text-xs text-zinc-600'
+                    ? 'text-xs text-success'
+                    : 'text-xs text-muted-foreground'
                 }
               >
                 {apiKey.isActive ? 'Active' : 'Inactive'}
@@ -335,7 +335,7 @@ function EmptyPanel({
   message: string;
 }) {
   return (
-    <div className="flex min-h-64 items-center justify-center px-6 text-center text-sm text-zinc-600">
+    <div className="flex min-h-64 items-center justify-center px-6 text-center text-sm text-muted-foreground">
       {message}
     </div>
   );
@@ -349,13 +349,13 @@ function EnvironmentDetailError({
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6">
       <div className="text-center">
-        <p className="text-sm text-zinc-300">
+        <p className="text-sm text-foreground-secondary">
           Unable to load this environment.
         </p>
 
         <Button
           variant="outline"
-          className="mt-5 border-white/10 bg-transparent"
+          className="mt-5 border-border bg-transparent"
           onClick={onRetry}
         >
           <RefreshCw className="size-4" />
@@ -370,12 +370,12 @@ function EnvironmentDetailSkeleton() {
   return (
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-7xl">
-        <Skeleton className="h-5 w-40 bg-white/[0.04]" />
-        <Skeleton className="mt-6 h-72 rounded-2xl bg-white/[0.04]" />
+        <Skeleton className="h-5 w-40 bg-surface-elevated" />
+        <Skeleton className="mt-6 h-72 rounded-2xl bg-surface-elevated" />
 
         <div className="mt-6 grid gap-6 xl:grid-cols-2">
-          <Skeleton className="h-96 rounded-2xl bg-white/[0.04]" />
-          <Skeleton className="h-96 rounded-2xl bg-white/[0.04]" />
+          <Skeleton className="h-96 rounded-2xl bg-surface-elevated" />
+          <Skeleton className="h-96 rounded-2xl bg-surface-elevated" />
         </div>
       </div>
     </main>

@@ -87,15 +87,15 @@ export function WebhooksPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Integrations
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Webhooks
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Notify external systems when feature flags
               change.
             </p>
@@ -114,7 +114,7 @@ export function WebhooksPage() {
           )}
 
           {webhooksQuery.isError && (
-            <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-500">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
               Unable to load webhooks.
             </div>
           )}
@@ -151,19 +151,19 @@ function WebhookCard({
   projectId: string;
 }) {
   return (
-    <article className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+    <article className="rounded-2xl border border-border bg-card p-5">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-violet-400/15 bg-violet-500/10">
-            <Webhook className="size-4 text-violet-300" />
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-elevated">
+            <Webhook className="size-4 text-foreground-secondary" />
           </div>
 
           <div className="min-w-0">
-            <h2 className="truncate text-sm font-medium text-zinc-200">
+            <h2 className="truncate text-sm font-medium text-foreground">
               {webhook.name ?? 'Unnamed webhook'}
             </h2>
 
-            <p className="mt-1 truncate text-xs text-zinc-600">
+            <p className="mt-1 truncate text-xs text-muted-foreground">
               {webhook.url ?? ''}
             </p>
           </div>
@@ -172,8 +172,8 @@ function WebhookCard({
         <span
           className={
             webhook.active
-              ? 'rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2.5 py-1 text-[10px] text-emerald-300'
-              : 'rounded-full border border-zinc-400/10 bg-zinc-500/10 px-2.5 py-1 text-[10px] text-zinc-500'
+              ? 'rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-[10px] text-success'
+              : 'rounded-full border border-border bg-surface-elevated px-2.5 py-1 text-[10px] text-muted-foreground'
           }
         >
           {webhook.active ? 'Active' : 'Inactive'}
@@ -184,20 +184,20 @@ function WebhookCard({
         {(webhook.events ?? []).map((event) => (
           <span
             key={event}
-            className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-2 py-1 font-mono text-[10px] text-zinc-500"
+            className="rounded-lg border border-border bg-card px-2 py-1 font-mono text-[10px] text-muted-foreground"
           >
             {event}
           </span>
         ))}
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-3 border-t border-white/[0.06] pt-4">
+      <div className="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Last triggered
           </p>
 
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             {webhook.lastTriggeredAt
               ? formatDate(webhook.lastTriggeredAt)
               : 'Never'}
@@ -205,15 +205,15 @@ function WebhookCard({
         </div>
 
         <div>
-          <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Failures
           </p>
 
           <p
             className={
               (webhook.failureCount ?? 0) > 0
-                ? 'mt-1 text-xs text-red-400'
-                : 'mt-1 text-xs text-zinc-500'
+                ? 'mt-1 text-xs text-destructive'
+                : 'mt-1 text-xs text-muted-foreground'
             }
           >
             {webhook.failureCount ?? 0}
@@ -358,7 +358,7 @@ function CreateWebhookDialog({
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
@@ -367,7 +367,7 @@ function CreateWebhookDialog({
 
       <DialogContent
         showCloseButton={!createdWebhook}
-        className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-lg"
+        className="max-h-[85vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-lg"
       >
         {createdWebhook ? (
           <CreatedWebhookView
@@ -384,7 +384,7 @@ function CreateWebhookDialog({
             <DialogHeader>
               <DialogTitle>Create webhook</DialogTitle>
 
-              <DialogDescription className="text-zinc-500">
+              <DialogDescription className="text-muted-foreground">
                 ToggleFlow signs each delivery using an HMAC
                 secret.
               </DialogDescription>
@@ -403,12 +403,12 @@ function CreateWebhookDialog({
                   <Input
                     id="webhook-name"
                     placeholder="Deployment notifications"
-                    className="border-white/10 bg-white/[0.035]"
+                    className="border-border bg-card"
                     {...register('name')}
                   />
 
                   {errors.name && (
-                    <p className="text-xs text-red-400">
+                    <p className="text-xs text-destructive">
                       {errors.name.message}
                     </p>
                   )}
@@ -423,12 +423,12 @@ function CreateWebhookDialog({
                     id="webhook-url"
                     type="url"
                     placeholder="https://example.com/webhooks/toggleflow"
-                    className="border-white/10 bg-white/[0.035]"
+                    className="border-border bg-card"
                     {...register('url')}
                   />
 
                   {errors.url && (
-                    <p className="text-xs text-red-400">
+                    <p className="text-xs text-destructive">
                       {errors.url.message}
                     </p>
                   )}
@@ -448,8 +448,8 @@ function CreateWebhookDialog({
                           type="button"
                           className={
                             selected
-                              ? 'flex items-center gap-3 rounded-xl border border-indigo-400/25 bg-indigo-500/10 px-3 py-3 text-left'
-                              : 'flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] px-3 py-3 text-left hover:bg-white/[0.05]'
+                              ? 'flex items-center gap-3 rounded-xl border border-primary/30 bg-primary-subtle px-3 py-3 text-left'
+                              : 'flex items-center gap-3 rounded-xl border border-border bg-card px-3 py-3 text-left hover:bg-surface-elevated'
                           }
                           onClick={() =>
                             toggleEvent(event)
@@ -458,16 +458,16 @@ function CreateWebhookDialog({
                           <span
                             className={
                               selected
-                                ? 'flex size-5 items-center justify-center rounded-md bg-indigo-500'
-                                : 'size-5 rounded-md border border-white/10'
+                                ? 'flex size-5 items-center justify-center rounded-md bg-primary'
+                                : 'size-5 rounded-md border border-border'
                             }
                           >
                             {selected && (
-                              <Check className="size-3 text-white" />
+                              <Check className="size-3 text-foreground" />
                             )}
                           </span>
 
-                          <span className="text-xs text-zinc-400">
+                          <span className="text-xs text-foreground-secondary">
                             {eventLabels[event]}
                           </span>
                         </button>
@@ -476,26 +476,26 @@ function CreateWebhookDialog({
                   </div>
 
                   {errors.events && (
-                    <p className="text-xs text-red-400">
+                    <p className="text-xs text-destructive">
                       {errors.events.message}
                     </p>
                   )}
                 </div>
 
-                <div className="flex items-center justify-between rounded-xl border border-white/[0.07] bg-white/[0.025] p-3">
+                <div className="flex items-center justify-between rounded-xl border border-border bg-card p-3">
                   <div>
-                    <p className="text-sm text-zinc-300">
+                    <p className="text-sm text-foreground-secondary">
                       Active
                     </p>
 
-                    <p className="mt-1 text-xs text-zinc-600">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       Begin delivering events immediately.
                     </p>
                   </div>
 
                   <Switch
                     checked={active}
-                    className="data-checked:bg-indigo-500"
+                    className="data-checked:bg-primary"
                     onCheckedChange={(checked) =>
                       setValue('active', checked)
                     }
@@ -503,11 +503,11 @@ function CreateWebhookDialog({
                 </div>
               </div>
 
-              <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+              <DialogFooter className="border-border bg-card">
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-white/10 bg-transparent"
+                  className="border-border bg-transparent"
                   disabled={createMutation.isPending}
                   onClick={() => onOpenChange(false)}
                 >
@@ -516,7 +516,7 @@ function CreateWebhookDialog({
 
                 <Button
                   type="submit"
-                  className="bg-indigo-500 text-white hover:bg-indigo-400"
+                  className="bg-primary text-primary-foreground hover:bg-primary-hover"
                   disabled={createMutation.isPending}
                 >
                   {createMutation.isPending && (
@@ -549,34 +549,34 @@ function CreatedWebhookView({
       <DialogHeader>
         <DialogTitle>Save the signing secret</DialogTitle>
 
-        <DialogDescription className="text-zinc-500">
+        <DialogDescription className="text-muted-foreground">
           This secret will not be displayed again.
         </DialogDescription>
       </DialogHeader>
 
-      <div className="flex gap-3 rounded-xl border border-amber-400/15 bg-amber-500/[0.06] p-4">
-        <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-300" />
+      <div className="flex gap-3 rounded-xl border border-warning/30 bg-warning-subtle p-4">
+        <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning" />
 
-        <p className="text-xs leading-5 text-amber-200/60">
+        <p className="text-xs leading-5 text-warning">
           Use this secret to verify the signature of incoming
           webhook payloads.
         </p>
       </div>
 
-      <div className="rounded-xl border border-white/[0.08] bg-black/30 p-4">
-        <code className="block break-all text-xs leading-6 text-indigo-200">
+      <div className="rounded-xl border border-border bg-background p-4">
+        <code className="block break-all text-xs leading-6 text-primary">
           {webhook.secret}
         </code>
       </div>
 
-      <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+      <DialogFooter className="border-border bg-card">
         <Button
           variant="outline"
-          className="border-white/10 bg-transparent"
+          className="border-border bg-transparent"
           onClick={onCopy}
         >
           {copied ? (
-            <Check className="size-4 text-emerald-400" />
+            <Check className="size-4 text-success" />
           ) : (
             <Copy className="size-4" />
           )}
@@ -584,7 +584,7 @@ function CreatedWebhookView({
         </Button>
 
         <Button
-          className="bg-indigo-500 text-white hover:bg-indigo-400"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover"
           onClick={onDone}
         >
           I saved the secret
@@ -598,15 +598,15 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6 text-center">
       <div>
-        <FolderKanban className="mx-auto size-8 text-indigo-300" />
+        <FolderKanban className="mx-auto size-8 text-primary" />
 
-        <h1 className="mt-5 text-lg text-white">
+        <h1 className="mt-5 text-lg text-foreground">
           Select a project
         </h1>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center rounded-lg bg-indigo-500 px-4 text-sm text-white"
+          className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm text-primary-foreground"
         >
           View projects
         </Link>
@@ -621,20 +621,20 @@ function EmptyWebhooks({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <Webhook className="size-8 text-violet-300" />
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <Webhook className="size-8 text-foreground-secondary" />
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         Create your first webhook
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Send signed event notifications to your deployment,
         monitoring, or communication systems.
       </p>
 
       <Button
-        className="mt-6 bg-indigo-500 text-white"
+        className="mt-6 bg-primary text-primary-foreground"
         onClick={onCreate}
       >
         <Plus className="size-4" />
@@ -650,7 +650,7 @@ function WebhooksSkeleton() {
       {Array.from({ length: 4 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-64 rounded-2xl bg-white/[0.04]"
+          className="h-64 rounded-2xl bg-surface-elevated"
         />
       ))}
     </div>

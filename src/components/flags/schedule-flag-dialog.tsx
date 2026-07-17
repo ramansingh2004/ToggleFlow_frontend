@@ -159,7 +159,7 @@ export function ScheduleFlagDialog({
             type="button"
             variant="ghost"
             size="icon"
-            className="text-zinc-600 hover:bg-indigo-500/10 hover:text-indigo-300"
+            className="text-muted-foreground hover:bg-primary-subtle hover:text-primary"
             disabled={!flag.id}
             title="Schedule a flag change"
           />
@@ -171,13 +171,13 @@ export function ScheduleFlagDialog({
         </span>
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-lg">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
             Schedule {flag.name ?? 'feature flag'}
           </DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Select the state and local time when this flag
             should change. A new schedule replaces an existing
             schedule for this flag.
@@ -193,21 +193,21 @@ export function ScheduleFlagDialog({
                 type="button"
                 className={
                   action === 'enable'
-                    ? 'flex items-center gap-3 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-4 text-left'
-                    : 'flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-4 text-left hover:bg-white/[0.05]'
+                    ? 'flex items-center gap-3 rounded-xl border border-success/30 bg-success-subtle p-4 text-left'
+                    : 'flex items-center gap-3 rounded-xl border border-border bg-card p-4 text-left hover:bg-surface-elevated'
                 }
                 onClick={() => setAction('enable')}
               >
-                <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-500/10">
-                  <Power className="size-4 text-emerald-300" />
+                <div className="flex size-9 items-center justify-center rounded-lg bg-success-subtle">
+                  <Power className="size-4 text-success" />
                 </div>
 
                 <div>
-                  <p className="text-sm text-zinc-200">
+                  <p className="text-sm text-foreground">
                     Enable
                   </p>
 
-                  <p className="mt-1 text-[10px] text-zinc-600">
+                  <p className="mt-1 text-[10px] text-muted-foreground">
                     Turn feature on
                   </p>
                 </div>
@@ -217,21 +217,21 @@ export function ScheduleFlagDialog({
                 type="button"
                 className={
                   action === 'disable'
-                    ? 'flex items-center gap-3 rounded-xl border border-amber-400/25 bg-amber-500/10 p-4 text-left'
-                    : 'flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-4 text-left hover:bg-white/[0.05]'
+                    ? 'flex items-center gap-3 rounded-xl border border-warning/30 bg-warning-subtle p-4 text-left'
+                    : 'flex items-center gap-3 rounded-xl border border-border bg-card p-4 text-left hover:bg-surface-elevated'
                 }
                 onClick={() => setAction('disable')}
               >
-                <div className="flex size-9 items-center justify-center rounded-lg bg-amber-500/10">
-                  <PowerOff className="size-4 text-amber-300" />
+                <div className="flex size-9 items-center justify-center rounded-lg bg-warning-subtle">
+                  <PowerOff className="size-4 text-warning" />
                 </div>
 
                 <div>
-                  <p className="text-sm text-zinc-200">
+                  <p className="text-sm text-foreground">
                     Disable
                   </p>
 
-                  <p className="mt-1 text-[10px] text-zinc-600">
+                  <p className="mt-1 text-[10px] text-muted-foreground">
                     Turn feature off
                   </p>
                 </div>
@@ -249,21 +249,21 @@ export function ScheduleFlagDialog({
               type="datetime-local"
               min={getMinimumScheduleTime()}
               value={scheduledAt}
-              className="border-white/10 bg-white/[0.035] [color-scheme:dark]"
+              className="border-border bg-card [color-scheme:dark]"
               onChange={(event) =>
                 setScheduledAt(event.target.value)
               }
             />
 
-            <p className="text-xs text-zinc-600">
+            <p className="text-xs text-muted-foreground">
               Your timezone:{' '}
               {Intl.DateTimeFormat().resolvedOptions()
                 .timeZone || 'Local time'}
             </p>
           </div>
 
-          <div className="rounded-xl border border-indigo-400/10 bg-indigo-500/[0.04] p-4">
-            <p className="text-xs leading-5 text-indigo-200/60">
+          <div className="rounded-xl border border-primary/30 bg-primary-subtle p-4">
+            <p className="text-xs leading-5 text-primary">
               The backend stores this time in UTC. ToggleFlow
               will display it using each viewer&apos;s local
               timezone.
@@ -271,11 +271,11 @@ export function ScheduleFlagDialog({
           </div>
         </div>
 
-        <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <DialogFooter className="border-border bg-card">
           <Button
             type="button"
             variant="outline"
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={isPending}
             onClick={() => setOpen(false)}
           >
@@ -284,7 +284,7 @@ export function ScheduleFlagDialog({
 
           <Button
             type="button"
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={isPending || !scheduledAt}
             onClick={scheduleChange}
           >

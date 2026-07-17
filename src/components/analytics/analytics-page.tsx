@@ -123,15 +123,15 @@ const selectedFlagId = useMemo(() => {
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-7xl">
         <div>
-          <p className="text-sm font-medium text-indigo-300">
+          <p className="text-sm font-medium text-primary">
             Insights
           </p>
 
-          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
             Analytics
           </h1>
 
-          <p className="mt-3 text-sm text-zinc-500">
+          <p className="mt-3 text-sm text-muted-foreground">
             Understand feature usage, evaluations, and
             conversions.
           </p>
@@ -140,7 +140,7 @@ const selectedFlagId = useMemo(() => {
         {projectAnalyticsQuery.isPending ? (
           <ProjectMetricsSkeleton />
         ) : projectAnalyticsQuery.isError ? (
-          <div className="mt-8 rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-600">
+          <div className="mt-8 rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
             Unable to load project analytics.
           </div>
         ) : (
@@ -188,14 +188,14 @@ const selectedFlagId = useMemo(() => {
           </section>
         )}
 
-        <section className="mt-6 rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-          <div className="flex flex-col justify-between gap-4 border-b border-white/[0.07] px-5 py-4 md:flex-row md:items-center">
+        <section className="mt-6 rounded-2xl border border-border bg-card">
+          <div className="flex flex-col justify-between gap-4 border-b border-border px-5 py-4 md:flex-row md:items-center">
             <div>
-              <h2 className="text-sm font-medium text-white">
+              <h2 className="text-sm font-medium text-foreground">
                 Flag performance
               </h2>
 
-              <p className="mt-1 text-xs text-zinc-600">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Evaluations and enabled impressions over time
               </p>
             </div>
@@ -207,11 +207,11 @@ const selectedFlagId = useMemo(() => {
                   setRequestedFlagId(value ?? '')
                 }
               >
-                <SelectTrigger className="h-9 w-full border-white/[0.08] bg-white/[0.025] sm:w-56">
+                <SelectTrigger className="h-9 w-full border-border bg-card sm:w-56">
                   <SelectValue placeholder="Select a flag" />
                 </SelectTrigger>
 
-                <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+                <SelectContent className="border border-border bg-popover text-foreground">
                   {flags.map((flag) => {
                     if (!flag.id) return null;
 
@@ -219,7 +219,7 @@ const selectedFlagId = useMemo(() => {
                       <SelectItem
                         key={flag.id}
                         value={flag.id}
-                        className="focus:bg-white/[0.06]"
+                        className="focus:bg-surface-elevated"
                       >
                         {flag.name ?? flag.key ?? 'Flag'}
                       </SelectItem>
@@ -242,16 +242,16 @@ const selectedFlagId = useMemo(() => {
                   }
                 }}
               >
-                <SelectTrigger className="h-9 w-full border-white/[0.08] bg-white/[0.025] sm:w-32">
+                <SelectTrigger className="h-9 w-full border-border bg-card sm:w-32">
                   <SelectValue />
                 </SelectTrigger>
 
-                <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+                <SelectContent className="border border-border bg-popover text-foreground">
                   {dayOptions.map((option) => (
                     <SelectItem
                       key={option}
                       value={String(option)}
-                      className="focus:bg-white/[0.06]"
+                      className="focus:bg-surface-elevated"
                     >
                       {option} days
                     </SelectItem>
@@ -264,12 +264,12 @@ const selectedFlagId = useMemo(() => {
           {!selectedFlagId ? (
             <EmptyChart message="Create or select a feature flag to view analytics." />
           ) : flagAnalyticsQuery.isPending ? (
-            <Skeleton className="m-5 h-80 bg-white/[0.04]" />
+            <Skeleton className="m-5 h-80 bg-surface-elevated" />
           ) : flagAnalyticsQuery.isError ? (
             <EmptyChart message="Unable to load analytics for this flag." />
           ) : (
             <>
-              <div className="grid gap-3 border-b border-white/[0.07] p-5 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-3 border-b border-border p-5 sm:grid-cols-2 xl:grid-cols-4">
                 <SmallMetric
                   label="Impressions"
                   value={
@@ -326,12 +326,12 @@ const selectedFlagId = useMemo(() => {
                         >
                           <stop
                             offset="5%"
-                            stopColor="#818cf8"
+                            stopColor="var(--chart-1)"
                             stopOpacity={0.3}
                           />
                           <stop
                             offset="95%"
-                            stopColor="#818cf8"
+                            stopColor="var(--chart-1)"
                             stopOpacity={0}
                           />
                         </linearGradient>
@@ -345,12 +345,12 @@ const selectedFlagId = useMemo(() => {
                         >
                           <stop
                             offset="5%"
-                            stopColor="#34d399"
+                            stopColor="var(--chart-2)"
                             stopOpacity={0.2}
                           />
                           <stop
                             offset="95%"
-                            stopColor="#34d399"
+                            stopColor="var(--chart-2)"
                             stopOpacity={0}
                           />
                         </linearGradient>
@@ -358,7 +358,7 @@ const selectedFlagId = useMemo(() => {
 
                       <CartesianGrid
                         vertical={false}
-                        stroke="rgba(255,255,255,0.06)"
+                        stroke="var(--border)"
                       />
 
                       <XAxis
@@ -366,7 +366,7 @@ const selectedFlagId = useMemo(() => {
                         axisLine={false}
                         tickLine={false}
                         tick={{
-                          fill: '#52525b',
+                          fill: 'var(--muted-foreground)',
                           fontSize: 11,
                         }}
                       />
@@ -376,21 +376,21 @@ const selectedFlagId = useMemo(() => {
                         axisLine={false}
                         tickLine={false}
                         tick={{
-                          fill: '#52525b',
+                          fill: 'var(--muted-foreground)',
                           fontSize: 11,
                         }}
                       />
 
                       <Tooltip
                         contentStyle={{
-                          background: '#0d111a',
+                          background: 'var(--surface-elevated)',
                           border:
-                            '1px solid rgba(255,255,255,0.1)',
+                            '1px solid var(--border)',
                           borderRadius: 12,
                           fontSize: 12,
                         }}
                         labelStyle={{
-                          color: '#a1a1aa',
+                          color: 'var(--foreground-secondary)',
                         }}
                       />
 
@@ -398,7 +398,7 @@ const selectedFlagId = useMemo(() => {
                         type="monotone"
                         dataKey="impressions"
                         name="Impressions"
-                        stroke="#818cf8"
+                        stroke="var(--chart-1)"
                         strokeWidth={2}
                         fill="url(#impressionsGradient)"
                       />
@@ -407,7 +407,7 @@ const selectedFlagId = useMemo(() => {
                         type="monotone"
                         dataKey="enabled"
                         name="Enabled"
-                        stroke="#34d399"
+                        stroke="var(--chart-2)"
                         strokeWidth={2}
                         fill="url(#enabledGradient)"
                       />
@@ -421,29 +421,29 @@ const selectedFlagId = useMemo(() => {
 
         {(projectAnalytics?.topFlags?.length ?? 0) >
           0 && (
-          <section className="mt-6 rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-            <div className="border-b border-white/[0.07] px-5 py-4">
-              <h2 className="text-sm font-medium text-white">
+          <section className="mt-6 rounded-2xl border border-border bg-card">
+            <div className="border-b border-border px-5 py-4">
+              <h2 className="text-sm font-medium text-foreground">
                 Top flags
               </h2>
             </div>
 
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-border">
               {projectAnalytics?.topFlags?.map(
                 (flag, index) => (
                   <div
                     key={flag.id ?? index}
                     className="flex items-center justify-between px-5 py-4"
                   >
-                    <p className="text-sm text-zinc-300">
+                    <p className="text-sm text-foreground-secondary">
                       {flag.name ?? 'Unnamed flag'}
                     </p>
 
                     <span
                       className={
                         flag.enabled
-                          ? 'text-xs text-emerald-400'
-                          : 'text-xs text-zinc-600'
+                          ? 'text-xs text-success'
+                          : 'text-xs text-muted-foreground'
                       }
                     >
                       {flag.enabled
@@ -475,18 +475,18 @@ function MetricCard({
   }>;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
-      <Icon className="size-4 text-indigo-300" />
+    <div className="rounded-2xl border border-border bg-card p-5">
+      <Icon className="size-4 text-primary" />
 
-      <p className="mt-5 truncate text-2xl font-semibold text-white">
+      <p className="mt-5 truncate text-2xl font-semibold text-foreground">
         {value}
       </p>
 
-      <p className="mt-1 text-xs text-zinc-400">
+      <p className="mt-1 text-xs text-foreground-secondary">
         {label}
       </p>
 
-      <p className="mt-2 truncate text-[10px] text-zinc-700">
+      <p className="mt-2 truncate text-[10px] text-muted-foreground">
         {detail}
       </p>
     </div>
@@ -505,12 +505,12 @@ function SmallMetric({
   }>;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-white/[0.025] p-3">
-      <Icon className="size-4 text-zinc-600" />
+    <div className="flex items-center gap-3 rounded-xl bg-card p-3">
+      <Icon className="size-4 text-muted-foreground" />
 
       <div>
-        <p className="text-xs text-zinc-600">{label}</p>
-        <p className="mt-1 text-sm font-medium text-zinc-200">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="mt-1 text-sm font-medium text-foreground">
           {value}
         </p>
       </div>
@@ -524,7 +524,7 @@ function EmptyChart({
   message: string;
 }) {
   return (
-    <div className="flex h-80 items-center justify-center px-6 text-center text-sm text-zinc-600">
+    <div className="flex h-80 items-center justify-center px-6 text-center text-sm text-muted-foreground">
       {message}
     </div>
   );
@@ -534,15 +534,15 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6 text-center">
       <div>
-        <FolderKanban className="mx-auto size-8 text-indigo-300" />
+        <FolderKanban className="mx-auto size-8 text-primary" />
 
-        <h1 className="mt-5 text-lg text-white">
+        <h1 className="mt-5 text-lg text-foreground">
           Select a project
         </h1>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center rounded-lg bg-indigo-500 px-4 text-sm text-white"
+          className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm text-primary-foreground"
         >
           View projects
         </Link>
@@ -557,7 +557,7 @@ function ProjectMetricsSkeleton() {
       {Array.from({ length: 4 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-40 rounded-2xl bg-white/[0.04]"
+          className="h-40 rounded-2xl bg-surface-elevated"
         />
       ))}
     </div>

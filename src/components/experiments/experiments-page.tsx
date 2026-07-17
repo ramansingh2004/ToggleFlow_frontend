@@ -70,15 +70,15 @@ export function ExperimentsPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Experimentation
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Experiments
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Test flag variants and measure conversion
               performance.
             </p>
@@ -99,7 +99,7 @@ export function ExperimentsPage() {
           )}
 
           {experimentsQuery.isError && (
-            <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-500">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
               Unable to load experiments.
             </div>
           )}
@@ -136,19 +136,19 @@ function ExperimentCard({
     experiment.variantCount ?? experiment.variants.length;
 
   return (
-    <article className="group rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 transition-colors hover:border-indigo-400/20">
+    <article className="group rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/30">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-fuchsia-400/15 bg-fuchsia-500/10">
-            <Beaker className="size-4 text-fuchsia-300" />
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-elevated">
+            <Beaker className="size-4 text-foreground-secondary" />
           </div>
 
           <div className="min-w-0">
-            <h2 className="truncate text-sm font-medium text-zinc-200">
+            <h2 className="truncate text-sm font-medium text-foreground">
               {experiment.name}
             </h2>
 
-            <p className="mt-1 font-mono text-xs text-zinc-600">
+            <p className="mt-1 font-mono text-xs text-muted-foreground">
               {experiment.conversionMetric}
             </p>
           </div>
@@ -157,28 +157,28 @@ function ExperimentCard({
         <StatusBadge status={experiment.status} />
       </div>
 
-      <p className="mt-5 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-600">
+      <p className="mt-5 line-clamp-2 min-h-10 text-sm leading-5 text-muted-foreground">
         {experiment.description ||
           'No experiment description provided.'}
       </p>
 
-      <div className="mt-5 grid grid-cols-2 gap-3 border-t border-white/[0.06] pt-4">
+      <div className="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Variants
           </p>
 
-          <p className="mt-1 text-xs text-zinc-400">
+          <p className="mt-1 text-xs text-foreground-secondary">
             {variants}
           </p>
         </div>
 
         <div>
-          <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Created
           </p>
 
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             {formatDate(experiment.createdAt)}
           </p>
         </div>
@@ -186,7 +186,7 @@ function ExperimentCard({
 
       <Link
         href={`/experiments/${experiment.id}`}
-        className="mt-5 flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5 text-xs text-zinc-500 transition-colors hover:bg-white/[0.05] hover:text-indigo-300"
+        className="mt-5 flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-xs text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-primary"
       >
         View experiment
         <ArrowRight className="size-3.5" />
@@ -202,11 +202,11 @@ function StatusBadge({
 }) {
   const styles = {
     draft:
-      'border-zinc-400/10 bg-zinc-500/10 text-zinc-400',
+      'border-border bg-surface-elevated text-foreground-secondary',
     running:
-      'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+      'border-success/30 bg-success-subtle text-success',
     completed:
-      'border-indigo-400/15 bg-indigo-500/10 text-indigo-300',
+      'border-primary/30 bg-primary-subtle text-primary',
   };
 
   return (
@@ -346,18 +346,18 @@ function CreateExperimentDialog({
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
         New experiment
       </DialogTrigger>
 
-      <DialogContent className="max-h-[88vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-2xl">
+      <DialogContent className="max-h-[88vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Create experiment</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Configure a weighted feature-flag experiment.
             Experiments are created as drafts.
           </DialogDescription>
@@ -375,7 +375,7 @@ function CreateExperimentDialog({
               >
                 <Input
                   placeholder="Homepage CTA test"
-                  className="border-white/10 bg-white/[0.035]"
+                  className="border-border bg-card"
                   {...register('name')}
                 />
               </FormField>
@@ -386,7 +386,7 @@ function CreateExperimentDialog({
               >
                 <Input
                   placeholder="signup"
-                  className="border-white/10 bg-white/[0.035] font-mono"
+                  className="border-border bg-card font-mono"
                   {...register('conversionMetric')}
                 />
               </FormField>
@@ -397,10 +397,10 @@ function CreateExperimentDialog({
               error={errors.flagId?.message}
             >
               <select
-                className="flex h-9 w-full rounded-md border border-white/10 bg-white/[0.035] px-3 text-sm text-zinc-300 outline-none focus:border-indigo-400/40"
+                className="flex h-9 w-full rounded-md border border-border bg-card px-3 text-sm text-foreground-secondary outline-none focus:border-primary/30"
                 {...register('flagId')}
               >
-                <option value="" className="bg-[#0d111a]">
+                <option value="" className="bg-popover">
                   Select a feature flag
                 </option>
 
@@ -409,7 +409,7 @@ function CreateExperimentDialog({
                     <option
                       key={flag.id}
                       value={flag.id}
-                      className="bg-[#0d111a]"
+                      className="bg-popover"
                     >
                       {flag.name ?? flag.key ?? flag.id}
                       {flag.enabled ? '' : ' — disabled'}
@@ -420,14 +420,14 @@ function CreateExperimentDialog({
 
               {flagsQuery.isSuccess &&
                 flags.length === 0 && (
-                  <p className="text-xs text-amber-400">
+                  <p className="text-xs text-warning">
                     Create a feature flag before creating an
                     experiment.
                   </p>
                 )}
 
               {selectedFlag && !selectedFlag.enabled && (
-                <p className="text-xs leading-5 text-amber-400/80">
+                <p className="text-xs leading-5 text-warning">
                   You can create this experiment as a draft,
                   but its flag must be enabled before users can
                   receive variant assignments.
@@ -442,7 +442,7 @@ function CreateExperimentDialog({
               <textarea
                 rows={3}
                 placeholder="What hypothesis are you testing?"
-                className="w-full resize-none rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 outline-none placeholder:text-zinc-700 focus:border-indigo-400/40"
+                className="w-full resize-none rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground-secondary outline-none placeholder:text-muted-foreground focus:border-primary/30"
                 {...register('description')}
               />
             </FormField>
@@ -452,7 +452,7 @@ function CreateExperimentDialog({
                 <div>
                   <Label>Variants</Label>
 
-                  <p className="mt-1 text-xs text-zinc-600">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     Weights must total exactly 100%.
                   </p>
                 </div>
@@ -460,8 +460,8 @@ function CreateExperimentDialog({
                 <span
                   className={
                     totalWeight === 100
-                      ? 'rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-300'
-                      : 'rounded-full border border-red-400/15 bg-red-500/10 px-2.5 py-1 text-xs text-red-300'
+                      ? 'rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-xs text-success'
+                      : 'rounded-full border border-destructive/30 bg-destructive-subtle px-2.5 py-1 text-xs text-destructive'
                   }
                 >
                   {totalWeight}%
@@ -472,20 +472,20 @@ function CreateExperimentDialog({
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="grid gap-3 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 sm:grid-cols-[1fr_110px_36px] sm:items-start"
+                    className="grid gap-3 rounded-xl border border-border bg-card p-3 sm:grid-cols-[1fr_110px_36px] sm:items-start"
                   >
                     <div>
                       <Input
                         aria-label={`Variant ${index + 1} name`}
                         placeholder={`Variant ${index + 1}`}
-                        className="border-white/10 bg-black/20"
+                        className="border-border bg-background"
                         {...register(
                           `variants.${index}.name`
                         )}
                       />
 
                       {errors.variants?.[index]?.name && (
-                        <p className="mt-1 text-xs text-red-400">
+                        <p className="mt-1 text-xs text-destructive">
                           {
                             errors.variants[index]?.name
                               ?.message
@@ -501,7 +501,7 @@ function CreateExperimentDialog({
                           min={1}
                           max={100}
                           aria-label={`Variant ${index + 1} weight`}
-                          className="border-white/10 bg-black/20 pr-7"
+                          className="border-border bg-background pr-7"
                           {...register(
                             `variants.${index}.weight`,
                             {
@@ -510,13 +510,13 @@ function CreateExperimentDialog({
                           )}
                         />
 
-                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-600">
+                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                           %
                         </span>
                       </div>
 
                       {errors.variants?.[index]?.weight && (
-                        <p className="mt-1 text-xs text-red-400">
+                        <p className="mt-1 text-xs text-destructive">
                           {
                             errors.variants[index]?.weight
                               ?.message
@@ -529,7 +529,7 @@ function CreateExperimentDialog({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="text-zinc-600 hover:text-red-400"
+                      className="text-muted-foreground hover:text-destructive"
                       disabled={fields.length <= 2}
                       onClick={() => remove(index)}
                     >
@@ -543,14 +543,14 @@ function CreateExperimentDialog({
               </div>
 
               {errors.variants?.root?.message && (
-                <p className="mt-2 text-xs text-red-400">
+                <p className="mt-2 text-xs text-destructive">
                   {errors.variants.root.message}
                 </p>
               )}
 
               {typeof errors.variants?.message ===
                 'string' && (
-                <p className="mt-2 text-xs text-red-400">
+                <p className="mt-2 text-xs text-destructive">
                   {errors.variants.message}
                 </p>
               )}
@@ -558,7 +558,7 @@ function CreateExperimentDialog({
               <Button
                 type="button"
                 variant="outline"
-                className="mt-3 border-white/10 bg-transparent text-zinc-400"
+                className="mt-3 border-border bg-transparent text-foreground-secondary"
                 onClick={() =>
                   append({
                     name: `Variant ${String.fromCharCode(
@@ -574,11 +574,11 @@ function CreateExperimentDialog({
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={createMutation.isPending}
               onClick={closeDialog}
             >
@@ -587,7 +587,7 @@ function CreateExperimentDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={
                 createMutation.isPending ||
                 flags.length === 0 ||
@@ -621,7 +621,7 @@ function FormField({
       {children}
 
       {error && (
-        <p className="text-xs text-red-400">{error}</p>
+        <p className="text-xs text-destructive">{error}</p>
       )}
     </div>
   );
@@ -631,19 +631,19 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6 text-center">
       <div>
-        <FolderKanban className="mx-auto size-8 text-indigo-300" />
+        <FolderKanban className="mx-auto size-8 text-primary" />
 
-        <h1 className="mt-5 text-lg text-white">
+        <h1 className="mt-5 text-lg text-foreground">
           Select a project
         </h1>
 
-        <p className="mt-2 text-sm text-zinc-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Choose a project before managing experiments.
         </p>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center rounded-lg bg-indigo-500 px-4 text-sm text-white"
+          className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm text-primary-foreground"
         >
           View projects
         </Link>
@@ -658,20 +658,20 @@ function EmptyExperiments({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <Beaker className="size-8 text-fuchsia-300" />
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <Beaker className="size-8 text-foreground-secondary" />
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         Create your first experiment
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Compare flag variants and learn which experience
         produces the best conversion rate.
       </p>
 
       <Button
-        className="mt-6 bg-indigo-500 text-white hover:bg-indigo-400"
+        className="mt-6 bg-primary text-primary-foreground hover:bg-primary-hover"
         onClick={onCreate}
       >
         <Plus className="size-4" />
@@ -687,7 +687,7 @@ function ExperimentsSkeleton() {
       {Array.from({ length: 4 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-64 rounded-2xl bg-white/[0.04]"
+          className="h-64 rounded-2xl bg-surface-elevated"
         />
       ))}
     </div>
@@ -733,24 +733,24 @@ function ExperimentWorkflow() {
   ];
 
   return (
-    <section className="mt-8 overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="grid gap-px bg-white/[0.06] sm:grid-cols-2 xl:grid-cols-4">
+    <section className="mt-8 overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="grid gap-px bg-surface-elevated sm:grid-cols-2 xl:grid-cols-4">
         {steps.map((step) => (
           <div
             key={step.number}
-            className="bg-[#090c13] p-4"
+            className="bg-surface p-4"
           >
             <div className="flex items-center gap-3">
-              <span className="font-mono text-[10px] text-indigo-400">
+              <span className="font-mono text-[10px] text-primary">
                 {step.number}
               </span>
 
-              <p className="text-xs font-medium text-zinc-300">
+              <p className="text-xs font-medium text-foreground-secondary">
                 {step.title}
               </p>
             </div>
 
-            <p className="mt-2 text-xs leading-5 text-zinc-600">
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
               {step.description}
             </p>
           </div>

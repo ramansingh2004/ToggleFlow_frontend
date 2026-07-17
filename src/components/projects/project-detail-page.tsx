@@ -68,30 +68,30 @@ export function ProjectDetailPage({
       <div className="mx-auto max-w-7xl">
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-300"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground-secondary"
         >
           <ArrowLeft className="size-4" />
           Back to projects
         </Link>
 
-        <header className="mt-6 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 sm:p-6">
+        <header className="mt-6 rounded-2xl border border-border bg-card p-5 sm:p-6">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
             <div className="flex items-start gap-4">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-indigo-400/15 bg-indigo-500/10">
-                <FolderKanban className="size-5 text-indigo-300" />
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+                <FolderKanban className="size-5 text-primary" />
               </div>
 
               <div>
                 <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="text-2xl font-semibold tracking-[-0.03em] text-white">
+                  <h1 className="text-2xl font-semibold tracking-[-0.03em] text-foreground">
                     {project.name ?? 'Untitled project'}
                   </h1>
 
                   <span
                     className={
                       project.isActive
-                        ? 'rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium text-emerald-300'
-                        : 'rounded-full border border-zinc-400/10 bg-zinc-500/10 px-2.5 py-1 text-[10px] font-medium text-zinc-500'
+                        ? 'rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-[10px] font-medium text-success'
+                        : 'rounded-full border border-border bg-surface-elevated px-2.5 py-1 text-[10px] font-medium text-muted-foreground'
                     }
                   >
                     {project.isActive
@@ -100,11 +100,11 @@ export function ProjectDetailPage({
                   </span>
                 </div>
 
-                <p className="mt-1 font-mono text-xs text-zinc-600">
+                <p className="mt-1 font-mono text-xs text-muted-foreground">
                   {project.slug ?? projectId}
                 </p>
 
-                <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-500">
+                <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">
                   {project.description ||
                     'No project description has been added.'}
                 </p>
@@ -117,7 +117,7 @@ export function ProjectDetailPage({
             />
           </div>
 
-          <div className="mt-6 grid gap-3 border-t border-white/[0.06] pt-5 sm:grid-cols-3">
+          <div className="mt-6 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
             <ProjectMetric
               label="Environments"
               value={environments.length}
@@ -168,12 +168,12 @@ function ProjectMetric({
   }>;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-white/[0.025] px-4 py-3">
-      <Icon className="size-4 text-zinc-600" />
+    <div className="flex items-center gap-3 rounded-xl bg-card px-4 py-3">
+      <Icon className="size-4 text-muted-foreground" />
 
       <div>
-        <p className="text-xs text-zinc-600">{label}</p>
-        <p className="mt-0.5 text-sm font-medium text-zinc-200">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="mt-0.5 text-sm font-medium text-foreground">
           {value}
         </p>
       </div>
@@ -191,18 +191,18 @@ function EnvironmentSection({
   isError: boolean;
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-4">
+    <section className="rounded-2xl border border-border bg-card">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div>
-          <h2 className="text-sm font-medium text-white">
+          <h2 className="text-sm font-medium text-foreground">
             Environments
           </h2>
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-muted-foreground">
             Deployment stages for this project
           </p>
         </div>
 
-        <Boxes className="size-4 text-zinc-600" />
+        <Boxes className="size-4 text-muted-foreground" />
       </div>
 
       <div className="p-3">
@@ -240,15 +240,15 @@ function EnvironmentRow({
 
   const typeStyles = {
     development:
-      'border-blue-400/15 bg-blue-500/10 text-blue-300',
+      'border-border bg-surface-elevated text-foreground-secondary',
     staging:
-      'border-amber-400/15 bg-amber-500/10 text-amber-300',
+      'border-warning/30 bg-warning-subtle text-warning',
     production:
-      'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+      'border-success/30 bg-success-subtle text-success',
   };
 
   return (
-    <div className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.03]">
+    <div className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-card">
       <div
         className={`flex size-9 items-center justify-center rounded-xl border ${typeStyles[type]}`}
       >
@@ -256,21 +256,21 @@ function EnvironmentRow({
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-zinc-300">
+        <p className="truncate text-sm font-medium text-foreground-secondary">
           {environment.name ?? 'Unnamed environment'}
         </p>
 
-        <p className="mt-1 text-xs capitalize text-zinc-600">
+        <p className="mt-1 text-xs capitalize text-muted-foreground">
           {type}
         </p>
       </div>
 
       <div className="text-right">
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-muted-foreground">
           {environment.flagCount ?? 0} flags
         </p>
 
-        <p className="mt-1 flex items-center justify-end gap-1 text-[10px] text-zinc-700">
+        <p className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <KeyRound className="size-3" />
           {environment.apiKeyCount ?? 0} keys
         </p>
@@ -289,18 +289,18 @@ function FlagSection({
   isError: boolean;
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-4">
+    <section className="rounded-2xl border border-border bg-card">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div>
-          <h2 className="text-sm font-medium text-white">
+          <h2 className="text-sm font-medium text-foreground">
             Feature flags
           </h2>
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-muted-foreground">
             Current release controls
           </p>
         </div>
 
-        <ToggleLeft className="size-4 text-zinc-600" />
+        <ToggleLeft className="size-4 text-muted-foreground" />
       </div>
 
       <div className="p-3">
@@ -333,21 +333,21 @@ function FlagRow({
   flag: FeatureFlagSummary;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.03]">
+    <div className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-card">
       <div
         className={
           flag.enabled
-            ? 'size-2 rounded-full bg-emerald-400 shadow-[0_0_9px_rgba(52,211,153,0.5)]'
-            : 'size-2 rounded-full bg-zinc-700'
+            ? 'size-2 rounded-full bg-success'
+            : 'size-2 rounded-full bg-surface-elevated'
         }
       />
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-zinc-300">
+        <p className="truncate text-sm font-medium text-foreground-secondary">
           {flag.name ?? 'Unnamed flag'}
         </p>
 
-        <p className="mt-1 truncate font-mono text-xs text-zinc-600">
+        <p className="mt-1 truncate font-mono text-xs text-muted-foreground">
           {flag.key ?? 'no-key'}
         </p>
       </div>
@@ -355,8 +355,8 @@ function FlagRow({
       <span
         className={
           flag.enabled
-            ? 'text-xs text-emerald-400'
-            : 'text-xs text-zinc-600'
+            ? 'text-xs text-success'
+            : 'text-xs text-muted-foreground'
         }
       >
         {flag.enabled ? 'Enabled' : 'Disabled'}
@@ -371,7 +371,7 @@ function SectionSkeleton() {
       {Array.from({ length: 3 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-16 rounded-xl bg-white/[0.04]"
+          className="h-16 rounded-xl bg-surface-elevated"
         />
       ))}
     </div>
@@ -384,7 +384,7 @@ function SectionMessage({
   message: string;
 }) {
   return (
-    <div className="py-16 text-center text-sm text-zinc-600">
+    <div className="py-16 text-center text-sm text-muted-foreground">
       {message}
     </div>
   );
@@ -398,13 +398,13 @@ function ProjectDetailError({
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6">
       <div className="text-center">
-        <p className="text-sm text-zinc-300">
+        <p className="text-sm text-foreground-secondary">
           Unable to load this project.
         </p>
 
         <Button
           variant="outline"
-          className="mt-5 border-white/10 bg-transparent"
+          className="mt-5 border-border bg-transparent"
           onClick={onRetry}
         >
           <RefreshCw className="size-4" />
@@ -419,12 +419,12 @@ function ProjectDetailSkeleton() {
   return (
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-7xl">
-        <Skeleton className="h-5 w-32 bg-white/[0.04]" />
-        <Skeleton className="mt-6 h-64 rounded-2xl bg-white/[0.04]" />
+        <Skeleton className="h-5 w-32 bg-surface-elevated" />
+        <Skeleton className="mt-6 h-64 rounded-2xl bg-surface-elevated" />
 
         <div className="mt-6 grid gap-6 xl:grid-cols-2">
-          <Skeleton className="h-96 rounded-2xl bg-white/[0.04]" />
-          <Skeleton className="h-96 rounded-2xl bg-white/[0.04]" />
+          <Skeleton className="h-96 rounded-2xl bg-surface-elevated" />
+          <Skeleton className="h-96 rounded-2xl bg-surface-elevated" />
         </div>
       </div>
     </main>

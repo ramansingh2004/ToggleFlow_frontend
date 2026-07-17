@@ -148,7 +148,7 @@ function RoleSelector({
     >
       <SelectTrigger
         size="sm"
-        className="w-28 border-white/[0.08] bg-white/[0.025] capitalize"
+        className="w-28 border-border bg-card capitalize"
       >
         {updateMutation.isPending ? (
           <LoaderCircle className="size-3.5 animate-spin" />
@@ -157,12 +157,12 @@ function RoleSelector({
         )}
       </SelectTrigger>
 
-      <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+      <SelectContent className="border border-border bg-popover text-foreground">
         {roles.map((role) => (
           <SelectItem
             key={role}
             value={role}
-            className="capitalize focus:bg-white/[0.06]"
+            className="capitalize focus:bg-surface-elevated"
           >
             {role}
           </SelectItem>
@@ -223,7 +223,7 @@ function RemoveMemberDialog({
           <Button
             variant="ghost"
             size="icon-sm"
-            className="text-zinc-600 hover:text-red-400"
+            className="text-muted-foreground hover:text-destructive"
           />
         }
       >
@@ -233,25 +233,25 @@ function RemoveMemberDialog({
         </span>
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0">
+      <AlertDialogContent className="border border-border bg-popover text-foreground ring-0">
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-red-500/10">
-            <AlertTriangle className="text-red-400" />
+          <AlertDialogMedia className="bg-destructive-subtle">
+            <AlertTriangle className="text-destructive" />
           </AlertDialogMedia>
 
           <AlertDialogTitle>
             Remove {member.username ?? member.email}?
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="text-zinc-500">
+          <AlertDialogDescription className="text-muted-foreground">
             This person will immediately lose access to the
             selected project.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <AlertDialogFooter className="border-border bg-card">
           <AlertDialogCancel
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={removeMutation.isPending}
           >
             Cancel

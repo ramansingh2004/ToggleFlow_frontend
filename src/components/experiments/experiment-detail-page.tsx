@@ -69,20 +69,20 @@ export function ExperimentDetailPage({
     return (
       <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6">
         <div className="text-center">
-          <Beaker className="mx-auto size-8 text-red-400" />
+          <Beaker className="mx-auto size-8 text-destructive" />
 
-          <h1 className="mt-5 text-lg font-medium text-white">
+          <h1 className="mt-5 text-lg font-medium text-foreground">
             Experiment unavailable
           </h1>
 
-          <p className="mt-2 text-sm text-zinc-600">
+          <p className="mt-2 text-sm text-muted-foreground">
             It may have been removed or you may not have
             permission to access it.
           </p>
 
           <Link
             href="/experiments"
-            className="mt-6 inline-flex text-sm text-indigo-300 hover:text-indigo-200"
+            className="mt-6 inline-flex text-sm text-primary hover:text-primary"
           >
             Return to experiments
           </Link>
@@ -98,7 +98,7 @@ export function ExperimentDetailPage({
       <div className="mx-auto max-w-7xl">
         <Link
           href="/experiments"
-          className="inline-flex items-center gap-2 text-xs text-zinc-600 transition-colors hover:text-zinc-300"
+          className="inline-flex items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground-secondary"
         >
           <ArrowLeft className="size-3.5" />
           Experiments
@@ -107,14 +107,14 @@ export function ExperimentDetailPage({
         <div className="mt-6 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-semibold tracking-[-0.03em] text-white">
+              <h1 className="text-3xl font-semibold tracking-[-0.03em] text-foreground">
                 {experiment.name}
               </h1>
 
               <StatusBadge status={experiment.status} />
             </div>
 
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-500">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
               {experiment.description ||
                 'No experiment description provided.'}
             </p>
@@ -245,7 +245,7 @@ function ExperimentActions({
   if (experiment.status === 'draft') {
     return (
       <Button
-        className="bg-emerald-500 text-white hover:bg-emerald-400"
+        className="bg-success text-success-foreground hover:bg-success/90"
         disabled={startMutation.isPending}
         onClick={startExperiment}
       >
@@ -264,7 +264,7 @@ function ExperimentActions({
       <>
         <Button
           variant="outline"
-          className="border-red-400/20 bg-red-500/[0.06] text-red-300 hover:bg-red-500/10"
+          className="border-destructive/30 bg-destructive-subtle text-destructive hover:bg-destructive-subtle"
           onClick={() => setEndOpen(true)}
         >
           <Square className="size-4" />
@@ -278,11 +278,11 @@ function ExperimentActions({
             setEndOpen(open);
           }}
         >
-          <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-lg">
+          <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>End experiment?</DialogTitle>
 
-              <DialogDescription className="text-zinc-500">
+              <DialogDescription className="text-muted-foreground">
                 The experiment will be marked as completed and
                 cannot be restarted.
               </DialogDescription>
@@ -291,10 +291,10 @@ function ExperimentActions({
             <div className="space-y-2 py-3">
               <label
                 htmlFor="experiment-conclusion"
-                className="text-sm text-zinc-300"
+                className="text-sm text-foreground-secondary"
               >
                 Conclusion
-                <span className="ml-1 text-zinc-600">
+                <span className="ml-1 text-muted-foreground">
                   (optional)
                 </span>
               </label>
@@ -305,22 +305,22 @@ function ExperimentActions({
                 maxLength={1000}
                 value={conclusion}
                 placeholder="Summarize what you learned from this experiment..."
-                className="w-full resize-none rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 outline-none placeholder:text-zinc-700 focus:border-indigo-400/40"
+                className="w-full resize-none rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground-secondary outline-none placeholder:text-muted-foreground focus:border-primary/30"
                 onChange={(event) =>
                   setConclusion(event.target.value)
                 }
               />
 
-              <p className="text-right text-[10px] text-zinc-700">
+              <p className="text-right text-[10px] text-muted-foreground">
                 {conclusion.length}/1000
               </p>
             </div>
 
-            <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+            <DialogFooter className="border-border bg-card">
               <Button
                 type="button"
                 variant="outline"
-                className="border-white/10 bg-transparent"
+                className="border-border bg-transparent"
                 disabled={endMutation.isPending}
                 onClick={() => setEndOpen(false)}
               >
@@ -329,7 +329,7 @@ function ExperimentActions({
 
               <Button
                 type="button"
-                className="bg-red-500 text-white hover:bg-red-400"
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 disabled={endMutation.isPending}
                 onClick={endExperiment}
               >
@@ -346,7 +346,7 @@ function ExperimentActions({
   }
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/15 bg-indigo-500/[0.06] px-4 py-2 text-xs text-indigo-300">
+    <div className="inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-primary-subtle px-4 py-2 text-xs text-primary">
       <CheckCircle2 className="size-4" />
       Experiment completed
     </div>
@@ -381,18 +381,18 @@ function VariantResults({
   });
 
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="border-b border-white/[0.07] px-5 py-4">
-        <h2 className="text-sm font-medium text-zinc-200">
+    <section className="rounded-2xl border border-border bg-card">
+      <div className="border-b border-border px-5 py-4">
+        <h2 className="text-sm font-medium text-foreground">
           Variant performance
         </h2>
 
-        <p className="mt-1 text-xs text-zinc-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           Results collected for each weighted variant.
         </p>
       </div>
 
-      <div className="divide-y divide-white/[0.06]">
+      <div className="divide-y divide-border">
         {variants.map((variant) => (
           <div
             key={variant.id}
@@ -401,26 +401,26 @@ function VariantResults({
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
               <div>
                 <div className="flex items-center gap-2">
-                  <FlaskConical className="size-4 text-fuchsia-300" />
+                  <FlaskConical className="size-4 text-foreground-secondary" />
 
-                  <p className="text-sm font-medium text-zinc-200">
+                  <p className="text-sm font-medium text-foreground">
                     {variant.name}
                   </p>
                 </div>
 
-                <p className="mt-1 text-xs text-zinc-600">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Traffic allocation: {variant.weight}%
                 </p>
               </div>
 
-              <p className="text-2xl font-semibold tracking-tight text-white">
+              <p className="text-2xl font-semibold tracking-tight text-foreground">
                 {formatPercent(variant.conversionRate)}
               </p>
             </div>
 
-            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-surface-elevated">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-400"
+                className="h-full rounded-full bg-primary"
                 style={{
                   width: `${Math.min(
                     100,
@@ -460,10 +460,10 @@ function VariantResults({
       </div>
 
       {(statistics?.totalParticipants ?? 0) === 0 && (
-        <div className="border-t border-amber-400/10 bg-amber-500/[0.03] px-5 py-4 text-xs leading-5 text-amber-200/50">
+        <div className="border-t border-warning/30 bg-warning-subtle px-5 py-4 text-xs leading-5 text-warning">
           No participants have been assigned yet. Start the
           experiment, enable its feature flag, and call
-          <code className="mx-1 font-mono text-amber-200/70">
+          <code className="mx-1 font-mono text-warning">
             assignExperiment()
           </code>
           from your application server.
@@ -492,30 +492,30 @@ function ExperimentInformation({
   };
 
   return (
-    <aside className="h-fit rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5">
-      <h2 className="text-sm font-medium text-zinc-200">
+    <aside className="h-fit rounded-2xl border border-border bg-card p-5">
+      <h2 className="text-sm font-medium text-foreground">
         Configuration
       </h2>
 
       <dl className="mt-5 space-y-5">
         <div>
-          <dt className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+          <dt className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Experiment ID
           </dt>
 
           <dd className="mt-2 flex items-center gap-2">
-            <code className="min-w-0 flex-1 truncate text-xs text-zinc-400">
+            <code className="min-w-0 flex-1 truncate text-xs text-foreground-secondary">
               {experiment.id}
             </code>
 
             <button
               type="button"
-              className="rounded-lg border border-white/[0.07] p-2 text-zinc-600 transition-colors hover:bg-white/[0.05] hover:text-indigo-300"
+              className="rounded-lg border border-border p-2 text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-primary"
               aria-label="Copy experiment ID"
               onClick={copyExperimentId}
             >
               {copied ? (
-                <Check className="size-3.5 text-emerald-400" />
+                <Check className="size-3.5 text-success" />
               ) : (
                 <Copy className="size-3.5" />
               )}
@@ -552,28 +552,28 @@ function ExperimentInformation({
       </dl>
 
       {experiment.conclusion && (
-        <div className="mt-6 border-t border-white/[0.06] pt-5">
-          <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+        <div className="mt-6 border-t border-border pt-5">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Conclusion
           </p>
 
-          <p className="mt-2 text-sm leading-6 text-zinc-500">
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {experiment.conclusion}
           </p>
         </div>
       )}
 
-      <div className="mt-6 border-t border-white/[0.06] pt-5">
+      <div className="mt-6 border-t border-border pt-5">
         <div className="flex items-center justify-between gap-3">
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-muted-foreground">
             Statistical significance
           </p>
 
           <span
             className={
               experiment.statistics?.statisticallySignificant
-                ? 'text-xs text-emerald-300'
-                : 'text-xs text-zinc-600'
+                ? 'text-xs text-success'
+                : 'text-xs text-muted-foreground'
             }
           >
             {experiment.statistics?.statisticallySignificant
@@ -583,11 +583,11 @@ function ExperimentInformation({
         </div>
 
         <div className="mt-3 flex items-center justify-between gap-3">
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-muted-foreground">
             p-value
           </p>
 
-          <span className="font-mono text-xs text-zinc-500">
+          <span className="font-mono text-xs text-muted-foreground">
             {formatPValue(experiment.statistics?.pValue)}
           </span>
         </div>
@@ -616,25 +616,25 @@ if (assignment.variant.name === 'Treatment') {
 );`;
 
   return (
-    <section className="mt-6 overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="flex items-start gap-3 border-b border-white/[0.07] px-5 py-4">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-cyan-400/15 bg-cyan-500/10">
-          <Code2 className="size-4 text-cyan-300" />
+    <section className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="flex items-start gap-3 border-b border-border px-5 py-4">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+          <Code2 className="size-4 text-primary" />
         </div>
 
         <div>
-          <h2 className="text-sm font-medium text-zinc-200">
+          <h2 className="text-sm font-medium text-foreground">
             Application integration
           </h2>
 
-          <p className="mt-1 text-xs leading-5 text-zinc-600">
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">
             Assign on the server before rendering, then record
             the conversion only when the configured event occurs.
           </p>
         </div>
       </div>
 
-      <div className="grid gap-px bg-white/[0.06] lg:grid-cols-2">
+      <div className="grid gap-px bg-surface-elevated lg:grid-cols-2">
         <CodeStep
           number="01"
           title="Assign the user"
@@ -648,10 +648,10 @@ if (assignment.variant.name === 'Treatment') {
         />
       </div>
 
-      <div className="border-t border-indigo-400/10 bg-indigo-500/[0.035] px-5 py-4 text-xs leading-5 text-indigo-200/60">
+      <div className="border-t border-primary/30 bg-primary-subtle px-5 py-4 text-xs leading-5 text-primary">
         Use the same stable application user ID for both calls.
         The API key must remain server-side. This experiment is
-        currently <span className="font-medium text-indigo-200">{experiment.status}</span>.
+        currently <span className="font-medium text-primary">{experiment.status}</span>.
       </div>
     </section>
   );
@@ -680,32 +680,32 @@ function CodeStep({
   };
 
   return (
-    <div className="bg-[#090c13] p-5">
+    <div className="bg-surface p-5">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-indigo-400">
+          <span className="font-mono text-[10px] text-primary">
             {number}
           </span>
-          <p className="text-xs font-medium text-zinc-300">
+          <p className="text-xs font-medium text-foreground-secondary">
             {title}
           </p>
         </div>
 
         <button
           type="button"
-          className="rounded-lg p-2 text-zinc-600 transition-colors hover:bg-white/[0.05] hover:text-zinc-300"
+          className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground-secondary"
           aria-label={`Copy ${title} code`}
           onClick={copyCode}
         >
           {copied ? (
-            <Check className="size-3.5 text-emerald-400" />
+            <Check className="size-3.5 text-success" />
           ) : (
             <Copy className="size-3.5" />
           )}
         </button>
       </div>
 
-      <pre className="mt-4 overflow-x-auto rounded-xl border border-white/[0.06] bg-black/30 p-4 text-xs leading-6 text-zinc-400">
+      <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-background p-4 text-xs leading-6 text-foreground-secondary">
         <code>{code}</code>
       </pre>
     </div>
@@ -722,14 +722,14 @@ function MetricCard({
   icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+    <div className="rounded-2xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
-        <p className="text-xs text-zinc-600">{label}</p>
+        <p className="text-xs text-muted-foreground">{label}</p>
 
-        <Icon className="size-4 text-indigo-300" />
+        <Icon className="size-4 text-primary" />
       </div>
 
-      <p className="mt-4 truncate text-2xl font-semibold tracking-tight text-white">
+      <p className="mt-4 truncate text-2xl font-semibold tracking-tight text-foreground">
         {value}
       </p>
     </div>
@@ -745,11 +745,11 @@ function VariantMetric({
 }) {
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-[0.1em] text-zinc-700">
+      <p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
         {label}
       </p>
 
-      <p className="mt-1 text-xs text-zinc-400">
+      <p className="mt-1 text-xs text-foreground-secondary">
         {value}
       </p>
     </div>
@@ -767,15 +767,15 @@ function InformationRow({
 }) {
   return (
     <div>
-      <dt className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+      <dt className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
         {label}
       </dt>
 
       <dd
         className={
           mono
-            ? 'mt-1 break-all font-mono text-xs text-zinc-400'
-            : 'mt-1 text-xs text-zinc-400'
+            ? 'mt-1 break-all font-mono text-xs text-foreground-secondary'
+            : 'mt-1 text-xs text-foreground-secondary'
         }
       >
         {value}
@@ -791,11 +791,11 @@ function StatusBadge({
 }) {
   const styles = {
     draft:
-      'border-zinc-400/10 bg-zinc-500/10 text-zinc-400',
+      'border-border bg-surface-elevated text-foreground-secondary',
     running:
-      'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+      'border-success/30 bg-success-subtle text-success',
     completed:
-      'border-indigo-400/15 bg-indigo-500/10 text-indigo-300',
+      'border-primary/30 bg-primary-subtle text-primary',
   };
 
   return (
@@ -811,18 +811,18 @@ function DetailSkeleton() {
   return (
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <Skeleton className="h-24 rounded-2xl bg-white/[0.04]" />
+        <Skeleton className="h-24 rounded-2xl bg-surface-elevated" />
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (
             <Skeleton
               key={index}
-              className="h-28 rounded-2xl bg-white/[0.04]"
+              className="h-28 rounded-2xl bg-surface-elevated"
             />
           ))}
         </div>
 
-        <Skeleton className="h-96 rounded-2xl bg-white/[0.04]" />
+        <Skeleton className="h-96 rounded-2xl bg-surface-elevated" />
       </div>
     </main>
   );

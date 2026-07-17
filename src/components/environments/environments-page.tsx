@@ -113,15 +113,15 @@ export function EnvironmentsPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Release stages
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Environments
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Separate development, staging, and production
               configuration.
             </p>
@@ -148,19 +148,19 @@ export function EnvironmentsPage() {
 
         <div className="mt-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-600" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
             <Input
               value={search}
               placeholder="Search environments..."
-              className="h-10 border-white/[0.08] bg-white/[0.025] pl-10"
+              className="h-10 border-border bg-card pl-10"
               onChange={(event) =>
                 setSearch(event.target.value)
               }
             />
           </div>
 
-          <div className="flex overflow-x-auto rounded-xl border border-white/[0.07] bg-white/[0.02] p-1">
+          <div className="flex overflow-x-auto rounded-xl border border-border bg-card p-1">
             {(
               [
                 'all',
@@ -174,8 +174,8 @@ export function EnvironmentsPage() {
                 type="button"
                 className={
                   filter === value
-                    ? 'rounded-lg bg-white/[0.08] px-3 py-1.5 text-xs capitalize text-zinc-200'
-                    : 'rounded-lg px-3 py-1.5 text-xs capitalize text-zinc-600 hover:text-zinc-300'
+                    ? 'rounded-lg bg-primary-subtle px-3 py-1.5 text-xs capitalize text-primary'
+                    : 'rounded-lg px-3 py-1.5 text-xs capitalize text-muted-foreground hover:text-foreground-secondary'
                 }
                 onClick={() => setFilter(value)}
               >
@@ -191,7 +191,7 @@ export function EnvironmentsPage() {
           )}
 
           {environmentsQuery.isError && (
-            <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-500">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
               Unable to load environments.
             </div>
           )}
@@ -206,7 +206,7 @@ export function EnvironmentsPage() {
           {environmentsQuery.isSuccess &&
             environments.length > 0 &&
             filteredEnvironments.length === 0 && (
-              <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] py-16 text-center text-sm text-zinc-600">
+              <div className="rounded-2xl border border-border bg-card py-16 text-center text-sm text-muted-foreground">
                 No environments match the current filters.
               </div>
             )}
@@ -239,22 +239,22 @@ function EnvironmentCard({
 
   const styles = {
     development: {
-      border: 'hover:border-blue-400/20',
-      icon: 'border-blue-400/15 bg-blue-500/10 text-blue-300',
+      border: 'hover:border-border',
+      icon: 'border-border bg-surface-elevated text-foreground-secondary',
       badge:
-        'border-blue-400/15 bg-blue-500/10 text-blue-300',
+        'border-border bg-surface-elevated text-foreground-secondary',
     },
     staging: {
-      border: 'hover:border-amber-400/20',
-      icon: 'border-amber-400/15 bg-amber-500/10 text-amber-300',
+      border: 'hover:border-warning/30',
+      icon: 'border-warning/30 bg-warning-subtle text-warning',
       badge:
-        'border-amber-400/15 bg-amber-500/10 text-amber-300',
+        'border-warning/30 bg-warning-subtle text-warning',
     },
     production: {
-      border: 'hover:border-emerald-400/20',
-      icon: 'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+      border: 'hover:border-success/30',
+      icon: 'border-success/30 bg-success-subtle text-success',
       badge:
-        'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
+        'border-success/30 bg-success-subtle text-success',
     },
   };
 
@@ -274,16 +274,16 @@ function EnvironmentCard({
         </span>
       </div>
 
-      <h2 className="mt-5 truncate text-base font-medium text-zinc-100">
+      <h2 className="mt-5 truncate text-base font-medium text-foreground">
         {environment.name ?? 'Unnamed environment'}
       </h2>
 
-      <p className="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500">
+      <p className="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-muted-foreground">
         {environment.description ||
           'No environment description has been added.'}
       </p>
 
-      <div className="mt-6 flex items-center gap-5 border-t border-white/[0.06] pt-4 text-xs text-zinc-600">
+      <div className="mt-6 flex items-center gap-5 border-t border-border pt-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-2">
           <ToggleLeft className="size-4" />
           {environment.flagCount ?? 0} flags
@@ -299,7 +299,7 @@ function EnvironmentCard({
 
   if (!environment.id) {
     return (
-      <article className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+      <article className="rounded-2xl border border-border bg-card p-5">
         {content}
       </article>
     );
@@ -308,7 +308,7 @@ function EnvironmentCard({
   return (
     <Link
       href={`/environments/${environment.id}`}
-      className={`rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 transition-all hover:-translate-y-0.5 hover:bg-white/[0.04] ${styles[type].border}`}
+      className={`rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:bg-surface-elevated ${styles[type].border}`}
     >
       {content}
     </Link>
@@ -401,18 +401,18 @@ function CreateEnvironmentDialog({
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
         New environment
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-md">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create environment</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Add a deployment stage to the selected project.
           </DialogDescription>
         </DialogHeader>
@@ -430,12 +430,12 @@ function CreateEnvironmentDialog({
               <Input
                 id="environment-name"
                 placeholder="Production"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('name')}
               />
 
               {errors.name && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -461,16 +461,16 @@ function CreateEnvironmentDialog({
                   }
                 }}
               >
-                <SelectTrigger className="h-10 w-full border-white/10 bg-white/[0.035]">
+                <SelectTrigger className="h-10 w-full border-border bg-card">
                   <SelectValue />
                 </SelectTrigger>
 
-                <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+                <SelectContent className="border border-border bg-popover text-foreground">
                   {environmentTypes.map((type) => (
                     <SelectItem
                       key={type}
                       value={type}
-                      className="capitalize focus:bg-white/[0.06]"
+                      className="capitalize focus:bg-surface-elevated"
                     >
                       {type}
                     </SelectItem>
@@ -488,23 +488,23 @@ function CreateEnvironmentDialog({
                 id="environment-description"
                 rows={3}
                 placeholder="Main customer-facing environment..."
-                className="resize-none border-white/10 bg-white/[0.035]"
+                className="resize-none border-border bg-card"
                 {...register('description')}
               />
 
               {errors.description && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.description.message}
                 </p>
               )}
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={createMutation.isPending}
               onClick={() => onOpenChange(false)}
             >
@@ -513,7 +513,7 @@ function CreateEnvironmentDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={createMutation.isPending}
             >
               {createMutation.isPending && (
@@ -532,22 +532,22 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6">
       <div className="max-w-sm text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-indigo-400/15 bg-indigo-500/10">
-          <FolderKanban className="size-6 text-indigo-300" />
+        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+          <FolderKanban className="size-6 text-primary" />
         </div>
 
-        <h1 className="mt-5 text-lg font-medium text-white">
+        <h1 className="mt-5 text-lg font-medium text-foreground">
           Select a project
         </h1>
 
-        <p className="mt-2 text-sm leading-6 text-zinc-600">
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
           Choose a project from the sidebar before managing
           environments.
         </p>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center justify-center rounded-lg bg-indigo-500 px-4 text-sm font-medium text-white hover:bg-indigo-400"
+          className="mt-6 inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
         >
           View projects
         </Link>
@@ -562,22 +562,22 @@ function EmptyEnvironments({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <div className="flex size-14 items-center justify-center rounded-2xl border border-indigo-400/15 bg-indigo-500/10">
-        <Boxes className="size-6 text-indigo-300" />
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <div className="flex size-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+        <Boxes className="size-6 text-primary" />
       </div>
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         Create your first environment
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Start with development, then add staging and
         production as your release process grows.
       </p>
 
       <Button
-        className="mt-6 bg-indigo-500 text-white hover:bg-indigo-400"
+        className="mt-6 bg-primary text-primary-foreground hover:bg-primary-hover"
         onClick={onCreate}
       >
         <Plus className="size-4" />
@@ -593,7 +593,7 @@ function EnvironmentSkeleton() {
       {Array.from({ length: 6 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-64 rounded-2xl bg-white/[0.04]"
+          className="h-64 rounded-2xl bg-surface-elevated"
         />
       ))}
     </div>

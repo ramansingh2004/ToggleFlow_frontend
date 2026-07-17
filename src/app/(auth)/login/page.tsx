@@ -105,15 +105,15 @@ export default function LoginPage() {
   return (
     <div>
       <div className="mb-8">
-        <p className="text-sm font-medium text-indigo-300">
+        <p className="text-sm font-medium text-primary">
           Welcome back
         </p>
 
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
           Sign in to ToggleFlow
         </h1>
 
-        <p className="mt-3 text-sm leading-6 text-zinc-500">
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
           Continue managing releases, flags, and environments.
         </p>
       </div>
@@ -122,14 +122,14 @@ export default function LoginPage() {
         <Button
           type="button"
           variant="outline"
-          className="h-11 border-white/10 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
+          className="h-11 border-border bg-card text-foreground hover:border-border hover:bg-surface-elevated hover:text-foreground"
           disabled={oauthLoading !== null}
           onClick={() => handleOAuth('google')}
         >
           {oauthLoading === 'google' ? (
             <LoaderCircle className="size-4 animate-spin" />
           ) : (
-            <span className="flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-blue-600">
+            <span className="flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-bold text-primary-foreground">
               G
             </span>
           )}
@@ -139,7 +139,7 @@ export default function LoginPage() {
         <Button
           type="button"
           variant="outline"
-          className="h-11 border-white/10 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
+          className="h-11 border-border bg-card text-foreground hover:border-border hover:bg-surface-elevated hover:text-foreground"
           disabled={oauthLoading !== null}
           onClick={() => handleOAuth('github')}
         >
@@ -153,11 +153,11 @@ export default function LoginPage() {
       </div>
 
       <div className="my-7 flex items-center gap-4">
-        <div className="h-px flex-1 bg-white/[0.08]" />
-        <span className="text-xs text-zinc-600">
+        <div className="h-px flex-1 bg-surface-elevated" />
+        <span className="text-xs text-muted-foreground">
           or continue with email
         </span>
-        <div className="h-px flex-1 bg-white/[0.08]" />
+        <div className="h-px flex-1 bg-surface-elevated" />
       </div>
 
       <form
@@ -168,7 +168,7 @@ export default function LoginPage() {
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className="text-sm text-zinc-300"
+            className="text-sm text-foreground-secondary"
           >
             Email
           </Label>
@@ -179,12 +179,12 @@ export default function LoginPage() {
             autoComplete="email"
             placeholder="developer@example.com"
             aria-invalid={Boolean(errors.email)}
-            className="h-11 border-white/10 bg-white/[0.035] text-white placeholder:text-zinc-700 focus-visible:border-indigo-400/50 focus-visible:ring-indigo-400/20"
+            className="h-11 border-border bg-card text-foreground placeholder:text-muted-foreground focus-visible:border-primary/30 focus-visible:ring-ring/40"
             {...register('email')}
           />
 
           {errors.email && (
-            <p className="text-xs text-red-400">
+            <p className="text-xs text-destructive">
               {errors.email.message}
             </p>
           )}
@@ -194,14 +194,14 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <Label
               htmlFor="password"
-              className="text-sm text-zinc-300"
+              className="text-sm text-foreground-secondary"
             >
               Password
             </Label>
 
             <Link
               href="/forgot-password"
-              className="text-xs text-zinc-500 transition-colors hover:text-indigo-300"
+              className="text-xs text-muted-foreground transition-colors hover:text-primary"
             >
               Forgot password?
             </Link>
@@ -214,7 +214,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               placeholder="Enter your password"
               aria-invalid={Boolean(errors.password)}
-              className="h-11 border-white/10 bg-white/[0.035] pr-11 text-white placeholder:text-zinc-700 focus-visible:border-indigo-400/50 focus-visible:ring-indigo-400/20"
+              className="h-11 border-border bg-card pr-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary/30 focus-visible:ring-ring/40"
               {...register('password')}
             />
 
@@ -225,7 +225,7 @@ export default function LoginPage() {
                   ? 'Hide password'
                   : 'Show password'
               }
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 transition-colors hover:text-zinc-300"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground-secondary"
               onClick={() =>
                 setShowPassword((current) => !current)
               }
@@ -239,7 +239,7 @@ export default function LoginPage() {
           </div>
 
           {errors.password && (
-            <p className="text-xs text-red-400">
+            <p className="text-xs text-destructive">
               {errors.password.message}
             </p>
           )}
@@ -247,7 +247,7 @@ export default function LoginPage() {
 
         <Button
           type="submit"
-          className="h-11 w-full bg-indigo-500 text-white shadow-[0_0_30px_rgba(99,102,241,0.2)] hover:bg-indigo-400"
+          className="h-11 w-full bg-primary text-primary-foreground hover:bg-primary-hover"
           disabled={
             loginMutation.isPending || oauthLoading !== null
           }
@@ -259,11 +259,11 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-7 text-center text-sm text-zinc-500">
+      <p className="mt-7 text-center text-sm text-muted-foreground">
         New to ToggleFlow?{' '}
         <Link
           href="/register"
-          className="font-medium text-indigo-300 transition-colors hover:text-indigo-200"
+          className="font-medium text-primary transition-colors hover:text-primary"
         >
           Create an account
         </Link>

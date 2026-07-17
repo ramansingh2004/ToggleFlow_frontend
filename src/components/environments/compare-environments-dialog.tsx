@@ -102,7 +102,7 @@ export function CompareEnvironmentsDialog({
         render={
           <Button
             variant="outline"
-            className="h-9 border-white/10 bg-white/[0.025]"
+            className="h-9 border-border bg-card"
             disabled={environments.length < 2}
           />
         }
@@ -111,13 +111,13 @@ export function CompareEnvironmentsDialog({
         Compare
       </DialogTrigger>
 
-      <DialogContent className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-4xl">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>
             Compare environments
           </DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Select two or more environments to compare
             feature availability.
           </DialogDescription>
@@ -137,15 +137,15 @@ export function CompareEnvironmentsDialog({
                 type="button"
                 className={
                   selected
-                    ? 'rounded-xl border border-indigo-400/30 bg-indigo-500/10 p-3 text-left'
-                    : 'rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 text-left transition-colors hover:bg-white/[0.05]'
+                    ? 'rounded-xl border border-primary/30 bg-primary-subtle p-3 text-left'
+                    : 'rounded-xl border border-border bg-card p-3 text-left transition-colors hover:bg-surface-elevated'
                 }
                 onClick={() =>
                   toggleEnvironment(environment.id!)
                 }
               >
                 <div className="flex items-center justify-between">
-                  <span className="truncate text-sm font-medium text-zinc-200">
+                  <span className="truncate text-sm font-medium text-foreground">
                     {environment.name ??
                       'Unnamed environment'}
                   </span>
@@ -153,8 +153,8 @@ export function CompareEnvironmentsDialog({
                   <span
                     className={
                       selected
-                        ? 'flex size-5 items-center justify-center rounded-full bg-indigo-500 text-white'
-                        : 'size-5 rounded-full border border-white/10'
+                        ? 'flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground'
+                        : 'size-5 rounded-full border border-border'
                     }
                   >
                     {selected && (
@@ -163,7 +163,7 @@ export function CompareEnvironmentsDialog({
                   </span>
                 </div>
 
-                <p className="mt-2 text-xs capitalize text-zinc-600">
+                <p className="mt-2 text-xs capitalize text-muted-foreground">
                   {environment.type ??
                     'development'}
                 </p>
@@ -172,13 +172,13 @@ export function CompareEnvironmentsDialog({
           })}
         </div>
 
-        <div className="flex items-center justify-between border-t border-white/[0.07] pt-4">
-          <p className="text-xs text-zinc-600">
+        <div className="flex items-center justify-between border-t border-border pt-4">
+          <p className="text-xs text-muted-foreground">
             {selectedIds.length} selected
           </p>
 
           <Button
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={
               selectedIds.length < 2 ||
               compareMutation.isPending
@@ -211,14 +211,14 @@ function ComparisonResult({
   const comparison = result.comparison ?? [];
 
   return (
-    <div className="border-t border-white/[0.07] pt-5">
+    <div className="border-t border-border pt-5">
       <div className="flex items-end justify-between">
         <div>
-          <h3 className="text-sm font-medium text-white">
+          <h3 className="text-sm font-medium text-foreground">
             Comparison result
           </h3>
 
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-muted-foreground">
             {result.totalFlags ?? comparison.length}{' '}
             unique feature flags
           </p>
@@ -226,15 +226,15 @@ function ComparisonResult({
       </div>
 
       {comparison.length === 0 ? (
-        <div className="mt-4 rounded-xl border border-white/[0.07] bg-white/[0.02] py-12 text-center text-sm text-zinc-600">
+        <div className="mt-4 rounded-xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
           No feature flags were found.
         </div>
       ) : (
-        <div className="mt-4 overflow-x-auto rounded-xl border border-white/[0.07]">
+        <div className="mt-4 overflow-x-auto rounded-xl border border-border">
           <table className="w-full min-w-[640px] border-collapse text-left">
             <thead>
-              <tr className="border-b border-white/[0.07] bg-white/[0.025]">
-                <th className="px-4 py-3 text-[10px] font-medium uppercase tracking-[0.12em] text-zinc-600">
+              <tr className="border-b border-border bg-card">
+                <th className="px-4 py-3 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
                   Flag key
                 </th>
 
@@ -242,7 +242,7 @@ function ComparisonResult({
                   (environment, index) => (
                     <th
                       key={environment.id ?? index}
-                      className="px-4 py-3 text-[10px] font-medium uppercase tracking-[0.12em] text-zinc-600"
+                      className="px-4 py-3 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground"
                     >
                       {environment.name ??
                         'Environment'}
@@ -252,11 +252,11 @@ function ComparisonResult({
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-white/[0.06]">
+            <tbody className="divide-y divide-border">
               {comparison.map((item) => (
                 <tr key={item.flagKey}>
                   <td className="px-4 py-3">
-                    <code className="text-xs text-zinc-400">
+                    <code className="text-xs text-foreground-secondary">
                       {item.flagKey}
                     </code>
                   </td>
@@ -308,7 +308,7 @@ function ComparisonState({
 }) {
   if (missing) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs text-zinc-700">
+      <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
         <Minus className="size-3.5" />
         Missing
       </span>
@@ -317,7 +317,7 @@ function ComparisonState({
 
   if (enabled) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400">
+      <span className="inline-flex items-center gap-1.5 text-xs text-success">
         <Check className="size-3.5" />
         Enabled
       </span>
@@ -325,7 +325,7 @@ function ComparisonState({
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500">
+    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
       <X className="size-3.5" />
       Disabled
     </span>

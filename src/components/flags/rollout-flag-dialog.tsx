@@ -224,7 +224,7 @@ const handleOpenChange = (
             type="button"
             variant="ghost"
             size="icon"
-            className="text-zinc-600 hover:bg-fuchsia-500/10 hover:text-fuchsia-300"
+            className="text-muted-foreground hover:bg-surface-elevated hover:text-foreground-secondary"
             disabled={!flag.id}
             title="Configure rollout"
           />
@@ -236,7 +236,7 @@ const handleOpenChange = (
         </span>
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-xl">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-xl">
         {confirmRollback ? (
           <RollbackConfirmation
             flagName={flag.name ?? 'this flag'}
@@ -253,7 +253,7 @@ const handleOpenChange = (
                 Gradual rollout
               </DialogTitle>
 
-              <DialogDescription className="text-zinc-500">
+              <DialogDescription className="text-muted-foreground">
                 Control what percentage of identified
                 application users receive{' '}
                 {flag.name ?? 'this feature'}.
@@ -262,13 +262,13 @@ const handleOpenChange = (
 
             {rolloutQuery.isPending && (
               <div className="space-y-4 py-4">
-                <Skeleton className="h-28 rounded-xl bg-white/[0.04]" />
-                <Skeleton className="h-16 rounded-xl bg-white/[0.04]" />
+                <Skeleton className="h-28 rounded-xl bg-surface-elevated" />
+                <Skeleton className="h-16 rounded-xl bg-surface-elevated" />
               </div>
             )}
 
             {rolloutQuery.isError && (
-              <div className="my-4 rounded-xl border border-red-400/10 bg-red-500/[0.04] p-4 text-sm text-red-300">
+              <div className="my-4 rounded-xl border border-destructive/30 bg-destructive-subtle p-4 text-sm text-destructive">
                 Unable to load rollout configuration.
               </div>
             )}
@@ -276,15 +276,15 @@ const handleOpenChange = (
             {rolloutQuery.isSuccess && stats && (
               <div className="space-y-6 py-3">
                 {!flag.enabled && (
-                  <div className="flex gap-3 rounded-xl border border-amber-400/15 bg-amber-500/[0.06] p-4">
-                    <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-300" />
+                  <div className="flex gap-3 rounded-xl border border-warning/30 bg-warning-subtle p-4">
+                    <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" />
 
                     <div>
-                      <p className="text-xs font-medium text-amber-200">
+                      <p className="text-xs font-medium text-warning">
                         Master flag is disabled
                       </p>
 
-                      <p className="mt-1 text-xs leading-5 text-amber-200/50">
+                      <p className="mt-1 text-xs leading-5 text-warning">
                         The percentage will be saved, but no
                         users receive the feature until the
                         flag is enabled.
@@ -293,14 +293,14 @@ const handleOpenChange = (
                   </div>
                 )}
 
-                <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+                <div className="rounded-2xl border border-border bg-card p-5">
                   <div className="flex items-end justify-between gap-4">
                     <div>
-                      <p className="text-xs text-zinc-600">
+                      <p className="text-xs text-muted-foreground">
                         Rollout percentage
                       </p>
 
-                      <p className="mt-2 text-3xl font-semibold tracking-tight text-white">
+                      <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
                         {percentage}%
                       </p>
                     </div>
@@ -308,8 +308,8 @@ const handleOpenChange = (
                     <span
                       className={
                         stats.isActive
-                          ? 'rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2.5 py-1 text-[10px] text-emerald-300'
-                          : 'rounded-full border border-zinc-400/10 bg-zinc-500/10 px-2.5 py-1 text-[10px] text-zinc-500'
+                          ? 'rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-[10px] text-success'
+                          : 'rounded-full border border-border bg-surface-elevated px-2.5 py-1 text-[10px] text-muted-foreground'
                       }
                     >
                       {stats.isActive
@@ -326,7 +326,7 @@ const handleOpenChange = (
                       step={1}
                       value={percentage}
                       aria-label="Rollout percentage"
-                      className="h-2 w-full cursor-pointer accent-indigo-500"
+                      className="h-2 w-full cursor-pointer accent-primary"
                       onChange={(event) =>
                         setPercentageOverride(
                           Number(event.target.value)
@@ -346,8 +346,8 @@ const handleOpenChange = (
                             type="button"
                             className={
                               percentage === preset
-                                ? 'rounded-lg border border-indigo-400/25 bg-indigo-500/10 px-2.5 py-1.5 text-xs text-indigo-300'
-                                : 'rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-1.5 text-xs text-zinc-600 hover:text-zinc-300'
+                                ? 'rounded-lg border border-primary/30 bg-primary-subtle px-2.5 py-1.5 text-xs text-primary'
+                                : 'rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground-secondary'
                             }
                             onClick={() =>
                               setPercentageOverride(preset)
@@ -372,7 +372,7 @@ const handleOpenChange = (
                           max={100}
                           step={1}
                           value={percentage}
-                          className="border-white/10 bg-black/20 pr-7"
+                          className="border-border bg-background pr-7"
                           onChange={(event) => {
                             const value = Number(
                               event.target.value
@@ -387,7 +387,7 @@ const handleOpenChange = (
                           }}
                         />
 
-                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-600">
+                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                           %
                         </span>
                       </div>
@@ -419,13 +419,13 @@ const handleOpenChange = (
                   />
                 </div>
 
-                <div className="flex items-center justify-between gap-4 rounded-xl border border-red-400/10 bg-red-500/[0.025] p-4">
+                <div className="flex items-center justify-between gap-4 rounded-xl border border-destructive/30 bg-destructive-subtle p-4">
                   <div>
-                    <p className="text-xs font-medium text-red-300">
+                    <p className="text-xs font-medium text-destructive">
                       Emergency rollback
                     </p>
 
-                    <p className="mt-1 text-xs text-zinc-600">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       Disable the flag, reset rollout to 0%,
                       and cancel its schedule.
                     </p>
@@ -435,7 +435,7 @@ const handleOpenChange = (
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="shrink-0 border-red-400/20 bg-transparent text-red-300 hover:bg-red-500/10"
+                    className="shrink-0 border-destructive/30 bg-transparent text-destructive hover:bg-destructive-subtle"
                     onClick={() =>
                       setConfirmRollback(true)
                     }
@@ -447,11 +447,11 @@ const handleOpenChange = (
               </div>
             )}
 
-            <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+            <DialogFooter className="border-border bg-card">
               <Button
                 type="button"
                 variant="outline"
-                className="border-white/10 bg-transparent"
+                className="border-border bg-transparent"
                 disabled={isPending}
                 onClick={closeDialog}
               >
@@ -460,7 +460,7 @@ const handleOpenChange = (
 
               <Button
                 type="button"
-                className="bg-indigo-500 text-white hover:bg-indigo-400"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover"
                 disabled={
                   isPending ||
                   rolloutQuery.isPending ||
@@ -495,31 +495,31 @@ function RollbackConfirmation({
   return (
     <>
       <DialogHeader>
-        <div className="mb-3 flex size-10 items-center justify-center rounded-full bg-red-500/10">
-          <AlertTriangle className="size-5 text-red-400" />
+        <div className="mb-3 flex size-10 items-center justify-center rounded-full bg-destructive-subtle">
+          <AlertTriangle className="size-5 text-destructive" />
         </div>
 
         <DialogTitle>
           Emergency rollback?
         </DialogTitle>
 
-        <DialogDescription className="text-zinc-500">
+        <DialogDescription className="text-muted-foreground">
           {flagName} will immediately be disabled for every
           user. Its rollout will be reset to 0%, and any
           scheduled change will be cancelled.
         </DialogDescription>
       </DialogHeader>
 
-      <div className="rounded-xl border border-red-400/10 bg-red-500/[0.04] p-4 text-xs leading-5 text-red-200/60">
+      <div className="rounded-xl border border-destructive/30 bg-destructive-subtle p-4 text-xs leading-5 text-destructive">
         Use this action when the released feature is causing
         errors or unexpected behavior.
       </div>
 
-      <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+      <DialogFooter className="border-border bg-card">
         <Button
           type="button"
           variant="outline"
-          className="border-white/10 bg-transparent"
+          className="border-border bg-transparent"
           disabled={pending}
           onClick={onCancel}
         >
@@ -528,7 +528,7 @@ function RollbackConfirmation({
 
         <Button
           type="button"
-          className="bg-red-500 text-white hover:bg-red-400"
+          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           disabled={pending}
           onClick={onConfirm}
         >
@@ -554,16 +554,16 @@ function InformationCard({
   value: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+    <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-center gap-2">
-        <Icon className="size-3.5 text-indigo-300" />
+        <Icon className="size-3.5 text-primary" />
 
-        <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+        <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
           {label}
         </p>
       </div>
 
-      <p className="mt-3 text-sm font-medium text-zinc-300">
+      <p className="mt-3 text-sm font-medium text-foreground-secondary">
         {value}
       </p>
     </div>

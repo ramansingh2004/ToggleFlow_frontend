@@ -42,15 +42,15 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
 function DashboardLoader() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#07090f] text-white">
+    <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
       <div className="text-center">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10">
-          <Braces className="size-5 text-indigo-300" />
+        <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+          <Braces className="size-5 text-primary" />
         </div>
 
-        <LoaderCircle className="mx-auto mt-6 size-5 animate-spin text-indigo-300" />
+        <LoaderCircle className="mx-auto mt-6 size-5 animate-spin text-primary" />
 
-        <p className="mt-3 text-sm text-zinc-500">
+        <p className="mt-3 text-sm text-muted-foreground">
           Loading your workspace…
         </p>
       </div>

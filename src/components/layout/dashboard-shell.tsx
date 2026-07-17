@@ -155,7 +155,7 @@ export function DashboardShell({
   };
 
   return (
-    <div className="min-h-screen bg-[#07090f] text-zinc-100">
+    <div className="min-h-screen bg-background text-foreground">
       {isSidebarOpen && (
         <button
           type="button"
@@ -167,27 +167,27 @@ export function DashboardShell({
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col border-r border-white/[0.07] bg-[#090c13]/95 backdrop-blur-xl transition-transform duration-300 lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col border-r border-border bg-surface/95 backdrop-blur-xl transition-transform duration-300 lg:translate-x-0',
           isSidebarOpen
             ? 'translate-x-0'
             : '-translate-x-full'
         )}
       >
-        <div className="flex h-16 items-center justify-between border-b border-white/[0.07] px-5">
+        <div className="flex h-16 items-center justify-between border-b border-border px-5">
           <Link
             href="/dashboard"
             className="flex items-center gap-3"
             onClick={closeSidebar}
           >
-            <div className="flex size-9 items-center justify-center rounded-xl border border-indigo-400/25 bg-indigo-500/10 shadow-[0_0_24px_rgba(99,102,241,0.12)]">
-              <Braces className="size-4 text-indigo-300" />
+            <div className="flex size-9 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+              <Braces className="size-4 text-primary" />
             </div>
 
             <div>
-              <p className="text-sm font-semibold tracking-tight text-white">
+              <p className="text-sm font-semibold tracking-tight text-foreground">
                 ToggleFlow
               </p>
-              <p className="text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
                 Control plane
               </p>
             </div>
@@ -196,14 +196,14 @@ export function DashboardShell({
           <button
             type="button"
             aria-label="Close sidebar"
-            className="text-zinc-500 hover:text-white lg:hidden"
+            className="text-muted-foreground hover:text-foreground lg:hidden"
             onClick={closeSidebar}
           >
             <X className="size-5" />
           </button>
         </div>
 
-        <div className="border-b border-white/[0.07] p-4">
+        <div className="border-b border-border p-4">
           <ProjectSelector />
         </div>
 
@@ -214,9 +214,9 @@ export function DashboardShell({
             onNavigate={closeSidebar}
           />
 
-          <div className="my-5 h-px bg-white/[0.06]" />
+          <div className="my-5 h-px bg-surface-elevated" />
 
-          <p className="mb-2 px-3 text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-700">
+          <p className="mb-2 px-3 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             Manage
           </p>
 
@@ -227,18 +227,18 @@ export function DashboardShell({
           />
         </nav>
 
-        <div className="border-t border-white/[0.07] p-3">
+        <div className="border-t border-border p-3">
           <div className="flex items-center gap-3 rounded-xl px-2 py-2">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-indigo-400/20 bg-indigo-500/10 text-xs font-semibold text-indigo-200">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary-subtle text-xs font-semibold text-primary">
               {user?.username?.slice(0, 2).toUpperCase() ??
                 'TF'}
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-medium text-zinc-200">
+              <p className="truncate text-xs font-medium text-foreground">
                 {user?.username ?? 'Developer'}
               </p>
-              <p className="truncate text-[11px] text-zinc-600">
+              <p className="truncate text-[11px] text-muted-foreground">
                 {user?.email ?? ''}
               </p>
             </div>
@@ -246,7 +246,7 @@ export function DashboardShell({
             <button
               type="button"
               aria-label="Sign out"
-              className="rounded-lg p-2 text-zinc-600 transition-colors hover:bg-white/[0.06] hover:text-red-400"
+              className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-destructive"
               disabled={logoutMutation.isPending}
               onClick={handleLogout}
             >
@@ -257,13 +257,13 @@ export function DashboardShell({
       </aside>
 
       <div className="lg:pl-[270px]">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/[0.07] bg-[#07090f]/80 px-4 backdrop-blur-xl sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur-xl sm:px-6">
           <div className="flex items-center gap-3">
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="text-zinc-500 hover:bg-white/[0.06] hover:text-white lg:hidden"
+              className="text-muted-foreground hover:bg-surface-elevated hover:text-foreground lg:hidden"
               onClick={openSidebar}
             >
               <Menu className="size-5" />
@@ -271,10 +271,10 @@ export function DashboardShell({
             </Button>
 
             <div>
-              <p className="text-xs text-zinc-600">
+              <p className="text-xs text-muted-foreground">
                 Workspace
               </p>
-              <p className="text-sm font-medium text-zinc-200">
+              <p className="text-sm font-medium text-foreground">
                 Personal workspace
               </p>
             </div>
@@ -283,10 +283,10 @@ export function DashboardShell({
           <button
             type="button"
             aria-label="Notifications"
-            className="relative rounded-xl border border-white/[0.07] bg-white/[0.025] p-2.5 text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-white"
+            className="relative rounded-xl border border-border bg-card p-2.5 text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground"
           >
             <Bell className="size-4" />
-            <span className="absolute right-2 top-2 size-1.5 rounded-full bg-indigo-400" />
+            <span className="absolute right-2 top-2 size-1.5 rounded-full bg-primary" />
           </button>
         </header>
 
@@ -334,8 +334,8 @@ function NavigationGroup({
             className={cn(
               'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors',
               isActive
-                ? 'bg-indigo-500/10 text-indigo-200'
-                : 'text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-200'
+                ? 'bg-primary-subtle text-primary'
+                : 'text-muted-foreground hover:bg-surface-elevated hover:text-foreground'
             )}
             onClick={onNavigate}
           >
@@ -343,8 +343,8 @@ function NavigationGroup({
               className={cn(
                 'size-4',
                 isActive
-                  ? 'text-indigo-300'
-                  : 'text-zinc-600 group-hover:text-zinc-400'
+                  ? 'text-primary'
+                  : 'text-muted-foreground group-hover:text-foreground-secondary'
               )}
             />
             {item.label}

@@ -103,15 +103,15 @@ export function FlagsPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Release control
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Feature flags
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Enable and disable features without deploying
               new code.
             </p>
@@ -126,19 +126,19 @@ export function FlagsPage() {
 
         <div className="mt-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-600" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
             <Input
               value={search}
               placeholder="Search by name or key..."
-              className="h-10 border-white/[0.08] bg-white/[0.025] pl-10"
+              className="h-10 border-border bg-card pl-10"
               onChange={(event) =>
                 setSearch(event.target.value)
               }
             />
           </div>
 
-          <div className="flex rounded-xl border border-white/[0.07] bg-white/[0.02] p-1">
+          <div className="flex rounded-xl border border-border bg-card p-1">
             {(['all', 'enabled', 'disabled'] as const).map(
               (value) => (
                 <button
@@ -146,8 +146,8 @@ export function FlagsPage() {
                   type="button"
                   className={
                     filter === value
-                      ? 'rounded-lg bg-white/[0.08] px-3 py-1.5 text-xs capitalize text-zinc-200'
-                      : 'rounded-lg px-3 py-1.5 text-xs capitalize text-zinc-600 transition-colors hover:text-zinc-300'
+                      ? 'rounded-lg bg-primary-subtle px-3 py-1.5 text-xs capitalize text-primary'
+                      : 'rounded-lg px-3 py-1.5 text-xs capitalize text-muted-foreground transition-colors hover:text-foreground-secondary'
                   }
                   onClick={() => setFilter(value)}
                 >
@@ -162,7 +162,7 @@ export function FlagsPage() {
           {flagsQuery.isPending && <FlagsSkeleton />}
 
           {flagsQuery.isError && (
-            <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] px-6 py-16 text-center text-sm text-zinc-400">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle px-6 py-16 text-center text-sm text-foreground-secondary">
               Unable to load feature flags.
             </div>
           )}
@@ -176,20 +176,20 @@ export function FlagsPage() {
           {flagsQuery.isSuccess &&
             flags.length > 0 &&
             filteredFlags.length === 0 && (
-              <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-6 py-16 text-center text-sm text-zinc-600">
+              <div className="rounded-2xl border border-border bg-card px-6 py-16 text-center text-sm text-muted-foreground">
                 No flags match the current filters.
               </div>
             )}
 
           {filteredFlags.length > 0 && (
-            <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-              <div className="hidden grid-cols-[1fr_1fr_120px] border-b border-white/[0.07] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-700 md:grid">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card">
+              <div className="hidden grid-cols-[1fr_1fr_120px] border-b border-border px-5 py-3 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground md:grid">
                 <span>Flag</span>
                 <span>Key</span>
                 <span className="text-right">Status</span>
               </div>
 
-              <div className="divide-y divide-white/[0.06]">
+              <div className="divide-y divide-border">
                 {filteredFlags.map((flag, index) => (
                   <FlagRow
                     key={flag.id ?? index}
@@ -276,31 +276,31 @@ function FlagRow({
   };
 
   return (
-    <div className="grid gap-4 px-5 py-4 transition-colors hover:bg-white/[0.02] md:grid-cols-[1fr_1fr_120px] md:items-center">
+    <div className="grid gap-4 px-5 py-4 transition-colors hover:bg-card md:grid-cols-[1fr_1fr_120px] md:items-center">
       <div className="flex min-w-0 items-center gap-3">
         <div
           className={
             displayedValue
-              ? 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-500/10'
-              : 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.03]'
+              ? 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-success/30 bg-success-subtle'
+              : 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card'
           }
         >
           <Flag
             className={
               displayedValue
-                ? 'size-4 text-emerald-300'
-                : 'size-4 text-zinc-600'
+                ? 'size-4 text-success'
+                : 'size-4 text-muted-foreground'
             }
           />
         </div>
 
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-zinc-200">
+          <p className="truncate text-sm font-medium text-foreground">
             {flag.name ?? 'Unnamed flag'}
           </p>
 
           {(flag.segmentIds?.length ?? 0) > 0 && (
-            <p className="mt-1 text-[11px] text-indigo-400/70">
+            <p className="mt-1 text-[11px] text-primary">
               {flag.segmentIds?.length}{' '}
               {flag.segmentIds?.length === 1
                 ? 'target segment'
@@ -308,13 +308,13 @@ function FlagRow({
             </p>
           )}
 
-          <p className="mt-1 text-xs text-zinc-700 md:hidden">
+          <p className="mt-1 text-xs text-muted-foreground md:hidden">
             {displayedValue ? 'Enabled' : 'Disabled'}
           </p>
         </div>
       </div>
 
-      <code className="truncate rounded-lg bg-white/[0.035] px-2.5 py-1.5 text-xs text-zinc-500">
+      <code className="truncate rounded-lg bg-card px-2.5 py-1.5 text-xs text-muted-foreground">
         {flag.key ?? 'no_key'}
       </code>
 
@@ -322,8 +322,8 @@ function FlagRow({
         <span
           className={
             displayedValue
-              ? 'text-xs text-emerald-400'
-              : 'text-xs text-zinc-600'
+              ? 'text-xs text-success'
+              : 'text-xs text-muted-foreground'
           }
         >
           {displayedValue ? 'On' : 'Off'}
@@ -347,7 +347,7 @@ function FlagRow({
         <Switch
           checked={displayedValue}
           disabled={!flag.id || isPending}
-          className="data-checked:bg-indigo-500"
+          className="data-checked:bg-primary"
           onCheckedChange={handleToggle}
         />
       </div>
@@ -472,18 +472,18 @@ const selectedSegmentIds = watch('segmentIds');
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
         New flag
       </DialogTrigger>
 
-      <DialogContent className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-lg">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Create feature flag</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             The flag will be disabled by default.
           </DialogDescription>
         </DialogHeader>
@@ -499,13 +499,13 @@ const selectedSegmentIds = watch('segmentIds');
               <Input
                 id="flag-name"
                 placeholder="Dark mode"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('name')}
                 onChange={handleNameChange}
               />
 
               {errors.name && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -517,12 +517,12 @@ const selectedSegmentIds = watch('segmentIds');
               <Input
                 id="flag-key"
                 placeholder="dark_mode"
-                className="font-mono border-white/10 bg-white/[0.035]"
+                className="font-mono border-border bg-card"
                 {...register('key')}
               />
 
               {errors.key && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.key.message}
                 </p>
               )}
@@ -537,12 +537,12 @@ const selectedSegmentIds = watch('segmentIds');
                 id="flag-description"
                 rows={3}
                 placeholder="Controls the new dark theme..."
-                className="resize-none border-white/10 bg-white/[0.035]"
+                className="resize-none border-border bg-card"
                 {...register('description')}
               />
 
               {errors.description && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.description.message}
                 </p>
               )}
@@ -553,7 +553,7 @@ const selectedSegmentIds = watch('segmentIds');
   <div>
     <Label>Target segments</Label>
 
-    <p className="mt-1 text-xs leading-5 text-zinc-600">
+    <p className="mt-1 text-xs leading-5 text-muted-foreground">
       Leave all users selected or restrict this flag to
       users matching one or more segments.
     </p>
@@ -579,24 +579,24 @@ const selectedSegmentIds = watch('segmentIds');
   </div>
 
   {segmentsQuery.isError && (
-    <p className="text-xs text-red-400">
+    <p className="text-xs text-destructive">
       Unable to load project segments.
     </p>
   )}
 
   {errors.segmentIds && (
-    <p className="text-xs text-red-400">
+    <p className="text-xs text-destructive">
       {errors.segmentIds.message}
     </p>
   )}
 </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={createMutation.isPending}
               onClick={() => {
                 reset();
@@ -607,7 +607,7 @@ const selectedSegmentIds = watch('segmentIds');
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={createMutation.isPending}
             >
               {createMutation.isPending && (
@@ -626,22 +626,22 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6">
       <div className="max-w-sm text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-indigo-400/15 bg-indigo-500/10">
-          <FolderKanban className="size-6 text-indigo-300" />
+        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+          <FolderKanban className="size-6 text-primary" />
         </div>
 
-        <h1 className="mt-5 text-lg font-medium text-white">
+        <h1 className="mt-5 text-lg font-medium text-foreground">
           Select a project
         </h1>
 
-        <p className="mt-2 text-sm leading-6 text-zinc-600">
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
           Choose a project from the sidebar before managing
           feature flags.
         </p>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center justify-center rounded-lg bg-indigo-500 px-4 text-sm font-medium text-white transition-colors hover:bg-indigo-400"
+          className="mt-6 inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
         >
           View projects
         </Link>
@@ -656,22 +656,22 @@ function EmptyFlags({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <div className="flex size-14 items-center justify-center rounded-2xl border border-indigo-400/15 bg-indigo-500/10">
-        <Flag className="size-6 text-indigo-300" />
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <div className="flex size-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+        <Flag className="size-6 text-primary" />
       </div>
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         Create your first feature flag
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Add a release control and safely enable it whenever
         you are ready.
       </p>
 
       <Button
-        className="mt-6 bg-indigo-500 text-white hover:bg-indigo-400"
+        className="mt-6 bg-primary text-primary-foreground hover:bg-primary-hover"
         onClick={onCreate}
       >
         <Plus className="size-4" />
@@ -687,7 +687,7 @@ function FlagsSkeleton() {
       {Array.from({ length: 6 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-20 rounded-xl bg-white/[0.04]"
+          className="h-20 rounded-xl bg-surface-elevated"
         />
       ))}
     </div>

@@ -112,15 +112,15 @@ export default function RegisterPage() {
   return (
     <div>
       <div className="mb-7">
-        <p className="text-sm font-medium text-indigo-300">
+        <p className="text-sm font-medium text-primary">
           Start shipping safely
         </p>
 
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
           Create your account
         </h1>
 
-        <p className="mt-3 text-sm leading-6 text-zinc-500">
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
           Set up your ToggleFlow workspace in a few seconds.
         </p>
       </div>
@@ -129,14 +129,14 @@ export default function RegisterPage() {
         <Button
           type="button"
           variant="outline"
-          className="h-11 border-white/10 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
+          className="h-11 border-border bg-card text-foreground hover:border-border hover:bg-surface-elevated hover:text-foreground"
           disabled={oauthLoading !== null}
           onClick={() => handleOAuth('google')}
         >
           {oauthLoading === 'google' ? (
             <LoaderCircle className="size-4 animate-spin" />
           ) : (
-            <span className="flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-blue-600">
+            <span className="flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-bold text-primary-foreground">
               G
             </span>
           )}
@@ -146,7 +146,7 @@ export default function RegisterPage() {
         <Button
           type="button"
           variant="outline"
-          className="h-11 border-white/10 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
+          className="h-11 border-border bg-card text-foreground hover:border-border hover:bg-surface-elevated hover:text-foreground"
           disabled={oauthLoading !== null}
           onClick={() => handleOAuth('github')}
         >
@@ -160,11 +160,11 @@ export default function RegisterPage() {
       </div>
 
       <div className="my-6 flex items-center gap-4">
-        <div className="h-px flex-1 bg-white/[0.08]" />
-        <span className="text-xs text-zinc-600">
+        <div className="h-px flex-1 bg-surface-elevated" />
+        <span className="text-xs text-muted-foreground">
           or register with email
         </span>
-        <div className="h-px flex-1 bg-white/[0.08]" />
+        <div className="h-px flex-1 bg-surface-elevated" />
       </div>
 
       <form
@@ -211,14 +211,14 @@ export default function RegisterPage() {
           registration={register('confirmPassword')}
         />
 
-        <p className="text-xs leading-5 text-zinc-600">
+        <p className="text-xs leading-5 text-muted-foreground">
           Use at least 8 characters with uppercase,
           lowercase, number, and special character.
         </p>
 
         <Button
           type="submit"
-          className="h-11 w-full bg-indigo-500 text-white shadow-[0_0_30px_rgba(99,102,241,0.2)] hover:bg-indigo-400"
+          className="h-11 w-full bg-primary text-primary-foreground hover:bg-primary-hover"
           disabled={
             registerMutation.isPending ||
             oauthLoading !== null
@@ -231,11 +231,11 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-zinc-500">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         Already have an account?{' '}
         <Link
           href="/login"
-          className="font-medium text-indigo-300 transition-colors hover:text-indigo-200"
+          className="font-medium text-primary transition-colors hover:text-primary"
         >
           Sign in
         </Link>
@@ -267,7 +267,7 @@ function FormField({
     <div className="space-y-2">
       <Label
         htmlFor={id}
-        className="text-sm text-zinc-300"
+        className="text-sm text-foreground-secondary"
       >
         {label}
       </Label>
@@ -278,12 +278,12 @@ function FormField({
         autoComplete={autoComplete}
         placeholder={placeholder}
         aria-invalid={Boolean(error)}
-        className="h-11 border-white/10 bg-white/[0.035] text-white placeholder:text-zinc-700 focus-visible:border-indigo-400/50 focus-visible:ring-indigo-400/20"
+        className="h-11 border-border bg-card text-foreground placeholder:text-muted-foreground focus-visible:border-primary/30 focus-visible:ring-ring/40"
         {...registration}
       />
 
       {error && (
-        <p className="text-xs text-red-400">{error}</p>
+        <p className="text-xs text-destructive">{error}</p>
       )}
     </div>
   );
@@ -314,7 +314,7 @@ function PasswordField({
     <div className="space-y-2">
       <Label
         htmlFor={id}
-        className="text-sm text-zinc-300"
+        className="text-sm text-foreground-secondary"
       >
         {label}
       </Label>
@@ -326,7 +326,7 @@ function PasswordField({
           autoComplete={autoComplete}
           placeholder="Enter your password"
           aria-invalid={Boolean(error)}
-          className="h-11 border-white/10 bg-white/[0.035] pr-11 text-white placeholder:text-zinc-700 focus-visible:border-indigo-400/50 focus-visible:ring-indigo-400/20"
+          className="h-11 border-border bg-card pr-11 text-foreground placeholder:text-muted-foreground focus-visible:border-primary/30 focus-visible:ring-ring/40"
           {...registration}
         />
 
@@ -337,7 +337,7 @@ function PasswordField({
               ? 'Hide password'
               : 'Show password'
           }
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 transition-colors hover:text-zinc-300"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground-secondary"
           onClick={() =>
             setShowPassword((current) => !current)
           }
@@ -351,7 +351,7 @@ function PasswordField({
       </div>
 
       {error && (
-        <p className="text-xs text-red-400">{error}</p>
+        <p className="text-xs text-destructive">{error}</p>
       )}
     </div>
   );

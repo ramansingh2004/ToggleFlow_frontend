@@ -32,16 +32,16 @@ export function SegmentPicker({
 
   if (loading) {
     return (
-      <div className="h-24 animate-pulse rounded-xl bg-white/[0.04]" />
+      <div className="h-24 animate-pulse rounded-xl bg-surface-elevated" />
     );
   }
 
   if (segments.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-white/[0.09] bg-white/[0.02] p-4 text-center">
-        <Layers3 className="mx-auto size-5 text-zinc-600" />
+      <div className="rounded-xl border border-dashed border-border bg-card p-4 text-center">
+        <Layers3 className="mx-auto size-5 text-muted-foreground" />
 
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-muted-foreground">
           No segments have been created for this project.
         </p>
       </div>
@@ -56,23 +56,23 @@ export function SegmentPicker({
         className={cn(
           'flex w-full items-center justify-between rounded-xl border px-3 py-3 text-left transition-colors',
           selectedIds.length === 0
-            ? 'border-indigo-400/25 bg-indigo-500/10'
-            : 'border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04]'
+            ? 'border-primary/30 bg-primary-subtle'
+            : 'border-border bg-card hover:bg-surface-elevated'
         )}
         onClick={() => onChange([])}
       >
         <div>
-          <p className="text-sm text-zinc-300">
+          <p className="text-sm text-foreground-secondary">
             All users
           </p>
 
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-muted-foreground">
             Do not restrict this flag by segment.
           </p>
         </div>
 
         {selectedIds.length === 0 && (
-          <Check className="size-4 text-indigo-300" />
+          <Check className="size-4 text-primary" />
         )}
       </button>
 
@@ -87,17 +87,17 @@ export function SegmentPicker({
             className={cn(
               'flex w-full items-center justify-between rounded-xl border px-3 py-3 text-left transition-colors',
               selected
-                ? 'border-indigo-400/25 bg-indigo-500/10'
-                : 'border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04]'
+                ? 'border-primary/30 bg-primary-subtle'
+                : 'border-border bg-card hover:bg-surface-elevated'
             )}
             onClick={() => toggleSegment(segment.id)}
           >
             <div className="min-w-0">
-              <p className="truncate text-sm text-zinc-300">
+              <p className="truncate text-sm text-foreground-secondary">
                 {segment.name ?? 'Unnamed segment'}
               </p>
 
-              <p className="mt-1 text-xs text-zinc-600">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {segment.ruleCount ?? 0}{' '}
                 {(segment.ruleCount ?? 0) === 1
                   ? 'rule'
@@ -109,8 +109,8 @@ export function SegmentPicker({
               className={cn(
                 'flex size-5 shrink-0 items-center justify-center rounded-md border',
                 selected
-                  ? 'border-indigo-400/30 bg-indigo-500 text-white'
-                  : 'border-white/10'
+                  ? 'border-primary/30 bg-primary text-primary-foreground'
+                  : 'border-border'
               )}
             >
               {selected && (

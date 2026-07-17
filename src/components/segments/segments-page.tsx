@@ -73,15 +73,15 @@ export function SegmentsPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Audience targeting
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Segments
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Group users using reusable targeting rules.
             </p>
           </div>
@@ -99,7 +99,7 @@ export function SegmentsPage() {
           )}
 
           {segmentsQuery.isError && (
-            <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-500">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
               Unable to load segments.
             </div>
           )}
@@ -136,18 +136,18 @@ function SegmentCard({
   projectId: string;
 }) {
   return (
-    <article className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 transition-colors hover:border-indigo-400/20">
+    <article className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/30">
       <div className="flex items-start gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-cyan-400/15 bg-cyan-500/10">
-          <ListFilter className="size-4 text-cyan-300" />
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+          <ListFilter className="size-4 text-primary" />
         </div>
 
         <div className="min-w-0">
-          <h2 className="truncate text-sm font-medium text-zinc-200">
+          <h2 className="truncate text-sm font-medium text-foreground">
             {segment.name}
           </h2>
 
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-muted-foreground">
             {segment.ruleCount ?? segment.rules.length}{' '}
             {segment.rules.length === 1
               ? 'rule'
@@ -157,7 +157,7 @@ function SegmentCard({
         </div>
       </div>
 
-      <p className="mt-5 min-h-10 text-sm leading-5 text-zinc-600">
+      <p className="mt-5 min-h-10 text-sm leading-5 text-muted-foreground">
         {segment.description ||
           'No segment description provided.'}
       </p>
@@ -171,19 +171,19 @@ function SegmentCard({
         ))}
 
         {segment.rules.length > 3 && (
-          <p className="px-2 text-xs text-zinc-700">
+          <p className="px-2 text-xs text-muted-foreground">
             +{segment.rules.length - 3} more rules
           </p>
         )}
       </div>
 
-      <div className="mt-5 flex items-end justify-between gap-4 border-t border-white/[0.06] pt-4">
+      <div className="mt-5 flex items-end justify-between gap-4 border-t border-border pt-4">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.12em] text-zinc-700">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             Updated
           </p>
 
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             {formatDate(segment.updatedAt)}
           </p>
         </div>
@@ -212,17 +212,17 @@ function RulePreview({
     : rule.value;
 
   return (
-    <div className="flex min-w-0 items-center gap-2 rounded-lg border border-white/[0.06] bg-black/20 px-3 py-2">
-      <Braces className="size-3.5 shrink-0 text-indigo-300" />
+    <div className="flex min-w-0 items-center gap-2 rounded-lg border border-border bg-background px-3 py-2">
+      <Braces className="size-3.5 shrink-0 text-primary" />
 
-      <code className="min-w-0 truncate text-[11px] text-zinc-500">
-        <span className="text-cyan-300">
+      <code className="min-w-0 truncate text-[11px] text-muted-foreground">
+        <span className="text-primary">
           {attribute}
         </span>{' '}
-        <span className="text-zinc-700">
+        <span className="text-muted-foreground">
           {formatOperator(rule.operator)}
         </span>{' '}
-        <span className="text-fuchsia-300">
+        <span className="text-foreground-secondary">
           {value}
         </span>
       </code>
@@ -346,18 +346,18 @@ function CreateSegmentDialog({
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
         New segment
       </DialogTrigger>
 
-      <DialogContent className="max-h-[88vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-3xl">
+      <DialogContent className="max-h-[88vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Create segment</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Every rule uses AND logic. A user must match all
             rules to enter this segment.
           </DialogDescription>
@@ -376,12 +376,12 @@ function CreateSegmentDialog({
               <Input
                 id="segment-name"
                 placeholder="Beta users"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('name')}
               />
 
               {errors.name && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -390,7 +390,7 @@ function CreateSegmentDialog({
             <div className="space-y-2">
               <Label htmlFor="segment-description">
                 Description
-                <span className="ml-1 text-zinc-600">
+                <span className="ml-1 text-muted-foreground">
                   (optional)
                 </span>
               </Label>
@@ -400,7 +400,7 @@ function CreateSegmentDialog({
                 rows={3}
                 maxLength={500}
                 placeholder="Users enrolled in beta testing"
-                className="w-full resize-none rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 outline-none placeholder:text-zinc-700 focus:border-indigo-400/40"
+                className="w-full resize-none rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground-secondary outline-none placeholder:text-muted-foreground focus:border-primary/30"
                 {...register('description')}
               />
             </div>
@@ -410,7 +410,7 @@ function CreateSegmentDialog({
                 <div>
                   <Label>Targeting rules</Label>
 
-                  <p className="mt-1 text-xs text-zinc-600">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     All rules must evaluate to true.
                   </p>
                 </div>
@@ -418,7 +418,7 @@ function CreateSegmentDialog({
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-white/10 bg-transparent text-zinc-400"
+                  className="border-border bg-transparent text-foreground-secondary"
                   onClick={() =>
                     append({
                       type: 'email',
@@ -444,10 +444,10 @@ function CreateSegmentDialog({
                   return (
                     <div
                       key={field.id}
-                      className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4"
+                      className="rounded-xl border border-border bg-card p-4"
                     >
                       <div className="flex items-center justify-between">
-                        <p className="text-xs font-medium text-zinc-500">
+                        <p className="text-xs font-medium text-muted-foreground">
                           Rule {index + 1}
                         </p>
 
@@ -455,7 +455,7 @@ function CreateSegmentDialog({
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="size-8 text-zinc-600 hover:text-red-400"
+                          className="size-8 text-muted-foreground hover:text-destructive"
                           disabled={fields.length === 1}
                           onClick={() => remove(index)}
                         >
@@ -476,28 +476,28 @@ function CreateSegmentDialog({
 
                           <select
                             id={`rule-${index}-type`}
-                            className="flex h-9 w-full rounded-md border border-white/10 bg-black/20 px-3 text-sm text-zinc-300 outline-none focus:border-indigo-400/40"
+                            className="flex h-9 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground-secondary outline-none focus:border-primary/30"
                             {...register(
                               `rules.${index}.type`
                             )}
                           >
                             <option
                               value="email"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Email
                             </option>
 
                             <option
                               value="country"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Country
                             </option>
 
                             <option
                               value="custom"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Custom
                             </option>
@@ -513,35 +513,35 @@ function CreateSegmentDialog({
 
                           <select
                             id={`rule-${index}-operator`}
-                            className="flex h-9 w-full rounded-md border border-white/10 bg-black/20 px-3 text-sm text-zinc-300 outline-none focus:border-indigo-400/40"
+                            className="flex h-9 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground-secondary outline-none focus:border-primary/30"
                             {...register(
                               `rules.${index}.operator`
                             )}
                           >
                             <option
                               value="equals"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Equals
                             </option>
 
                             <option
                               value="contains"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Contains
                             </option>
 
                             <option
                               value="in"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Is one of
                             </option>
 
                             <option
                               value="startsWith"
-                              className="bg-[#0d111a]"
+                              className="bg-popover"
                             >
                               Starts with
                             </option>
@@ -564,7 +564,7 @@ function CreateSegmentDialog({
                                 ? 'IN, US, GB'
                                 : 'example.com'
                             }
-                            className="border-white/10 bg-black/20"
+                            className="border-border bg-background"
                             {...register(
                               `rules.${index}.value`
                             )}
@@ -572,7 +572,7 @@ function CreateSegmentDialog({
 
                           {errors.rules?.[index]
                             ?.value && (
-                            <p className="text-xs text-red-400">
+                            <p className="text-xs text-destructive">
                               {
                                 errors.rules[index]?.value
                                   ?.message
@@ -593,7 +593,7 @@ function CreateSegmentDialog({
                           <Input
                             id={`rule-${index}-attribute`}
                             placeholder="plan"
-                            className="border-white/10 bg-black/20 font-mono"
+                            className="border-border bg-background font-mono"
                             {...register(
                               `rules.${index}.attribute`
                             )}
@@ -601,7 +601,7 @@ function CreateSegmentDialog({
 
                           {errors.rules?.[index]
                             ?.attribute && (
-                            <p className="text-xs text-red-400">
+                            <p className="text-xs text-destructive">
                               {
                                 errors.rules[index]
                                   ?.attribute?.message
@@ -617,18 +617,18 @@ function CreateSegmentDialog({
 
               {typeof errors.rules?.message ===
                 'string' && (
-                <p className="mt-2 text-xs text-red-400">
+                <p className="mt-2 text-xs text-destructive">
                   {errors.rules.message}
                 </p>
               )}
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={createMutation.isPending}
               onClick={closeDialog}
             >
@@ -637,7 +637,7 @@ function CreateSegmentDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={createMutation.isPending}
             >
               {createMutation.isPending && (
@@ -656,19 +656,19 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6 text-center">
       <div>
-        <FolderKanban className="mx-auto size-8 text-indigo-300" />
+        <FolderKanban className="mx-auto size-8 text-primary" />
 
-        <h1 className="mt-5 text-lg text-white">
+        <h1 className="mt-5 text-lg text-foreground">
           Select a project
         </h1>
 
-        <p className="mt-2 text-sm text-zinc-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Choose a project before managing segments.
         </p>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center rounded-lg bg-indigo-500 px-4 text-sm text-white"
+          className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm text-primary-foreground"
         >
           View projects
         </Link>
@@ -683,20 +683,20 @@ function EmptySegments({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <ListFilter className="size-8 text-cyan-300" />
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <ListFilter className="size-8 text-primary" />
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         Create your first segment
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Build reusable audiences from email, country, or
         custom user attributes.
       </p>
 
       <Button
-        className="mt-6 bg-indigo-500 text-white hover:bg-indigo-400"
+        className="mt-6 bg-primary text-primary-foreground hover:bg-primary-hover"
         onClick={onCreate}
       >
         <Plus className="size-4" />
@@ -712,7 +712,7 @@ function SegmentsSkeleton() {
       {Array.from({ length: 4 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-72 rounded-2xl bg-white/[0.04]"
+          className="h-72 rounded-2xl bg-surface-elevated"
         />
       ))}
     </div>

@@ -67,7 +67,7 @@ export function SegmentActions({
   projectId,
 }: SegmentActionsProps) {
   return (
-    <div className="mt-5 flex items-center gap-2 border-t border-white/[0.06] pt-4">
+    <div className="mt-5 flex items-center gap-2 border-t border-border pt-4">
       <EditSegmentDialog
         segment={segment}
         projectId={projectId}
@@ -235,7 +235,7 @@ function EditSegmentDialog({
           <Button
             variant="outline"
             size="sm"
-            className="border-white/10 bg-transparent text-zinc-400"
+            className="border-border bg-transparent text-foreground-secondary"
           />
         }
       >
@@ -243,11 +243,11 @@ function EditSegmentDialog({
         Edit
       </DialogTrigger>
 
-      <DialogContent className="max-h-[88vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-3xl">
+      <DialogContent className="max-h-[88vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Edit segment</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             All targeting rules use AND logic.
           </DialogDescription>
         </DialogHeader>
@@ -262,7 +262,7 @@ function EditSegmentDialog({
               id={`segment-${segment.id}-name`}
               value={name}
               maxLength={100}
-              className="border-white/10 bg-white/[0.035]"
+              className="border-border bg-card"
               onChange={(event) =>
                 setName(event.target.value)
               }
@@ -281,7 +281,7 @@ function EditSegmentDialog({
               rows={3}
               maxLength={500}
               value={description}
-              className="w-full resize-none rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300 outline-none focus:border-indigo-400/40"
+              className="w-full resize-none rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground-secondary outline-none focus:border-primary/30"
               onChange={(event) =>
                 setDescription(event.target.value)
               }
@@ -293,7 +293,7 @@ function EditSegmentDialog({
               <div>
                 <Label>Rules</Label>
 
-                <p className="mt-1 text-xs text-zinc-600">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Every rule must match.
                 </p>
               </div>
@@ -301,7 +301,7 @@ function EditSegmentDialog({
               <Button
                 type="button"
                 variant="outline"
-                className="border-white/10 bg-transparent text-zinc-400"
+                className="border-border bg-transparent text-foreground-secondary"
                 onClick={() =>
                   setRules((current) => [
                     ...current,
@@ -336,11 +336,11 @@ function EditSegmentDialog({
           </div>
         </div>
 
-        <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <DialogFooter className="border-border bg-card">
           <Button
             type="button"
             variant="outline"
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={updateMutation.isPending}
             onClick={() => setOpen(false)}
           >
@@ -349,7 +349,7 @@ function EditSegmentDialog({
 
           <Button
             type="button"
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={updateMutation.isPending}
             onClick={saveSegment}
           >
@@ -378,9 +378,9 @@ function EditableRuleCard({
   onRemove: () => void;
 }) {
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+    <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-zinc-500">
+        <p className="text-xs font-medium text-muted-foreground">
           Rule {index + 1}
         </p>
 
@@ -388,7 +388,7 @@ function EditableRuleCard({
           type="button"
           variant="ghost"
           size="icon"
-          className="size-8 text-zinc-600 hover:text-red-400"
+          className="size-8 text-muted-foreground hover:text-destructive"
           disabled={!canRemove}
           onClick={onRemove}
         >
@@ -449,7 +449,7 @@ function EditableRuleCard({
                 ? 'IN, US, GB'
                 : 'example.com'
             }
-            className="border-white/10 bg-black/20"
+            className="border-border bg-background"
             onChange={(event) =>
               onChange({
                 value: event.target.value,
@@ -465,7 +465,7 @@ function EditableRuleCard({
             <Input
               value={rule.attribute}
               placeholder="plan"
-              className="border-white/10 bg-black/20 font-mono"
+              className="border-border bg-background font-mono"
               onChange={(event) =>
                 onChange({
                   attribute: event.target.value,
@@ -553,7 +553,7 @@ function TestSegmentDialog({
           <Button
             variant="outline"
             size="sm"
-            className="border-white/10 bg-transparent text-zinc-400"
+            className="border-border bg-transparent text-foreground-secondary"
           />
         }
       >
@@ -561,11 +561,11 @@ function TestSegmentDialog({
         Test
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-xl">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Test {segment.name}</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Provide a sample user context as JSON.
           </DialogDescription>
         </DialogHeader>
@@ -580,7 +580,7 @@ function TestSegmentDialog({
             rows={10}
             value={context}
             spellCheck={false}
-            className="w-full resize-none rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-xs leading-6 text-cyan-200 outline-none focus:border-indigo-400/40"
+            className="w-full resize-none rounded-xl border border-border bg-background p-4 font-mono text-xs leading-6 text-primary outline-none focus:border-primary/30"
             onChange={(event) => {
               setContext(event.target.value);
               setResult(null);
@@ -591,22 +591,22 @@ function TestSegmentDialog({
             <div
               className={
                 result
-                  ? 'flex items-center gap-3 rounded-xl border border-emerald-400/15 bg-emerald-500/[0.06] p-4'
-                  : 'flex items-center gap-3 rounded-xl border border-red-400/15 bg-red-500/[0.06] p-4'
+                  ? 'flex items-center gap-3 rounded-xl border border-success/30 bg-success-subtle p-4'
+                  : 'flex items-center gap-3 rounded-xl border border-destructive/30 bg-destructive-subtle p-4'
               }
             >
               {result ? (
-                <CheckCircle2 className="size-5 text-emerald-300" />
+                <CheckCircle2 className="size-5 text-success" />
               ) : (
-                <XCircle className="size-5 text-red-300" />
+                <XCircle className="size-5 text-destructive" />
               )}
 
               <div>
                 <p
                   className={
                     result
-                      ? 'text-sm text-emerald-200'
-                      : 'text-sm text-red-200'
+                      ? 'text-sm text-success'
+                      : 'text-sm text-destructive'
                   }
                 >
                   {result
@@ -614,7 +614,7 @@ function TestSegmentDialog({
                     : 'User does not match this segment'}
                 </p>
 
-                <p className="mt-1 text-xs text-zinc-600">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Every rule must evaluate to true.
                 </p>
               </div>
@@ -622,11 +622,11 @@ function TestSegmentDialog({
           )}
         </div>
 
-        <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <DialogFooter className="border-border bg-card">
           <Button
             type="button"
             variant="outline"
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={testMutation.isPending}
             onClick={() => setOpen(false)}
           >
@@ -635,7 +635,7 @@ function TestSegmentDialog({
 
           <Button
             type="button"
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={testMutation.isPending}
             onClick={runTest}
           >
@@ -694,7 +694,7 @@ function DeleteSegmentDialog({
           <Button
             variant="ghost"
             size="icon"
-            className="ml-auto text-zinc-600 hover:text-red-400"
+            className="ml-auto text-muted-foreground hover:text-destructive"
           />
         }
       >
@@ -702,25 +702,25 @@ function DeleteSegmentDialog({
         <span className="sr-only">Delete segment</span>
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0">
+      <AlertDialogContent className="border border-border bg-popover text-foreground ring-0">
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-red-500/10">
-            <AlertTriangle className="text-red-400" />
+          <AlertDialogMedia className="bg-destructive-subtle">
+            <AlertTriangle className="text-destructive" />
           </AlertDialogMedia>
 
           <AlertDialogTitle>
             Delete {segment.name}?
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="text-zinc-500">
+          <AlertDialogDescription className="text-muted-foreground">
             This targeting segment will be permanently
             removed. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <AlertDialogFooter className="border-border bg-card">
           <AlertDialogCancel
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={deleteMutation.isPending}
           >
             Cancel
@@ -799,4 +799,4 @@ function createExampleContext(
 }
 
 const selectClasses =
-  'flex h-9 w-full rounded-md border border-white/10 bg-black/20 px-3 text-sm text-zinc-300 outline-none focus:border-indigo-400/40';
+  'flex h-9 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground-secondary outline-none focus:border-primary/30';

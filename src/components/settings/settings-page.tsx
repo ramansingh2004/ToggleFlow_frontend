@@ -57,7 +57,7 @@ export function SettingsPage() {
   ) {
     return (
       <main className="p-6">
-        <div className="mx-auto max-w-5xl rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-500">
+        <div className="mx-auto max-w-5xl rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
           Unable to load account settings.
         </div>
       </main>
@@ -71,15 +71,15 @@ export function SettingsPage() {
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-5xl">
         <div>
-          <p className="text-sm font-medium text-indigo-300">
+          <p className="text-sm font-medium text-primary">
             Account
           </p>
 
-          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
             Settings
           </h1>
 
-          <p className="mt-3 text-sm text-zinc-500">
+          <p className="mt-3 text-sm text-muted-foreground">
             Manage your ToggleFlow profile and account
             security.
           </p>
@@ -177,7 +177,7 @@ function ProfileSettings({
   };
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card">
       <SectionHeader
         icon={UserRound}
         title="Profile"
@@ -189,8 +189,8 @@ function ProfileSettings({
         noValidate
       >
         <div className="space-y-5 p-5 sm:p-6">
-          <div className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-black/20 p-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-indigo-400/20 bg-indigo-500/10 text-sm font-semibold text-indigo-200">
+          <div className="flex items-center gap-4 rounded-xl border border-border bg-background p-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary-subtle text-sm font-semibold text-primary">
               {getInitials(
                 user?.firstName,
                 user?.lastName,
@@ -199,11 +199,11 @@ function ProfileSettings({
             </div>
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-zinc-200">
+              <p className="truncate text-sm font-medium text-foreground">
                 {user?.username ?? 'Developer'}
               </p>
 
-              <p className="mt-1 truncate text-xs text-zinc-600">
+              <p className="mt-1 truncate text-xs text-muted-foreground">
                 {user?.email}
               </p>
             </div>
@@ -216,7 +216,7 @@ function ProfileSettings({
             >
               <Input
                 placeholder="First name"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('firstName')}
               />
             </FormField>
@@ -227,7 +227,7 @@ function ProfileSettings({
             >
               <Input
                 placeholder="Last name"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('lastName')}
               />
             </FormField>
@@ -240,7 +240,7 @@ function ProfileSettings({
             <Input
               type="url"
               placeholder="https://example.com/avatar.png"
-              className="border-white/10 bg-white/[0.035]"
+              className="border-border bg-card"
               {...register('avatar')}
             />
           </FormField>
@@ -258,10 +258,10 @@ function ProfileSettings({
           </div>
         </div>
 
-        <div className="flex justify-end border-t border-white/[0.07] bg-white/[0.015] px-5 py-4 sm:px-6">
+        <div className="flex justify-end border-t border-border bg-card px-5 py-4 sm:px-6">
           <Button
             type="submit"
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={
               updateMutation.isPending || !isDirty
             }
@@ -289,7 +289,7 @@ function SignInMethod({
   loading: boolean;
 }) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card">
       <SectionHeader
         icon={ShieldCheck}
         title="Sign-in method"
@@ -298,39 +298,39 @@ function SignInMethod({
 
       <div className="p-5 sm:p-6">
         {loading ? (
-          <Skeleton className="h-20 rounded-xl bg-white/[0.04]" />
+          <Skeleton className="h-20 rounded-xl bg-surface-elevated" />
         ) : (
-          <div className="flex items-center justify-between gap-4 rounded-xl border border-white/[0.07] bg-black/20 p-4">
+          <div className="flex items-center justify-between gap-4 rounded-xl border border-border bg-background p-4">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-indigo-400/15 bg-indigo-500/10">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
                 {primaryAuth === 'oauth' ? (
-                  <Braces className="size-4 text-indigo-300" />
+                  <Braces className="size-4 text-primary" />
                 ) : (
-                  <KeyRound className="size-4 text-indigo-300" />
+                  <KeyRound className="size-4 text-primary" />
                 )}
               </div>
 
               <div className="min-w-0">
-                <p className="text-sm font-medium capitalize text-zinc-200">
+                <p className="text-sm font-medium capitalize text-foreground">
                   {primaryAuth === 'oauth'
                     ? linkedProviders[0] ??
                       'OAuth'
                     : 'Email and password'}
                 </p>
 
-                <p className="mt-1 truncate text-xs text-zinc-600">
+                <p className="mt-1 truncate text-xs text-muted-foreground">
                   {email}
                 </p>
               </div>
             </div>
 
-            <span className="rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2.5 py-1 text-[10px] text-emerald-300">
+            <span className="rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-[10px] text-success">
               Active
             </span>
           </div>
         )}
 
-        <p className="mt-3 text-xs leading-5 text-zinc-700">
+        <p className="mt-3 text-xs leading-5 text-muted-foreground">
           Provider linking and unlinking will be available
           after multi-provider account protection is added.
         </p>
@@ -380,7 +380,7 @@ function PasswordSettings() {
   };
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card">
       <SectionHeader
         icon={LockKeyhole}
         title="Password"
@@ -399,7 +399,7 @@ function PasswordSettings() {
             <Input
               type="password"
               autoComplete="current-password"
-              className="border-white/10 bg-white/[0.035]"
+              className="border-border bg-card"
               {...register('oldPassword')}
             />
           </FormField>
@@ -412,7 +412,7 @@ function PasswordSettings() {
               <Input
                 type="password"
                 autoComplete="new-password"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('newPassword')}
               />
             </FormField>
@@ -424,22 +424,22 @@ function PasswordSettings() {
               <Input
                 type="password"
                 autoComplete="new-password"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('confirmPassword')}
               />
             </FormField>
           </div>
 
-          <p className="text-xs leading-5 text-zinc-700">
+          <p className="text-xs leading-5 text-muted-foreground">
             Use at least eight characters with uppercase,
             lowercase, a number, and one of @$!%*?&.
           </p>
         </div>
 
-        <div className="flex justify-end border-t border-white/[0.07] bg-white/[0.015] px-5 py-4 sm:px-6">
+        <div className="flex justify-end border-t border-border bg-card px-5 py-4 sm:px-6">
           <Button
             type="submit"
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={changeMutation.isPending}
           >
             {changeMutation.isPending && (
@@ -455,16 +455,16 @@ function PasswordSettings() {
 
 function OAuthPasswordNotice() {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
+    <section className="rounded-2xl border border-border bg-card p-6">
       <div className="flex gap-3">
-        <LockKeyhole className="mt-0.5 size-4 shrink-0 text-zinc-500" />
+        <LockKeyhole className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
 
         <div>
-          <p className="text-sm text-zinc-300">
+          <p className="text-sm text-foreground-secondary">
             Password management unavailable
           </p>
 
-          <p className="mt-2 text-xs leading-5 text-zinc-600">
+          <p className="mt-2 text-xs leading-5 text-muted-foreground">
             This account signs in through an OAuth provider.
             Password changes are not available for this account
             type.
@@ -487,15 +487,15 @@ function SectionHeader({
   description: string;
 }) {
   return (
-    <div className="flex items-start gap-3 border-b border-white/[0.07] px-5 py-4 sm:px-6">
-      <Icon className="mt-0.5 size-4 text-indigo-300" />
+    <div className="flex items-start gap-3 border-b border-border px-5 py-4 sm:px-6">
+      <Icon className="mt-0.5 size-4 text-primary" />
 
       <div>
-        <h2 className="text-sm font-medium text-zinc-200">
+        <h2 className="text-sm font-medium text-foreground">
           {title}
         </h2>
 
-        <p className="mt-1 text-xs text-zinc-600">
+        <p className="mt-1 text-xs text-muted-foreground">
           {description}
         </p>
       </div>
@@ -518,7 +518,7 @@ function FormField({
       {children}
 
       {error && (
-        <p className="text-xs text-red-400">{error}</p>
+        <p className="text-xs text-destructive">{error}</p>
       )}
     </div>
   );
@@ -538,7 +538,7 @@ function ReadOnlyField({
       <Input
         value={value}
         readOnly
-        className="border-white/[0.06] bg-black/20 text-zinc-600"
+        className="border-border bg-background text-muted-foreground"
       />
     </div>
   );
@@ -548,10 +548,10 @@ function SettingsSkeleton() {
   return (
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-5xl space-y-6">
-        <Skeleton className="h-24 rounded-2xl bg-white/[0.04]" />
-        <Skeleton className="h-96 rounded-2xl bg-white/[0.04]" />
-        <Skeleton className="h-40 rounded-2xl bg-white/[0.04]" />
-        <Skeleton className="h-80 rounded-2xl bg-white/[0.04]" />
+        <Skeleton className="h-24 rounded-2xl bg-surface-elevated" />
+        <Skeleton className="h-96 rounded-2xl bg-surface-elevated" />
+        <Skeleton className="h-40 rounded-2xl bg-surface-elevated" />
+        <Skeleton className="h-80 rounded-2xl bg-surface-elevated" />
       </div>
     </main>
   );

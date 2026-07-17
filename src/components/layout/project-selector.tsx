@@ -95,25 +95,25 @@ export function ProjectSelector() {
         render={
           <button
             type="button"
-            className="flex w-full items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.035] px-3 py-3 text-left outline-none transition-colors hover:bg-white/[0.06] data-popup-open:border-indigo-400/20 data-popup-open:bg-white/[0.06]"
+            className="flex w-full items-center gap-3 rounded-xl border border-border bg-card px-3 py-3 text-left outline-none transition-colors hover:bg-surface-elevated data-popup-open:border-primary/30 data-popup-open:bg-surface-elevated"
           />
         }
       >
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/15">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-subtle">
           {projectsQuery.isPending ? (
-            <LoaderCircle className="size-4 animate-spin text-indigo-300" />
+            <LoaderCircle className="size-4 animate-spin text-primary" />
           ) : (
-            <FolderKanban className="size-4 text-indigo-300" />
+            <FolderKanban className="size-4 text-primary" />
           )}
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-xs font-medium text-zinc-200">
+          <p className="truncate text-xs font-medium text-foreground">
             {selectedProject?.name ??
               'Select a project'}
           </p>
 
-          <p className="truncate font-mono text-[10px] text-zinc-600">
+          <p className="truncate font-mono text-[10px] text-muted-foreground">
             {selectedProject?.slug ??
               (projects.length === 0
                 ? 'No projects yet'
@@ -121,33 +121,33 @@ export function ProjectSelector() {
           </p>
         </div>
 
-        <ChevronsUpDown className="size-4 shrink-0 text-zinc-600" />
+        <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         sideOffset={8}
-        className="w-64 border border-white/[0.09] bg-[#0d111a] p-1 text-white shadow-2xl"
+        className="w-64 border border-border bg-popover p-1 text-foreground shadow-2xl"
       >
         <DropdownMenuGroup>
-  <DropdownMenuLabel className="px-2 py-2 text-[10px] uppercase tracking-[0.14em] text-zinc-600">
+  <DropdownMenuLabel className="px-2 py-2 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
     Projects
   </DropdownMenuLabel>
 
   {projects.length === 0 ? (
-    <div className="px-2 py-5 text-center text-xs text-zinc-600">
+    <div className="px-2 py-5 text-center text-xs text-muted-foreground">
       No projects available
     </div>
   ) : (
     projects.map((project) => (
       <DropdownMenuItem
         key={project.id}
-        className="min-h-10 gap-3 px-2 text-zinc-400 focus:bg-white/[0.06] focus:text-white"
+        className="min-h-10 gap-3 px-2 text-foreground-secondary focus:bg-surface-elevated focus:text-foreground"
         onClick={() =>
           handleProjectSelection(project.id)
         }
       >
-        <div className="flex size-7 items-center justify-center rounded-lg bg-white/[0.04]">
-          <FolderKanban className="size-3.5 text-indigo-300" />
+        <div className="flex size-7 items-center justify-center rounded-lg bg-surface-elevated">
+          <FolderKanban className="size-3.5 text-primary" />
         </div>
 
         <div className="min-w-0 flex-1">
@@ -155,33 +155,33 @@ export function ProjectSelector() {
             {project.name ?? 'Untitled project'}
           </p>
 
-          <p className="truncate font-mono text-[10px] text-zinc-600">
+          <p className="truncate font-mono text-[10px] text-muted-foreground">
             {project.slug ?? ''}
           </p>
         </div>
 
         {project.id === selectedProjectId && (
-          <Check className="size-4 text-indigo-300" />
+          <Check className="size-4 text-primary" />
         )}
       </DropdownMenuItem>
     ))
   )}
 </DropdownMenuGroup>
 
-<DropdownMenuSeparator className="bg-white/[0.07]" />
+<DropdownMenuSeparator className="bg-surface-elevated" />
 
 <DropdownMenuItem
-  className="min-h-9 px-2 text-xs text-zinc-500 focus:bg-indigo-500/10 focus:text-indigo-200"
+  className="min-h-9 px-2 text-xs text-muted-foreground focus:bg-primary-subtle focus:text-primary"
   onClick={() => router.push('/projects')}
 >
   <Plus className="size-4" />
   Create or manage projects
 </DropdownMenuItem>
 
-        <DropdownMenuSeparator className="bg-white/[0.07]" />
+        <DropdownMenuSeparator className="bg-surface-elevated" />
 
         <DropdownMenuItem
-          className="min-h-9 px-2 text-xs text-zinc-500 focus:bg-indigo-500/10 focus:text-indigo-200"
+          className="min-h-9 px-2 text-xs text-muted-foreground focus:bg-primary-subtle focus:text-primary"
           onClick={() => router.push('/projects')}
         >
           <Plus className="size-4" />

@@ -186,8 +186,8 @@ setSelectedIds(savedSegmentIds);
             size="icon"
             className={
               (flag.segmentIds?.length ?? 0) > 0
-                ? 'text-indigo-300 hover:bg-indigo-500/10 hover:text-indigo-200'
-                : 'text-zinc-600 hover:bg-indigo-500/10 hover:text-indigo-300'
+                ? 'text-primary hover:bg-primary-subtle hover:text-primary'
+                : 'text-muted-foreground hover:bg-primary-subtle hover:text-primary'
             }
             disabled={!flag.id}
             title="Configure segment targeting"
@@ -201,25 +201,25 @@ setSelectedIds(savedSegmentIds);
         </span>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-lg">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
             Segment targeting
           </DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Control which users are eligible for{' '}
             {flag.name ?? 'this feature'}.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-3">
-          <div className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4">
-            <p className="text-xs text-zinc-500">
+          <div className="rounded-xl border border-border bg-card p-4">
+            <p className="text-xs text-muted-foreground">
               Evaluation order
             </p>
 
-            <p className="mt-2 text-xs leading-5 text-zinc-600">
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
               The user must match at least one selected
               segment. The rollout percentage is applied
               after the segment match.
@@ -235,17 +235,17 @@ setSelectedIds(savedSegmentIds);
           />
 
           {segmentsQuery.isError && (
-            <p className="text-xs text-red-400">
+            <p className="text-xs text-destructive">
               Unable to load project segments.
             </p>
           )}
         </div>
 
-        <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <DialogFooter className="border-border bg-card">
           <Button
             type="button"
             variant="outline"
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={updateMutation.isPending}
             onClick={() => handleOpenChange(false)}
           >
@@ -254,7 +254,7 @@ setSelectedIds(savedSegmentIds);
 
           <Button
             type="button"
-            className="bg-indigo-500 text-white hover:bg-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
             disabled={
               updateMutation.isPending ||
               segmentsQuery.isPending ||

@@ -7,7 +7,7 @@
     width="64"
     height="64"
     rx="18"
-    fill="#0D111A"
+    fill="#101110"
   />
 
   <rect
@@ -16,14 +16,14 @@
     width="62"
     height="62"
     rx="17"
-    stroke="#818CF8"
-    stroke-opacity=".32"
+    stroke="#5FA8A0"
+    stroke-opacity=".42"
     stroke-width="2"
   />
 
   <path
     d="M25 19L16 32L25 45"
-    stroke="#A5B4FC"
+    stroke="#E8E5D6"
     stroke-width="4"
     stroke-linecap="round"
     stroke-linejoin="round"
@@ -31,7 +31,7 @@
 
   <path
     d="M39 19L48 32L39 45"
-    stroke="#A5B4FC"
+    stroke="#E8E5D6"
     stroke-width="4"
     stroke-linecap="round"
     stroke-linejoin="round"
@@ -39,7 +39,7 @@
 
   <path
     d="M35 16L29 48"
-    stroke="#6366F1"
+    stroke="#5FA8A0"
     stroke-width="4"
     stroke-linecap="round"
   />

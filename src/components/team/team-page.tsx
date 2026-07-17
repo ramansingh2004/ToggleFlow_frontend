@@ -106,15 +106,15 @@ export function TeamPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Collaboration
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Team
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Control who can view and manage this project.
             </p>
           </div>
@@ -157,13 +157,13 @@ export function TeamPage() {
           />
         </section>
 
-        <section className="mt-6 overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-          <div className="border-b border-white/[0.07] px-5 py-4">
-            <h2 className="text-sm font-medium text-white">
+        <section className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-sm font-medium text-foreground">
               Project members
             </h2>
 
-            <p className="mt-1 text-xs text-zinc-600">
+            <p className="mt-1 text-xs text-muted-foreground">
               Roles determine access across the selected
               project.
             </p>
@@ -172,7 +172,7 @@ export function TeamPage() {
           {teamQuery.isPending ? (
             <TeamSkeleton />
           ) : teamQuery.isError ? (
-            <div className="py-20 text-center text-sm text-zinc-600">
+            <div className="py-20 text-center text-sm text-muted-foreground">
               Unable to load team members.
             </div>
           ) : members.length === 0 ? (
@@ -181,7 +181,7 @@ export function TeamPage() {
               onAdd={() => setAddMemberOpen(true)}
             />
           ) : (
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-border">
               {members.map((member, index) => (
                 <TeamMemberRow
                   key={member.id ?? index}
@@ -210,16 +210,16 @@ function TeamMetric({
   }>;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
-      <div className="flex size-9 items-center justify-center rounded-xl border border-indigo-400/15 bg-indigo-500/10">
-        <Icon className="size-4 text-indigo-300" />
+    <div className="rounded-2xl border border-border bg-card p-5">
+      <div className="flex size-9 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+        <Icon className="size-4 text-primary" />
       </div>
 
-      <p className="mt-5 text-2xl font-semibold text-white">
+      <p className="mt-5 text-2xl font-semibold text-foreground">
         {value}
       </p>
 
-      <p className="mt-1 text-xs text-zinc-600">
+      <p className="mt-1 text-xs text-muted-foreground">
         {label}
       </p>
     </div>
@@ -238,24 +238,24 @@ function TeamMemberRow({
   return (
     <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center">
       <div className="flex min-w-0 flex-1 items-center gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-indigo-400/15 bg-indigo-500/10 text-xs font-semibold text-indigo-200">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary-subtle text-xs font-semibold text-primary">
           {getInitials(member)}
         </div>
 
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <p className="truncate text-sm font-medium text-zinc-200">
+            <p className="truncate text-sm font-medium text-foreground">
               {member.username ?? 'Developer'}
             </p>
 
             {member.isCurrentUser && (
-              <span className="rounded-full bg-white/[0.05] px-2 py-0.5 text-[9px] text-zinc-500">
+              <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-[9px] text-muted-foreground">
                 You
               </span>
             )}
           </div>
 
-          <p className="mt-1 truncate text-xs text-zinc-600">
+          <p className="mt-1 truncate text-xs text-muted-foreground">
             {member.email ?? ''}
           </p>
         </div>
@@ -264,7 +264,7 @@ function TeamMemberRow({
       <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
         <RoleBadge role={member.role} />
 
-        <p className="text-xs text-zinc-700">
+        <p className="text-xs text-muted-foreground">
            Joined {formatDate(member.joinedAt)}
         </p>
 
@@ -285,13 +285,13 @@ function RoleBadge({
 }) {
   const styles = {
     owner:
-      'border-amber-400/15 bg-amber-500/10 text-amber-300',
+      'border-warning/30 bg-warning-subtle text-warning',
     admin:
-      'border-violet-400/15 bg-violet-500/10 text-violet-300',
+      'border-border bg-surface-elevated text-foreground-secondary',
     editor:
-      'border-blue-400/15 bg-blue-500/10 text-blue-300',
+      'border-border bg-surface-elevated text-foreground-secondary',
     viewer:
-      'border-white/[0.08] bg-white/[0.03] text-zinc-500',
+      'border-border bg-card text-muted-foreground',
   };
 
   return (
@@ -390,18 +390,18 @@ function AddTeamMemberDialog({
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
         Add member
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-md">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add team member</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             The user must already have a ToggleFlow account.
           </DialogDescription>
         </DialogHeader>
@@ -420,12 +420,12 @@ function AddTeamMemberDialog({
                 id="member-email"
                 type="email"
                 placeholder="developer@example.com"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('email')}
               />
 
               {errors.email && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.email.message}
                 </p>
               )}
@@ -451,17 +451,17 @@ function AddTeamMemberDialog({
                   }
                 }}
               >
-                <SelectTrigger className="h-10 w-full border-white/10 bg-white/[0.035]">
+                <SelectTrigger className="h-10 w-full border-border bg-card">
                   <SelectValue />
                 </SelectTrigger>
 
-                <SelectContent className="border border-white/[0.09] bg-[#0d111a] text-white">
+                <SelectContent className="border border-border bg-popover text-foreground">
                   {manageableTeamRoles.map(
                     (teamRole) => (
                       <SelectItem
                         key={teamRole}
                         value={teamRole}
-                        className="capitalize focus:bg-white/[0.06]"
+                        className="capitalize focus:bg-surface-elevated"
                       >
                         {teamRole}
                       </SelectItem>
@@ -472,11 +472,11 @@ function AddTeamMemberDialog({
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={addMutation.isPending}
               onClick={() => onOpenChange(false)}
             >
@@ -485,7 +485,7 @@ function AddTeamMemberDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={addMutation.isPending}
             >
               {addMutation.isPending && (
@@ -509,15 +509,15 @@ function EmptyTeam({
 }) {
   return (
     <div className="flex min-h-72 flex-col items-center justify-center px-6 text-center">
-      <Users className="size-8 text-indigo-300" />
+      <Users className="size-8 text-primary" />
 
-      <p className="mt-4 text-sm font-medium text-zinc-300">
+      <p className="mt-4 text-sm font-medium text-foreground-secondary">
         No team members found
       </p>
 
       {canManage && (
         <Button
-          className="mt-5 bg-indigo-500 text-white"
+          className="mt-5 bg-primary text-primary-foreground"
           onClick={onAdd}
         >
           <Plus className="size-4" />
@@ -532,15 +532,15 @@ function NoProjectSelected() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-6">
       <div className="text-center">
-        <FolderKanban className="mx-auto size-8 text-indigo-300" />
+        <FolderKanban className="mx-auto size-8 text-primary" />
 
-        <h1 className="mt-5 text-lg text-white">
+        <h1 className="mt-5 text-lg text-foreground">
           Select a project
         </h1>
 
         <Link
           href="/projects"
-          className="mt-6 inline-flex h-9 items-center rounded-lg bg-indigo-500 px-4 text-sm text-white"
+          className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm text-primary-foreground"
         >
           View projects
         </Link>
@@ -555,7 +555,7 @@ function TeamSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-20 bg-white/[0.04]"
+          className="h-20 bg-surface-elevated"
         />
       ))}
     </div>

@@ -47,21 +47,21 @@ export default function OAuthCallbackPage() {
   ]);
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#07090f] px-6 text-white">
-      <div className="absolute left-1/2 top-1/2 size-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/15 blur-[130px]" />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-6 text-foreground">
+      <div className="absolute left-1/2 top-1/2 size-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-subtle blur-[130px]" />
 
       <div className="relative text-center">
-        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10">
-          <Braces className="size-6 text-indigo-300" />
+        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+          <Braces className="size-6 text-primary" />
         </div>
 
-        <LoaderCircle className="mx-auto mt-8 size-6 animate-spin text-indigo-300" />
+        <LoaderCircle className="mx-auto mt-8 size-6 animate-spin text-primary" />
 
         <h1 className="mt-5 text-xl font-semibold">
           Completing authentication
         </h1>
 
-        <p className="mt-2 text-sm text-zinc-500">
+        <p className="mt-2 text-sm text-muted-foreground">
           Verifying your ToggleFlow session…
         </p>
       </div>

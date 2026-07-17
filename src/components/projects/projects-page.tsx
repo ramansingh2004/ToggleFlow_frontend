@@ -77,15 +77,15 @@ export function ProjectsPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Workspace
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Projects
             </h1>
 
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Organize flags, environments, and team access by
               application.
             </p>
@@ -99,19 +99,19 @@ export function ProjectsPage() {
 
         <div className="mt-8 flex items-center gap-3">
           <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-600" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
             <Input
               value={search}
               placeholder="Search projects..."
-              className="h-10 border-white/[0.08] bg-white/[0.025] pl-10 text-zinc-200 placeholder:text-zinc-700"
+              className="h-10 border-border bg-card pl-10 text-foreground placeholder:text-muted-foreground"
               onChange={(event) =>
                 setSearch(event.target.value)
               }
             />
           </div>
 
-          <div className="hidden text-xs text-zinc-600 sm:block">
+          <div className="hidden text-xs text-muted-foreground sm:block">
             {projects.length}{' '}
             {projects.length === 1 ? 'project' : 'projects'}
           </div>
@@ -235,18 +235,18 @@ function CreateProjectDialog({
     >
       <DialogTrigger
         render={
-          <Button className="h-9 bg-indigo-500 px-4 text-white shadow-[0_0_24px_rgba(99,102,241,0.18)] hover:bg-indigo-400" />
+          <Button className="h-9 bg-primary px-4 text-primary-foreground hover:bg-primary-hover" />
         }
       >
         <Plus className="size-4" />
         New project
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-md">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create a project</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Projects contain your environments, feature flags,
             API keys, and team members.
           </DialogDescription>
@@ -264,12 +264,12 @@ function CreateProjectDialog({
                 id="name"
                 autoFocus
                 placeholder="Developer Portal"
-                className="h-10 border-white/10 bg-white/[0.035]"
+                className="h-10 border-border bg-card"
                 {...register('name')}
               />
 
               {errors.name && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -278,7 +278,7 @@ function CreateProjectDialog({
             <div className="space-y-2">
               <Label htmlFor="description">
                 Description
-                <span className="ml-1 text-zinc-600">
+                <span className="ml-1 text-muted-foreground">
                   (optional)
                 </span>
               </Label>
@@ -287,23 +287,23 @@ function CreateProjectDialog({
                 id="description"
                 rows={4}
                 placeholder="Describe what this project controls..."
-                className="resize-none border-white/10 bg-white/[0.035]"
+                className="resize-none border-border bg-card"
                 {...register('description')}
               />
 
               {errors.description && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.description.message}
                 </p>
               )}
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={createMutation.isPending}
               onClick={() => handleDialogChange(false)}
             >
@@ -312,7 +312,7 @@ function CreateProjectDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={createMutation.isPending}
             >
               {createMutation.isPending && (
@@ -335,40 +335,40 @@ function ProjectCard({
   const content = (
     <>
       <div className="flex items-start justify-between">
-        <div className="flex size-11 items-center justify-center rounded-xl border border-indigo-400/15 bg-indigo-500/10">
-          <FolderKanban className="size-5 text-indigo-300" />
+        <div className="flex size-11 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+          <FolderKanban className="size-5 text-primary" />
         </div>
 
         <div className="flex items-center gap-2">
           <span
             className={
               project.isActive
-                ? 'rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2 py-1 text-[10px] font-medium text-emerald-300'
-                : 'rounded-full border border-zinc-400/10 bg-zinc-500/10 px-2 py-1 text-[10px] font-medium text-zinc-500'
+                ? 'rounded-full border border-success/30 bg-success-subtle px-2 py-1 text-[10px] font-medium text-success'
+                : 'rounded-full border border-border bg-surface-elevated px-2 py-1 text-[10px] font-medium text-muted-foreground'
             }
           >
             {project.isActive ? 'Active' : 'Inactive'}
           </span>
 
-          <ArrowUpRight className="size-4 text-zinc-700 transition-colors group-hover:text-zinc-400" />
+          <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-foreground-secondary" />
         </div>
       </div>
 
-      <h2 className="mt-5 truncate text-base font-medium text-zinc-100">
+      <h2 className="mt-5 truncate text-base font-medium text-foreground">
         {project.name ?? 'Untitled project'}
       </h2>
 
-      <p className="mt-1 font-mono text-xs text-zinc-600">
+      <p className="mt-1 font-mono text-xs text-muted-foreground">
         {project.slug ?? 'no-slug'}
       </p>
 
-      <p className="mt-4 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500">
+      <p className="mt-4 line-clamp-2 min-h-10 text-sm leading-5 text-muted-foreground">
         {project.description ||
           'No project description has been added.'}
       </p>
 
-      <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-4">
-        <div className="flex items-center gap-2 text-xs text-zinc-600">
+      <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <ToggleLeft className="size-4" />
           {project.flagCount ?? 0}{' '}
           {(project.flagCount ?? 0) === 1
@@ -376,7 +376,7 @@ function ProjectCard({
             : 'flags'}
         </div>
 
-        <span className="text-xs text-zinc-700">
+        <span className="text-xs text-muted-foreground">
           {formatProjectDate(project.createdAt)}
         </span>
       </div>
@@ -385,7 +385,7 @@ function ProjectCard({
 
   if (!project.id) {
     return (
-      <article className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+      <article className="rounded-2xl border border-border bg-card p-5">
         {content}
       </article>
     );
@@ -394,7 +394,7 @@ function ProjectCard({
   return (
     <Link
       href={`/projects/${project.id}`}
-      className="group rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 transition-all hover:-translate-y-0.5 hover:border-indigo-400/20 hover:bg-white/[0.04]"
+      className="group rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:bg-surface-elevated"
     >
       {content}
     </Link>
@@ -407,22 +407,22 @@ function EmptyProjects({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <div className="flex size-14 items-center justify-center rounded-2xl border border-indigo-400/15 bg-indigo-500/10">
-        <FolderKanban className="size-6 text-indigo-300" />
+    <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <div className="flex size-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary-subtle">
+        <FolderKanban className="size-6 text-primary" />
       </div>
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         Create your first project
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Projects keep feature flags, environments, API keys,
         and team access organized.
       </p>
 
       <Button
-        className="mt-6 bg-indigo-500 text-white hover:bg-indigo-400"
+        className="mt-6 bg-primary text-primary-foreground hover:bg-primary-hover"
         onClick={onCreate}
       >
         <Plus className="size-4" />
@@ -438,9 +438,9 @@ function NoSearchResults({
   search: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-6 py-16 text-center">
-      <Search className="mx-auto size-6 text-zinc-700" />
-      <p className="mt-4 text-sm text-zinc-400">
+    <div className="rounded-2xl border border-border bg-card px-6 py-16 text-center">
+      <Search className="mx-auto size-6 text-muted-foreground" />
+      <p className="mt-4 text-sm text-foreground-secondary">
         No projects match “{search}”
       </p>
     </div>
@@ -453,14 +453,14 @@ function ProjectsError({
   onRetry: () => void;
 }) {
   return (
-    <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] px-6 py-16 text-center">
-      <p className="text-sm text-zinc-300">
+    <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle px-6 py-16 text-center">
+      <p className="text-sm text-foreground-secondary">
         Unable to load your projects.
       </p>
 
       <Button
         variant="outline"
-        className="mt-5 border-white/10 bg-transparent"
+        className="mt-5 border-border bg-transparent"
         onClick={onRetry}
       >
         <RefreshCw className="size-4" />
@@ -476,7 +476,7 @@ function ProjectsSkeleton() {
       {Array.from({ length: 6 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-64 rounded-2xl bg-white/[0.04]"
+          className="h-64 rounded-2xl bg-surface-elevated"
         />
       ))}
     </div>

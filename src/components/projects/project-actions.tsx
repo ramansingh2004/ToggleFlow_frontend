@@ -165,7 +165,7 @@ function EditProjectDialog({
         render={
           <Button
             variant="outline"
-            className="border-white/10 bg-white/[0.025]"
+            className="border-border bg-card"
           />
         }
       >
@@ -173,11 +173,11 @@ function EditProjectDialog({
         Edit project
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-md">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Edit project</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Update the project name and description.
           </DialogDescription>
         </DialogHeader>
@@ -194,12 +194,12 @@ function EditProjectDialog({
 
               <Input
                 id="edit-project-name"
-                className="h-10 border-white/10 bg-white/[0.035]"
+                className="h-10 border-border bg-card"
                 {...register('name')}
               />
 
               {errors.name && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -213,23 +213,23 @@ function EditProjectDialog({
               <Textarea
                 id="edit-project-description"
                 rows={4}
-                className="resize-none border-white/10 bg-white/[0.035]"
+                className="resize-none border-border bg-card"
                 {...register('description')}
               />
 
               {errors.description && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.description.message}
                 </p>
               )}
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={updateMutation.isPending}
               onClick={() => handleOpenChange(false)}
             >
@@ -238,7 +238,7 @@ function EditProjectDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={updateMutation.isPending}
             >
               {updateMutation.isPending && (
@@ -325,7 +325,7 @@ function DeleteProjectDialog({
         render={
           <Button
             variant="destructive"
-            className="border border-red-400/10"
+            className="border border-destructive/30"
           />
         }
       >
@@ -333,26 +333,26 @@ function DeleteProjectDialog({
         Delete
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0">
+      <AlertDialogContent className="border border-border bg-popover text-foreground ring-0">
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-red-500/10">
-            <AlertTriangle className="text-red-400" />
+          <AlertDialogMedia className="bg-destructive-subtle">
+            <AlertTriangle className="text-destructive" />
           </AlertDialogMedia>
 
           <AlertDialogTitle>
             Delete {projectName}?
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="text-zinc-500">
+          <AlertDialogDescription className="text-muted-foreground">
             This will remove the project and make its
             associated resources unavailable. This action
             cannot be undone from the dashboard.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <AlertDialogFooter className="border-border bg-card">
           <AlertDialogCancel
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={deleteMutation.isPending}
           >
             Cancel

@@ -61,15 +61,15 @@ export function SchedulerPage() {
     <main className="p-5 sm:p-7 lg:p-8">
       <div className="mx-auto max-w-7xl">
         <div>
-          <p className="text-sm font-medium text-indigo-300">
+          <p className="text-sm font-medium text-primary">
             Automation
           </p>
 
-          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
             Scheduled changes
           </h1>
 
-          <p className="mt-3 text-sm text-zinc-500">
+          <p className="mt-3 text-sm text-muted-foreground">
             Review and cancel upcoming feature-flag state
             changes across your projects.
           </p>
@@ -104,18 +104,18 @@ export function SchedulerPage() {
         <section className="mt-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-medium text-zinc-200">
+              <h2 className="text-sm font-medium text-foreground">
                 Upcoming changes
               </h2>
 
-              <p className="mt-1 text-xs text-zinc-600">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Times are displayed in your local timezone.
               </p>
             </div>
 
             <Link
               href="/flags"
-              className="text-xs text-indigo-300 transition-colors hover:text-indigo-200"
+              className="text-xs text-primary transition-colors hover:text-primary"
             >
               View feature flags
             </Link>
@@ -127,7 +127,7 @@ export function SchedulerPage() {
           )}
 
           {schedulesQuery.isError && (
-            <div className="rounded-2xl border border-red-400/10 bg-red-500/[0.03] py-16 text-center text-sm text-zinc-500">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive-subtle py-16 text-center text-sm text-muted-foreground">
               Unable to load scheduled changes.
             </div>
           )}
@@ -138,8 +138,8 @@ export function SchedulerPage() {
             )}
 
           {schedules.length > 0 && (
-            <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-              <div className="hidden grid-cols-[1.3fr_1fr_130px_1fr_60px] border-b border-white/[0.07] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-700 lg:grid">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card">
+              <div className="hidden grid-cols-[1.3fr_1fr_130px_1fr_60px] border-b border-border px-5 py-3 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground lg:grid">
                 <span>Feature flag</span>
                 <span>Project</span>
                 <span>Action</span>
@@ -147,7 +147,7 @@ export function SchedulerPage() {
                 <span />
               </div>
 
-              <div className="divide-y divide-white/[0.06]">
+              <div className="divide-y divide-border">
                 {schedules.map((schedule) => (
                   <ScheduleRow
                     key={schedule.flagId}
@@ -177,36 +177,36 @@ function ScheduleRow({
         <div
           className={
             enabling
-              ? 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/15 bg-emerald-500/10'
-              : 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-amber-400/15 bg-amber-500/10'
+              ? 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-success/30 bg-success-subtle'
+              : 'flex size-9 shrink-0 items-center justify-center rounded-xl border border-warning/30 bg-warning-subtle'
           }
         >
           <ActionIcon
             className={
               enabling
-                ? 'size-4 text-emerald-300'
-                : 'size-4 text-amber-300'
+                ? 'size-4 text-success'
+                : 'size-4 text-warning'
             }
           />
         </div>
 
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-zinc-200">
+          <p className="truncate text-sm font-medium text-foreground">
             {schedule.flagName}
           </p>
 
-          <code className="mt-1 block truncate text-[11px] text-zinc-600">
+          <code className="mt-1 block truncate text-[11px] text-muted-foreground">
             {schedule.flagKey}
           </code>
         </div>
       </div>
 
       <div>
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-foreground-secondary">
           {schedule.projectName}
         </p>
 
-        <p className="mt-1 text-[10px] text-zinc-700">
+        <p className="mt-1 text-[10px] text-muted-foreground">
           Currently{' '}
           {schedule.currentlyEnabled
             ? 'enabled'
@@ -218,8 +218,8 @@ function ScheduleRow({
         <span
           className={
             enabling
-              ? 'rounded-full border border-emerald-400/15 bg-emerald-500/10 px-2.5 py-1 text-[10px] text-emerald-300'
-              : 'rounded-full border border-amber-400/15 bg-amber-500/10 px-2.5 py-1 text-[10px] text-amber-300'
+              ? 'rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-[10px] text-success'
+              : 'rounded-full border border-warning/30 bg-warning-subtle px-2.5 py-1 text-[10px] text-warning'
           }
         >
           {enabling ? 'Enable' : 'Disable'}
@@ -227,11 +227,11 @@ function ScheduleRow({
       </div>
 
       <div>
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-foreground-secondary">
           {formatDateTime(schedule.scheduledAt)}
         </p>
 
-        <p className="mt-1 text-[10px] text-indigo-300">
+        <p className="mt-1 text-[10px] text-primary">
           {formatTimeUntil(schedule.scheduledAt)}
         </p>
       </div>
@@ -294,7 +294,7 @@ function CancelScheduleDialog({
           <Button
             variant="ghost"
             size="icon"
-            className="text-zinc-600 hover:text-red-400"
+            className="text-muted-foreground hover:text-destructive"
           />
         }
       >
@@ -304,17 +304,17 @@ function CancelScheduleDialog({
         </span>
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0">
+      <AlertDialogContent className="border border-border bg-popover text-foreground ring-0">
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-amber-500/10">
-            <AlertTriangle className="text-amber-400" />
+          <AlertDialogMedia className="bg-warning-subtle">
+            <AlertTriangle className="text-warning" />
           </AlertDialogMedia>
 
           <AlertDialogTitle>
             Cancel this scheduled change?
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="text-zinc-500">
+          <AlertDialogDescription className="text-muted-foreground">
             {schedule.flagName} will no longer be{' '}
             {schedule.action === 'enable'
               ? 'enabled'
@@ -323,9 +323,9 @@ function CancelScheduleDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <AlertDialogFooter className="border-border bg-card">
           <AlertDialogCancel
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={cancelMutation.isPending}
           >
             Keep schedule
@@ -357,14 +357,14 @@ function StatCard({
   icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+    <div className="rounded-2xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
-        <p className="text-xs text-zinc-600">{label}</p>
+        <p className="text-xs text-muted-foreground">{label}</p>
 
-        <Icon className="size-4 text-indigo-300" />
+        <Icon className="size-4 text-primary" />
       </div>
 
-      <p className="mt-4 text-2xl font-semibold tracking-tight text-white">
+      <p className="mt-4 text-2xl font-semibold tracking-tight text-foreground">
         {new Intl.NumberFormat('en').format(value)}
       </p>
     </div>
@@ -373,21 +373,21 @@ function StatCard({
 
 function EmptySchedules() {
   return (
-    <div className="flex min-h-[380px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.1] bg-white/[0.015] px-6 text-center">
-      <CalendarClock className="size-8 text-indigo-300" />
+    <div className="flex min-h-[380px] flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center">
+      <CalendarClock className="size-8 text-primary" />
 
-      <h2 className="mt-5 text-base font-medium text-white">
+      <h2 className="mt-5 text-base font-medium text-foreground">
         No scheduled changes
       </h2>
 
-      <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
+      <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
         Schedule a future enable or disable action from one of
         your feature flags.
       </p>
 
       <Link
         href="/flags"
-        className="mt-6 inline-flex h-9 items-center rounded-lg bg-indigo-500 px-4 text-sm text-white hover:bg-indigo-400"
+        className="mt-6 inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm text-primary-foreground hover:bg-primary-hover"
       >
         View feature flags
       </Link>
@@ -401,7 +401,7 @@ function SchedulerSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <Skeleton
           key={index}
-          className="h-20 rounded-xl bg-white/[0.04]"
+          className="h-20 rounded-xl bg-surface-elevated"
         />
       ))}
     </div>

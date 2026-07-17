@@ -182,7 +182,7 @@ function EditEnvironmentDialog({
         render={
           <Button
             variant="outline"
-            className="border-white/10 bg-white/[0.025]"
+            className="border-border bg-card"
           />
         }
       >
@@ -190,11 +190,11 @@ function EditEnvironmentDialog({
         Edit environment
       </DialogTrigger>
 
-      <DialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-md">
+      <DialogContent className="border border-border bg-popover text-foreground ring-0 sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Edit environment</DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             Environment type cannot be changed after
             creation.
           </DialogDescription>
@@ -212,12 +212,12 @@ function EditEnvironmentDialog({
 
               <Input
                 id="edit-environment-name"
-                className="border-white/10 bg-white/[0.035]"
+                className="border-border bg-card"
                 {...register('name')}
               />
 
               {errors.name && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -231,23 +231,23 @@ function EditEnvironmentDialog({
               <Textarea
                 id="edit-environment-description"
                 rows={4}
-                className="resize-none border-white/10 bg-white/[0.035]"
+                className="resize-none border-border bg-card"
                 {...register('description')}
               />
 
               {errors.description && (
-                <p className="text-xs text-red-400">
+                <p className="text-xs text-destructive">
                   {errors.description.message}
                 </p>
               )}
             </div>
           </div>
 
-          <DialogFooter className="border-white/[0.07] bg-white/[0.02]">
+          <DialogFooter className="border-border bg-card">
             <Button
               type="button"
               variant="outline"
-              className="border-white/10 bg-transparent"
+              className="border-border bg-transparent"
               disabled={updateMutation.isPending}
               onClick={() => setOpen(false)}
             >
@@ -256,7 +256,7 @@ function EditEnvironmentDialog({
 
             <Button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-400"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover"
               disabled={updateMutation.isPending}
             >
               {updateMutation.isPending && (
@@ -346,7 +346,7 @@ function DeleteEnvironmentDialog({
         render={
           <Button
             variant="destructive"
-            className="border border-red-400/10"
+            className="border border-destructive/30"
           />
         }
       >
@@ -354,26 +354,26 @@ function DeleteEnvironmentDialog({
         Delete
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0">
+      <AlertDialogContent className="border border-border bg-popover text-foreground ring-0">
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-red-500/10">
-            <AlertTriangle className="text-red-400" />
+          <AlertDialogMedia className="bg-destructive-subtle">
+            <AlertTriangle className="text-destructive" />
           </AlertDialogMedia>
 
           <AlertDialogTitle>
             Delete {environmentName}?
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="text-zinc-500">
+          <AlertDialogDescription className="text-muted-foreground">
             Keys and environment-specific configuration may
             stop working. This action cannot be undone from
             the dashboard.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <AlertDialogFooter className="border-border bg-card">
           <AlertDialogCancel
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={deleteMutation.isPending}
           >
             Cancel

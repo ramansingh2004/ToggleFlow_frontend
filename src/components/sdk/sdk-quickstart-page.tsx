@@ -111,15 +111,15 @@ export function SdkQuickstartPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-indigo-300">
+            <p className="text-sm font-medium text-primary">
               Developer integration
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-foreground">
               Node.js SDK quickstart
             </h1>
 
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-500">
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
               Create a flag in ToggleFlow, connect your server,
               and safely change production behavior without
               rebuilding or redeploying your application.
@@ -128,7 +128,7 @@ export function SdkQuickstartPage() {
 
           <Link
             href="/api-keys"
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-indigo-500 px-4 text-sm font-medium text-white hover:bg-indigo-400"
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
           >
             <KeyRound className="size-4" />
             Create API key
@@ -233,7 +233,7 @@ export function SdkQuickstartPage() {
                 code={examples.install}
               />
 
-              <p className="mt-3 text-xs leading-5 text-zinc-600">
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
                 The SDK supports Node.js 20 or newer and can be
                 used with Next.js, Express, Fastify, NestJS, and
                 other server-side Node.js applications.
@@ -269,9 +269,9 @@ export function SdkQuickstartPage() {
                 code={examples.client}
               />
 
-              <p className="mt-3 text-xs leading-5 text-zinc-600">
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
                 For a non-Next.js Node application, remove the
-                <code className="mx-1 text-zinc-400">
+                <code className="mx-1 text-foreground-secondary">
                   import &apos;server-only&apos;
                 </code>
                 line.
@@ -318,14 +318,14 @@ export function SdkQuickstartPage() {
                 ]}
               />
 
-              <div className="mt-4 rounded-xl border border-white/[0.07] bg-black/20 p-4">
+              <div className="mt-4 rounded-xl border border-border bg-background p-4">
                 <div className="flex items-center gap-2">
-                  <Gauge className="size-4 text-cyan-300" />
-                  <p className="text-xs font-medium text-zinc-300">
+                  <Gauge className="size-4 text-primary" />
+                  <p className="text-xs font-medium text-foreground-secondary">
                     Deterministic assignment
                   </p>
                 </div>
-                <p className="mt-2 text-xs leading-5 text-zinc-600">
+                <p className="mt-2 text-xs leading-5 text-muted-foreground">
                   A 50% rollout does not mean every user alternates
                   between on and off. The same user ID consistently
                   receives the same result until targeting changes.
@@ -398,23 +398,23 @@ export function SdkQuickstartPage() {
           </div>
 
           <aside className="space-y-4 xl:sticky xl:top-24 xl:h-fit">
-            <div className="rounded-2xl border border-amber-400/15 bg-amber-500/[0.05] p-5">
+            <div className="rounded-2xl border border-warning/30 bg-warning-subtle p-5">
               <div className="flex items-center gap-2">
-                <ShieldAlert className="size-4 text-amber-300" />
-                <h2 className="text-sm font-medium text-amber-200">
+                <ShieldAlert className="size-4 text-warning" />
+                <h2 className="text-sm font-medium text-warning">
                   Server-side only
                 </h2>
               </div>
 
-              <p className="mt-3 text-xs leading-5 text-amber-200/50">
+              <p className="mt-3 text-xs leading-5 text-warning">
                 Never put the API key in a Client Component,
                 browser bundle, mobile application, or a variable
                 prefixed with NEXT_PUBLIC_.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5">
-              <h2 className="text-sm font-medium text-zinc-200">
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h2 className="text-sm font-medium text-foreground">
                 Integration checklist
               </h2>
 
@@ -432,8 +432,8 @@ export function SdkQuickstartPage() {
                     key={item}
                     className="flex items-start gap-2"
                   >
-                    <CircleCheck className="mt-0.5 size-3.5 shrink-0 text-emerald-400" />
-                    <span className="text-xs leading-5 text-zinc-500">
+                    <CircleCheck className="mt-0.5 size-3.5 shrink-0 text-success" />
+                    <span className="text-xs leading-5 text-muted-foreground">
                       {item}
                     </span>
                   </div>
@@ -441,15 +441,15 @@ export function SdkQuickstartPage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5">
+            <div className="rounded-2xl border border-border bg-card p-5">
               <div className="flex items-center gap-2">
-                <UserRound className="size-4 text-indigo-300" />
-                <h2 className="text-sm font-medium text-zinc-200">
+                <UserRound className="size-4 text-primary" />
+                <h2 className="text-sm font-medium text-foreground">
                   Choosing a userId
                 </h2>
               </div>
 
-              <p className="mt-3 text-xs leading-5 text-zinc-600">
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
                 Use your application&apos;s database user ID. For
                 anonymous visitors, create a random ID once, save
                 it in a cookie, and reuse it. Do not generate a new
@@ -457,12 +457,12 @@ export function SdkQuickstartPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5">
-              <h2 className="text-sm font-medium text-zinc-200">
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h2 className="text-sm font-medium text-foreground">
                 Troubleshooting
               </h2>
 
-              <ul className="mt-3 space-y-2 text-xs leading-5 text-zinc-600">
+              <ul className="mt-3 space-y-2 text-xs leading-5 text-muted-foreground">
                 <li>• Confirm the key belongs to the selected project.</li>
                 <li>• Match the flag key exactly.</li>
                 <li>• Enable the flag before testing rollout.</li>
@@ -472,14 +472,14 @@ export function SdkQuickstartPage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5">
-              <h2 className="text-sm font-medium text-zinc-200">
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h2 className="text-sm font-medium text-foreground">
                 SDK package
               </h2>
-              <code className="mt-3 block rounded-lg bg-black/30 p-3 text-xs text-cyan-300">
+              <code className="mt-3 block rounded-lg bg-background p-3 text-xs text-primary">
                 @toggleflow/node
               </code>
-              <p className="mt-3 text-xs leading-5 text-zinc-600">
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
                 This guide targets SDK version 0.2.0 or newer.
               </p>
             </div>
@@ -502,19 +502,19 @@ function ConceptCard({
   description: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+    <div className="rounded-2xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
-        <div className="flex size-9 items-center justify-center rounded-xl border border-indigo-400/15 bg-indigo-500/10">
-          <Icon className="size-4 text-indigo-300" />
+        <div className="flex size-9 items-center justify-center rounded-xl border border-primary/30 bg-primary-subtle">
+          <Icon className="size-4 text-primary" />
         </div>
-        <span className="font-mono text-[10px] text-zinc-700">
+        <span className="font-mono text-[10px] text-muted-foreground">
           {number}
         </span>
       </div>
-      <h2 className="mt-5 text-sm font-medium text-zinc-200">
+      <h2 className="mt-5 text-sm font-medium text-foreground">
         {title}
       </h2>
-      <p className="mt-2 text-xs leading-5 text-zinc-600">
+      <p className="mt-2 text-xs leading-5 text-muted-foreground">
         {description}
       </p>
     </div>
@@ -538,9 +538,9 @@ function GuideSection({
   const isBoth = area === 'ToggleFlow + your application';
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.02]">
-      <div className="flex items-start gap-4 border-b border-white/[0.07] p-5">
-        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-indigo-400/15 bg-indigo-500/10 font-mono text-xs text-indigo-300">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="flex items-start gap-4 border-b border-border p-5">
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary-subtle font-mono text-xs text-primary">
           {number}
         </div>
 
@@ -548,18 +548,18 @@ function GuideSection({
           <span
             className={
               isBoth
-                ? 'inline-flex rounded-full border border-violet-400/15 bg-violet-500/10 px-2 py-1 text-[10px] font-medium text-violet-300'
+                ? 'inline-flex rounded-full border border-border bg-surface-elevated px-2 py-1 text-[10px] font-medium text-foreground-secondary'
                 : isDashboard
-                  ? 'inline-flex rounded-full border border-indigo-400/15 bg-indigo-500/10 px-2 py-1 text-[10px] font-medium text-indigo-300'
-                  : 'inline-flex rounded-full border border-cyan-400/15 bg-cyan-500/10 px-2 py-1 text-[10px] font-medium text-cyan-300'
+                  ? 'inline-flex rounded-full border border-primary/30 bg-primary-subtle px-2 py-1 text-[10px] font-medium text-primary'
+                  : 'inline-flex rounded-full border border-primary/30 bg-primary-subtle px-2 py-1 text-[10px] font-medium text-primary'
             }
           >
             {area}
           </span>
-          <h2 className="mt-3 text-sm font-medium text-zinc-200">
+          <h2 className="mt-3 text-sm font-medium text-foreground">
             {title}
           </h2>
-          <p className="mt-1 text-xs leading-5 text-zinc-600">
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">
             {description}
           </p>
         </div>
@@ -575,10 +575,10 @@ function InstructionList({ items }: { items: string[] }) {
     <ol className="space-y-3">
       {items.map((item, index) => (
         <li key={item} className="flex items-start gap-3">
-          <span className="flex size-5 shrink-0 items-center justify-center rounded-md bg-white/[0.05] font-mono text-[10px] text-zinc-500">
+          <span className="flex size-5 shrink-0 items-center justify-center rounded-md bg-surface-elevated font-mono text-[10px] text-muted-foreground">
             {index + 1}
           </span>
-          <span className="text-xs leading-5 text-zinc-500">
+          <span className="text-xs leading-5 text-muted-foreground">
             {item}
           </span>
         </li>
@@ -597,7 +597,7 @@ function DashboardLink({
   return (
     <Link
       href={href}
-      className="mt-4 inline-flex h-8 items-center rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 text-xs font-medium text-zinc-300 hover:bg-white/[0.06] hover:text-white"
+      className="mt-4 inline-flex h-8 items-center rounded-lg border border-border bg-card px-3 text-xs font-medium text-foreground-secondary hover:bg-surface-elevated hover:text-foreground"
     >
       {children}
     </Link>
@@ -606,7 +606,7 @@ function DashboardLink({
 
 function InfoBox({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-4 rounded-xl border border-indigo-400/10 bg-indigo-500/[0.04] px-4 py-3 text-xs leading-5 text-indigo-200/60">
+    <div className="mt-4 rounded-xl border border-primary/30 bg-primary-subtle px-4 py-3 text-xs leading-5 text-primary">
       {children}
     </div>
   );
@@ -633,11 +633,11 @@ function CodeBlock({
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-[#07090f]">
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
+    <div className="overflow-hidden rounded-xl border border-border bg-background">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
         <div className="flex items-center gap-2">
-          <Terminal className="size-3.5 text-zinc-600" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-600">
+          <Terminal className="size-3.5 text-muted-foreground" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
             {language}
           </span>
         </div>
@@ -646,11 +646,11 @@ function CodeBlock({
           type="button"
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-xs text-zinc-600 hover:text-zinc-300"
+          className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground-secondary"
           onClick={copyCode}
         >
           {copied ? (
-            <Check className="size-3.5 text-emerald-400" />
+            <Check className="size-3.5 text-success" />
           ) : (
             <Copy className="size-3.5" />
           )}
@@ -658,7 +658,7 @@ function CodeBlock({
         </Button>
       </div>
 
-      <pre className="overflow-x-auto p-4 text-xs leading-6 text-zinc-400">
+      <pre className="overflow-x-auto p-4 text-xs leading-6 text-foreground-secondary">
         <code>{code}</code>
       </pre>
     </div>

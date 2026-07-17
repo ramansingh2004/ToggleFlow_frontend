@@ -62,7 +62,7 @@ export function WebhookActions({
   if (!webhook.id) return null;
 
   return (
-    <div className="mt-4 flex flex-wrap gap-2 border-t border-white/[0.06] pt-4">
+    <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">
       <TestWebhookButton
         webhookId={webhook.id}
         projectId={projectId}
@@ -137,7 +137,7 @@ function TestWebhookButton({
     <Button
       variant="outline"
       size="sm"
-      className="border-white/[0.08] bg-white/[0.025]"
+      className="border-border bg-card"
       disabled={testMutation.isPending}
       onClick={testWebhook}
     >
@@ -181,7 +181,7 @@ function WebhookHistoryDialog({
           <Button
             variant="outline"
             size="sm"
-            className="border-white/[0.08] bg-white/[0.025]"
+            className="border-border bg-card"
           />
         }
       >
@@ -189,13 +189,13 @@ function WebhookHistoryDialog({
         History
       </DialogTrigger>
 
-      <DialogContent className="max-h-[85vh] overflow-y-auto border border-white/[0.09] bg-[#0d111a] text-white ring-0 sm:max-w-2xl">
+      <DialogContent className="max-h-[85vh] overflow-y-auto border border-border bg-popover text-foreground ring-0 sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>
             {webhookName} delivery history
           </DialogTitle>
 
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-muted-foreground">
             The twenty most recent webhook delivery attempts.
           </DialogDescription>
         </DialogHeader>
@@ -203,7 +203,7 @@ function WebhookHistoryDialog({
         {historyQuery.isPending ? (
           <HistorySkeleton />
         ) : historyQuery.isError ? (
-          <div className="py-16 text-center text-sm text-zinc-600">
+          <div className="py-16 text-center text-sm text-muted-foreground">
             Unable to load delivery history.
           </div>
         ) : (
@@ -217,13 +217,13 @@ function WebhookHistoryDialog({
               <HistoryMetric
                 label="Successful"
                 value={statistics?.successful ?? 0}
-                color="text-emerald-300"
+                color="text-success"
               />
 
               <HistoryMetric
                 label="Failed"
                 value={statistics?.failed ?? 0}
-                color="text-red-400"
+                color="text-destructive"
               />
 
               <HistoryMetric
@@ -231,16 +231,16 @@ function WebhookHistoryDialog({
                 value={`${Math.round(
                   statistics?.successRate ?? 0
                 )}%`}
-                color="text-indigo-300"
+                color="text-primary"
               />
             </div>
 
             {events.length === 0 ? (
-              <div className="mt-4 rounded-xl border border-white/[0.07] py-16 text-center text-sm text-zinc-600">
+              <div className="mt-4 rounded-xl border border-border py-16 text-center text-sm text-muted-foreground">
                 No deliveries recorded yet.
               </div>
             ) : (
-              <div className="mt-4 divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.07]">
+              <div className="mt-4 divide-y divide-border overflow-hidden rounded-xl border border-border">
                 {events.map((event, index) => (
                   <HistoryEvent
                     key={event.id ?? index}
@@ -259,19 +259,19 @@ function WebhookHistoryDialog({
 function HistoryMetric({
   label,
   value,
-  color = 'text-zinc-200',
+  color = 'text-foreground',
 }: {
   label: string;
   value: number | string;
   color?: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-3">
+    <div className="rounded-xl border border-border bg-card p-3">
       <p className={`text-lg font-semibold ${color}`}>
         {value}
       </p>
 
-      <p className="mt-1 text-[10px] uppercase tracking-[0.1em] text-zinc-700">
+      <p className="mt-1 text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
         {label}
       </p>
     </div>
@@ -286,29 +286,29 @@ function HistoryEvent({
   return (
     <div className="flex items-start gap-3 px-4 py-4">
       {event.success ? (
-        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" />
       ) : (
-        <XCircle className="mt-0.5 size-4 shrink-0 text-red-400" />
+        <XCircle className="mt-0.5 size-4 shrink-0 text-destructive" />
       )}
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <code className="text-xs text-zinc-300">
+          <code className="text-xs text-foreground-secondary">
             {event.event ?? 'unknown.event'}
           </code>
 
-          <span className="font-mono text-xs text-zinc-600">
+          <span className="font-mono text-xs text-muted-foreground">
             HTTP {event.statusCode ?? 0}
           </span>
         </div>
 
         {event.error && (
-          <p className="mt-2 text-xs leading-5 text-red-400/70">
+          <p className="mt-2 text-xs leading-5 text-destructive">
             {event.error}
           </p>
         )}
 
-        <p className="mt-2 text-[10px] text-zinc-700">
+        <p className="mt-2 text-[10px] text-muted-foreground">
           {formatDate(
             event.deliveredAt ?? event.createdAt
           )}
@@ -381,7 +381,7 @@ function DeleteWebhookDialog({
           <Button
             variant="ghost"
             size="sm"
-            className="ml-auto text-zinc-600 hover:text-red-400"
+            className="ml-auto text-muted-foreground hover:text-destructive"
           />
         }
       >
@@ -389,26 +389,26 @@ function DeleteWebhookDialog({
         Delete
       </AlertDialogTrigger>
 
-      <AlertDialogContent className="border border-white/[0.09] bg-[#0d111a] text-white ring-0">
+      <AlertDialogContent className="border border-border bg-popover text-foreground ring-0">
         <AlertDialogHeader>
-          <AlertDialogMedia className="bg-red-500/10">
-            <AlertTriangle className="text-red-400" />
+          <AlertDialogMedia className="bg-destructive-subtle">
+            <AlertTriangle className="text-destructive" />
           </AlertDialogMedia>
 
           <AlertDialogTitle>
             Delete {webhookName}?
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="text-zinc-500">
+          <AlertDialogDescription className="text-muted-foreground">
             ToggleFlow will stop sending events to this
             endpoint. Existing delivery history will also
             become unavailable.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="border-white/[0.07] bg-white/[0.02]">
+        <AlertDialogFooter className="border-border bg-card">
           <AlertDialogCancel
-            className="border-white/10 bg-transparent"
+            className="border-border bg-transparent"
             disabled={deleteMutation.isPending}
           >
             Cancel
@@ -437,12 +437,12 @@ function HistorySkeleton() {
         {Array.from({ length: 4 }).map((_, index) => (
           <Skeleton
             key={index}
-            className="h-20 bg-white/[0.04]"
+            className="h-20 bg-surface-elevated"
           />
         ))}
       </div>
 
-      <Skeleton className="h-72 bg-white/[0.04]" />
+      <Skeleton className="h-72 bg-surface-elevated" />
     </div>
   );
 }
