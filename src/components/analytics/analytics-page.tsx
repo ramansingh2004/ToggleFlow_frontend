@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useUiStore } from '@/store/ui-store';
+import { ObservabilityDashboard } from '@/components/analytics/observability-dashboard';
 
 const dayOptions = [7, 30, 90] as const;
 
@@ -136,6 +137,10 @@ const selectedFlagId = useMemo(() => {
             conversions.
           </p>
         </div>
+
+        <ObservabilityDashboard
+          projectId={selectedProjectId}
+        />
 
         {projectAnalyticsQuery.isPending ? (
           <ProjectMetricsSkeleton />

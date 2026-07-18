@@ -34,7 +34,9 @@ import type {
   ConversionResponse,
   FlagAnalyticsResponse,
   GetFlagAnalyticsParams,
-  ProjectAnalyticsResponse
+  GetProjectObservabilityParams,
+  ProjectAnalyticsResponse,
+  ProjectObservabilityResponse
 } from '../models';
 
 import { customInstance } from '../../client/orval-client';
@@ -308,6 +310,109 @@ export function useGetProjectAnalytics<TData = Awaited<ReturnType<typeof getProj
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetProjectAnalyticsQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * Returns operational SDK traffic, latency, error-rate, endpoint, and
+ * experiment metrics for a project. The requested period is limited to
+ * the most recent 168 hours.
+ * @summary Get project observability
+ */
+export const getProjectObservability = (
+    projectId: string,
+    params?: GetProjectObservabilityParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ProjectObservabilityResponse>(
+      {url: `/analytics/projects/${projectId}/observability`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetProjectObservabilityQueryKey = (projectId: string,
+    params?: GetProjectObservabilityParams,) => {
+    return [
+    `/analytics/projects/${projectId}/observability`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetProjectObservabilityQueryOptions = <TData = Awaited<ReturnType<typeof getProjectObservability>>, TError = ErrorType<ApiError>>(projectId: string,
+    params?: GetProjectObservabilityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectObservability>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectObservabilityQueryKey(projectId,params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjectObservability>>> = ({ signal }) => getProjectObservability(projectId,params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjectObservability>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProjectObservabilityQueryResult = NonNullable<Awaited<ReturnType<typeof getProjectObservability>>>
+export type GetProjectObservabilityQueryError = ErrorType<ApiError>
+
+
+export function useGetProjectObservability<TData = Awaited<ReturnType<typeof getProjectObservability>>, TError = ErrorType<ApiError>>(
+ projectId: string,
+    params: undefined |  GetProjectObservabilityParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectObservability>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectObservability>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectObservability>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectObservability<TData = Awaited<ReturnType<typeof getProjectObservability>>, TError = ErrorType<ApiError>>(
+ projectId: string,
+    params?: GetProjectObservabilityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectObservability>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectObservability>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectObservability>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectObservability<TData = Awaited<ReturnType<typeof getProjectObservability>>, TError = ErrorType<ApiError>>(
+ projectId: string,
+    params?: GetProjectObservabilityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectObservability>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get project observability
+ */
+
+export function useGetProjectObservability<TData = Awaited<ReturnType<typeof getProjectObservability>>, TError = ErrorType<ApiError>>(
+ projectId: string,
+    params?: GetProjectObservabilityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectObservability>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProjectObservabilityQueryOptions(projectId,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
