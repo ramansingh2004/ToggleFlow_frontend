@@ -36,6 +36,8 @@ import type {
   SdkExperimentAssignmentResponse,
   SdkExperimentConversionResponse,
   SdkExperimentUserRequest,
+  SdkFlagConversionRequest,
+  SdkFlagConversionResponse,
   SdkFlagResponse,
   SdkFlagsResponse,
   SdkProjectInfoResponse
@@ -399,6 +401,74 @@ export const useEvaluateSdkFlag = <TError = ErrorType<ApiError>,
         TContext
       > => {
       return useMutation(getEvaluateSdkFlagMutationOptions(options), queryClient);
+    }
+    /**
+ * Records a real conversion for an application user. Supplying eventId
+ * makes retries idempotent; without it, one conversion per user, type,
+ * flag, and UTC day is recorded.
+ * @summary Record a feature flag conversion
+ */
+export const recordSdkFlagConversion = (
+    key: string,
+    sdkFlagConversionRequest: BodyType<SdkFlagConversionRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<SdkFlagConversionResponse>(
+      {url: `/sdk/flags/${key}/conversions`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sdkFlagConversionRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getRecordSdkFlagConversionMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordSdkFlagConversion>>, TError,{key: string;data: BodyType<SdkFlagConversionRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof recordSdkFlagConversion>>, TError,{key: string;data: BodyType<SdkFlagConversionRequest>}, TContext> => {
+
+const mutationKey = ['recordSdkFlagConversion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof recordSdkFlagConversion>>, {key: string;data: BodyType<SdkFlagConversionRequest>}> = (props) => {
+          const {key,data} = props ?? {};
+
+          return  recordSdkFlagConversion(key,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RecordSdkFlagConversionMutationResult = NonNullable<Awaited<ReturnType<typeof recordSdkFlagConversion>>>
+    export type RecordSdkFlagConversionMutationBody = BodyType<SdkFlagConversionRequest>
+    export type RecordSdkFlagConversionMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Record a feature flag conversion
+ */
+export const useRecordSdkFlagConversion = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordSdkFlagConversion>>, TError,{key: string;data: BodyType<SdkFlagConversionRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof recordSdkFlagConversion>>,
+        TError,
+        {key: string;data: BodyType<SdkFlagConversionRequest>},
+        TContext
+      > => {
+      return useMutation(getRecordSdkFlagConversionMutationOptions(options), queryClient);
     }
     /**
  * Deterministically assigns an application user to one weighted variant

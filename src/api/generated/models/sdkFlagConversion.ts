@@ -9,10 +9,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type FlagAnalyticsDailyTrendItem = {
-  date?: string;
-  count?: number;
-  enabled?: number;
-  disabled?: number;
-  conversions?: number;
-};
+export interface SdkFlagConversion {
+  recorded: boolean;
+  duplicate: boolean;
+  flagId: string;
+  conversionType: string;
+  timestamp: string;
+}

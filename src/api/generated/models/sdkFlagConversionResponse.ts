@@ -8,11 +8,9 @@
  *
  * OpenAPI spec version: 1.0.0
  */
+import type { ApiSuccess } from './apiSuccess';
+import type { SdkFlagConversion } from './sdkFlagConversion';
 
-export type FlagAnalyticsDailyTrendItem = {
-  date?: string;
-  count?: number;
-  enabled?: number;
-  disabled?: number;
-  conversions?: number;
+export type SdkFlagConversionResponse = ApiSuccess & {
+  data: SdkFlagConversion;
 };

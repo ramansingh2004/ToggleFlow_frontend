@@ -111,6 +111,7 @@ const selectedFlagId = useMemo(() => {
           date: formatChartDate(item.date),
           impressions: item.count ?? 0,
           enabled: item.enabled ?? 0,
+          conversions: item.conversions ?? 0,
         })
       ),
     [flagAnalytics?.dailyTrend]
@@ -201,7 +202,7 @@ const selectedFlagId = useMemo(() => {
               </h2>
 
               <p className="mt-1 text-xs text-muted-foreground">
-                Evaluations and enabled impressions over time
+                Real SDK evaluations and conversions over time
               </p>
             </div>
 
@@ -285,10 +286,10 @@ const selectedFlagId = useMemo(() => {
                 />
 
                 <SmallMetric
-                  label="Estimated users"
+                  label="Unique users"
                   value={
                     flagAnalytics?.metrics
-                      ?.estimatedUsers ?? 0
+                      ?.uniqueUsers ?? 0
                   }
                   icon={Users}
                 />
@@ -359,6 +360,25 @@ const selectedFlagId = useMemo(() => {
                             stopOpacity={0}
                           />
                         </linearGradient>
+
+                        <linearGradient
+                          id="conversionsGradient"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="var(--chart-3)"
+                            stopOpacity={0.2}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="var(--chart-3)"
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
                       </defs>
 
                       <CartesianGrid
@@ -416,6 +436,15 @@ const selectedFlagId = useMemo(() => {
                         strokeWidth={2}
                         fill="url(#enabledGradient)"
                       />
+
+                      <Area
+                        type="monotone"
+                        dataKey="conversions"
+                        name="Conversions"
+                        stroke="var(--chart-3)"
+                        strokeWidth={2}
+                        fill="url(#conversionsGradient)"
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -444,17 +473,20 @@ const selectedFlagId = useMemo(() => {
                       {flag.name ?? 'Unnamed flag'}
                     </p>
 
-                    <span
-                      className={
-                        flag.enabled
-                          ? 'text-xs text-success'
-                          : 'text-xs text-muted-foreground'
-                      }
-                    >
-                      {flag.enabled
-                        ? 'Enabled'
-                        : 'Disabled'}
-                    </span>
+                    <div className="text-right">
+                      <p className="text-xs font-medium text-foreground-secondary">
+                        {flag.impressions ?? 0} impressions
+                      </p>
+                      <span
+                        className={
+                          flag.enabled
+                            ? 'text-[10px] text-success'
+                            : 'text-[10px] text-muted-foreground'
+                        }
+                      >
+                        {flag.enabled ? 'Enabled' : 'Disabled'}
+                      </span>
+                    </div>
                   </div>
                 )
               )}

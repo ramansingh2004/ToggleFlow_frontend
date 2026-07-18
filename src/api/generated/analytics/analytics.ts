@@ -67,7 +67,8 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Records a conversion event for a feature flag.
+ * Records an idempotent conversion event for a feature flag. Prefer the
+ * API-key-protected SDK endpoint from application code.
  * @summary Record conversion
  */
 export const recordConversion = (

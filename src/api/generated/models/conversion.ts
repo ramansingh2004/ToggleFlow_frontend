@@ -11,6 +11,7 @@
 
 export interface Conversion {
   recorded?: boolean;
+  duplicate?: boolean;
   flagId?: string;
   conversionType?: string;
   timestamp?: string;

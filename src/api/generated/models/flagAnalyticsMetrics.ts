@@ -11,7 +11,8 @@
 
 export type FlagAnalyticsMetrics = {
   totalImpressions?: number;
-  estimatedUsers?: number;
+  /** Exact distinct identified users in the selected period. */
+  uniqueUsers?: number;
   conversionCount?: number;
   conversionRate?: number;
   enabledImpressions?: number;

@@ -8,21 +8,25 @@
  *
  * OpenAPI spec version: 1.0.0
  */
-import type { ConversionRequestMetadata } from './conversionRequestMetadata';
+import type { SdkFlagConversionRequestMetadata } from './sdkFlagConversionRequestMetadata';
 
-export interface ConversionRequest {
-  flagId: string;
-  flagKey: string;
-  conversionType: string;
+export interface SdkFlagConversionRequest {
   /**
      * Application user identifier. Stored only as an HMAC digest.
+     * @minLength 1
      * @maxLength 200
      */
-  userId?: string;
+  userId: string;
   /**
-     * Optional idempotency identifier for this conversion.
+     * @minLength 1
+     * @maxLength 100
+     */
+  conversionType: string;
+  /**
+     * Optional idempotency identifier for safe retries.
+     * @minLength 1
      * @maxLength 200
      */
   eventId?: string;
-  metadata?: ConversionRequestMetadata;
+  metadata?: SdkFlagConversionRequestMetadata;
 }

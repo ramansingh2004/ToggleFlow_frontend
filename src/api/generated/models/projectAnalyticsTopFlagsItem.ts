@@ -13,4 +13,6 @@ export type ProjectAnalyticsTopFlagsItem = {
   id?: string;
   name?: string;
   enabled?: boolean;
+  /** Real SDK evaluations during the last 30 days. */
+  impressions?: number;
 };
