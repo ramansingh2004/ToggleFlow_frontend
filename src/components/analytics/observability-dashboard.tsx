@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ObservabilityAlertingPanel } from '@/components/analytics/observability-alerting-panel';
 
 const periodOptions = [6, 24, 72, 168] as const;
 
@@ -195,6 +196,8 @@ export function ObservabilityDashboard({
           ))}
         </div>
       )}
+
+      <ObservabilityAlertingPanel projectId={projectId} />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <OperationalMetric

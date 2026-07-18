@@ -18,4 +18,6 @@ export const WebhookSubscriptionEvent = {
   flagenabled: 'flag.enabled',
   flagdisabled: 'flag.disabled',
   flagdeleted: 'flag.deleted',
+  observabilityalerttriggered: 'observability.alert.triggered',
+  observabilityalertresolved: 'observability.alert.resolved',
 } as const;

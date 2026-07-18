@@ -6,6 +6,8 @@ export const webhookEvents = [
   'flag.enabled',
   'flag.disabled',
   'flag.deleted',
+  'observability.alert.triggered',
+  'observability.alert.resolved',
 ] as const;
 
 export const createWebhookSchema = z.object({

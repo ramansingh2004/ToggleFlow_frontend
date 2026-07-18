@@ -56,6 +56,8 @@ const eventLabels = {
   'flag.enabled': 'Flag enabled',
   'flag.disabled': 'Flag disabled',
   'flag.deleted': 'Flag deleted',
+  'observability.alert.triggered': 'Reliability alert triggered',
+  'observability.alert.resolved': 'Reliability alert resolved',
 } as const;
 
 export function WebhooksPage() {
@@ -97,7 +99,7 @@ export function WebhooksPage() {
 
             <p className="mt-3 text-sm text-muted-foreground">
               Notify external systems when feature flags
-              change.
+              change or reliability alerts fire.
             </p>
           </div>
 

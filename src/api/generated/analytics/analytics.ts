@@ -35,8 +35,12 @@ import type {
   FlagAnalyticsResponse,
   GetFlagAnalyticsParams,
   GetProjectObservabilityParams,
+  ObservabilityAlertConfigResponse,
+  ProjectAlertEvaluationResponse,
+  ProjectAlertingResponse,
   ProjectAnalyticsResponse,
-  ProjectObservabilityResponse
+  ProjectObservabilityResponse,
+  UpdateObservabilityAlertConfigRequest
 } from '../models';
 
 import { customInstance } from '../../client/orval-client';
@@ -425,6 +429,225 @@ export function useGetProjectObservability<TData = Awaited<ReturnType<typeof get
 
 
 /**
+ * @summary Get project alerting configuration and history
+ */
+export const getProjectAlerting = (
+    projectId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ProjectAlertingResponse>(
+      {url: `/analytics/projects/${projectId}/alerting`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetProjectAlertingQueryKey = (projectId: string,) => {
+    return [
+    `/analytics/projects/${projectId}/alerting`
+    ] as const;
+    }
+
+
+export const getGetProjectAlertingQueryOptions = <TData = Awaited<ReturnType<typeof getProjectAlerting>>, TError = ErrorType<ApiError>>(projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAlerting>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetProjectAlertingQueryKey(projectId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProjectAlerting>>> = ({ signal }) => getProjectAlerting(projectId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: projectId !== null && projectId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProjectAlerting>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProjectAlertingQueryResult = NonNullable<Awaited<ReturnType<typeof getProjectAlerting>>>
+export type GetProjectAlertingQueryError = ErrorType<ApiError>
+
+
+export function useGetProjectAlerting<TData = Awaited<ReturnType<typeof getProjectAlerting>>, TError = ErrorType<ApiError>>(
+ projectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAlerting>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectAlerting>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectAlerting>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectAlerting<TData = Awaited<ReturnType<typeof getProjectAlerting>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAlerting>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getProjectAlerting>>,
+          TError,
+          Awaited<ReturnType<typeof getProjectAlerting>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProjectAlerting<TData = Awaited<ReturnType<typeof getProjectAlerting>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAlerting>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get project alerting configuration and history
+ */
+
+export function useGetProjectAlerting<TData = Awaited<ReturnType<typeof getProjectAlerting>>, TError = ErrorType<ApiError>>(
+ projectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProjectAlerting>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetProjectAlertingQueryOptions(projectId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * @summary Update project alerting configuration
+ */
+export const updateProjectAlerting = (
+    projectId: string,
+    updateObservabilityAlertConfigRequest: BodyType<UpdateObservabilityAlertConfigRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ObservabilityAlertConfigResponse>(
+      {url: `/analytics/projects/${projectId}/alerting`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateObservabilityAlertConfigRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateProjectAlertingMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProjectAlerting>>, TError,{projectId: string;data: BodyType<UpdateObservabilityAlertConfigRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateProjectAlerting>>, TError,{projectId: string;data: BodyType<UpdateObservabilityAlertConfigRequest>}, TContext> => {
+
+const mutationKey = ['updateProjectAlerting'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateProjectAlerting>>, {projectId: string;data: BodyType<UpdateObservabilityAlertConfigRequest>}> = (props) => {
+          const {projectId,data} = props ?? {};
+
+          return  updateProjectAlerting(projectId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateProjectAlertingMutationResult = NonNullable<Awaited<ReturnType<typeof updateProjectAlerting>>>
+    export type UpdateProjectAlertingMutationBody = BodyType<UpdateObservabilityAlertConfigRequest>
+    export type UpdateProjectAlertingMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Update project alerting configuration
+ */
+export const useUpdateProjectAlerting = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProjectAlerting>>, TError,{projectId: string;data: BodyType<UpdateObservabilityAlertConfigRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateProjectAlerting>>,
+        TError,
+        {projectId: string;data: BodyType<UpdateObservabilityAlertConfigRequest>},
+        TContext
+      > => {
+      return useMutation(getUpdateProjectAlertingMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Evaluate project alert thresholds immediately
+ */
+export const evaluateProjectAlerting = (
+    projectId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ProjectAlertEvaluationResponse>(
+      {url: `/analytics/projects/${projectId}/alerting/evaluate`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+
+export const getEvaluateProjectAlertingMutationOptions = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateProjectAlerting>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof evaluateProjectAlerting>>, TError,{projectId: string}, TContext> => {
+
+const mutationKey = ['evaluateProjectAlerting'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof evaluateProjectAlerting>>, {projectId: string}> = (props) => {
+          const {projectId} = props ?? {};
+
+          return  evaluateProjectAlerting(projectId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateProjectAlertingMutationResult = NonNullable<Awaited<ReturnType<typeof evaluateProjectAlerting>>>
+
+    export type EvaluateProjectAlertingMutationError = ErrorType<ApiError>
+
+    /**
+ * @summary Evaluate project alert thresholds immediately
+ */
+export const useEvaluateProjectAlerting = <TError = ErrorType<ApiError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof evaluateProjectAlerting>>, TError,{projectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof evaluateProjectAlerting>>,
+        TError,
+        {projectId: string},
+        TContext
+      > => {
+      return useMutation(getEvaluateProjectAlertingMutationOptions(options), queryClient);
+    }
+    /**
  * Returns usage statistics and request metrics for an API key.
  * @summary Get API key analytics
  */
