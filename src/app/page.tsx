@@ -201,17 +201,17 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="hidden h-9 items-center rounded-lg px-4 text-sm text-foreground-secondary transition-colors hover:bg-surface-elevated hover:text-foreground sm:inline-flex"
+              className="hidden h-9 items-center rounded-lg px-4 text-sm text-foreground-secondary transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-surface-elevated hover:text-foreground hover:shadow-md active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none sm:inline-flex"
             >
               Sign in
             </Link>
 
             <Link
               href="/register"
-              className="inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+              className="group inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-lg hover:shadow-primary/20 active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none"
             >
               Get started
-              <ArrowRight className="size-3.5" />
+              <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transform-none" />
             </Link>
           </div>
         </div>
@@ -251,17 +251,17 @@ export default function Home() {
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/register"
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary-hover"
+                  className="group inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/20 active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none"
                 >
                   Start building
-                  <ArrowRight className="size-4" />
+                  <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none" />
                 </Link>
 
                 <Link
                   href="/login"
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 text-sm text-foreground-secondary transition-colors hover:bg-surface-elevated"
+                  className="group inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 text-sm text-foreground-secondary transition-all duration-200 ease-out hover:-translate-y-1 hover:border-primary/30 hover:bg-surface-elevated hover:text-foreground hover:shadow-lg active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none"
                 >
-                  <Terminal className="size-4 text-muted-foreground" />
+                  <Terminal className="size-4 text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:text-primary motion-reduce:transform-none" />
                   Open control plane
                 </Link>
               </div>
@@ -456,10 +456,10 @@ export default function Home() {
 
             <Link
               href="/register"
-              className="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
+              className="group mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/20 active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none"
             >
               Create your account
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none" />
             </Link>
           </div>
         </section>
